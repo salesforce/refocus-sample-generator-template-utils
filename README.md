@@ -79,7 +79,7 @@ For example:
     "Authorization": "{{token}}",
     "Accept": "application/json"
   },
-  "timeout": 10000
+  "timeout": 10000,
   "url": "{{baseUrl}}/v1/xyz?key={{aspect[0].name}}&&id={{subject.name}}"
 }
 ```
