@@ -29,12 +29,13 @@ describe('toUrl tests >', () => {
    * Execute your toUrl function by calling generateUrl and check that the
    * returned string is an expected url
    */
-  //describe('generateUrl >', () => {
-  //  // bulk
-  //  it('generateUrl', () => {
-  //    const url = tu.generateUrl(ctx, aspects, subjects);
-  //    expect(url).to.be.an('url');
-  //  });
-  //
-  //});
+
+  /*
+   *describe('generateUrl >', () => {
+   *  it('generateUrl', () => {
+   *    const url = tu.generateUrl(ctx, aspects, subjects);
+   *    expect(url.splice(0,4)).to.contain('http'));
+   *  });
+   *});
+  */
 });

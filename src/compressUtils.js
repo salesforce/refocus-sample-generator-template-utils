@@ -63,7 +63,8 @@ const compressToUrl = (dir = cwd) => {
   const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
   const toUrlExports = require(toUrlPath);
   const toUrlString = toUrlExports.toUrl.toString();
-  return compress(toUrlString);
+  const helpers = toUrlExports.helpers;
+  return compress(toUrlString, helpers);
 };
 
 const doCompress = (code) => UglifyJS.minify(code, uglifyOpts).code;
@@ -161,18 +162,28 @@ function isBulk(code) {
   }
 }
 
+/**
+ * Returns the minified code along with the helpers.
+ * @param  {String} code -  Code to be minified
+ * @param  {Object} helpers - Helper functions used by the code.
+ * @returns {String} as minified code
+ */
 function compress(code, helpers = {}) {
-  // For default functions of the form:
-  //   transformBulk(ctx, aspects, ...) {...}
-  // Make sure code is a valid function declaration so uglify won't drop it.
+  /*
+   * For default functions of the form:
+   *   transformBulk(ctx, aspects, ...) {...}
+   * Make sure code is a valid function declaration so uglify won't drop it.
+   */
   if (!code.startsWith('function')) {
     code = code.replace(/^/, 'function ');
   }
 
-  // For error handler functions of the form:
-  //   '404': function(ctx, aspects, ...) {...}
-  // Make sure code is a valid function declaration so uglify won't drop it.
-  // The "placeholder" name will be removed on minify.
+  /*
+   * For error handler functions of the form:
+   *  '404': function(ctx, aspects, ...) {...}
+   * Make sure code is a valid function declaration so uglify won't drop it.
+   * The "placeholder" name will be removed on minify.
+   */
   if (code.startsWith('function')) {
     code = code.replace(/^function\s*\(/, 'function placeholder(');
   }
@@ -181,15 +192,19 @@ function compress(code, helpers = {}) {
   Object.keys(helpers).forEach((key) => {
     let helperCode = helpers[key].toString();
 
-    // For helpers of the form:
-    //   square(x) {...}
-    // Make sure code is a valid function declaration so uglify won't drop it.
+    /*
+     * For helpers of the form:
+     *   square(x) {...}
+     * Make sure code is a valid function declaration so uglify won't drop it.
+     */
     if (!helperCode.startsWith('function')) {
       helperCode = helperCode.replace(/^/, 'function ');
     }
 
-    // Concatenate the helpers directly on to the end of the function string.
-    // Uglify will rename and reformat it, or drop it if it isn't used.
+    /*
+     * Concatenate the helpers directly on to the end of the function string.
+     * Uglify will rename and reformat it, or drop it if it isn't used.
+     */
     code = code.replace(/}$/, ';' + helperCode + '}');
   });
 
