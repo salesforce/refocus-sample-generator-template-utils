@@ -1,7 +1,7 @@
 /**
  * src/toUrl.js
  *
- * Implement the toUrl function here.
+ * Implement the toUrl function and the optional helper functions here.
  *
  * Use context data, aspects and subjects to generate the url to connect to
  * your remote data source.
@@ -23,6 +23,14 @@ module.exports = {
   * @returns {String} the url
   */
  toUrl(ctx, aspects, subjects) {
+
+  },
+
+  /* Helpers (optional)
+   *
+   * Define helper functions here if you need to be able to test them directly.
+   */
+  helpers: {
 
   },
 }
