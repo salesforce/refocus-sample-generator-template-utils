@@ -47,12 +47,13 @@ const scriptsToAdd = {
   build: 'sgtu-build-transform && sgtu-build-to-url',
   deploy: 'sgtu-deploy',
   'template-init': 'sgtu-init',
-  test: 'echo "test"',
+  test: 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
+    '--report lcovonly -- -R dot transform/testTransform.js toUrl/testToUrl.js ',
   'test-connection': 'echo "test-connection"',
-  'test-to-url': 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
-    '--report lcovonly -- -R dot toUrl/testToUrl.js',
-  'test-transform': 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
-    '--report lcovonly -- -R dot transform/testTransform.js',
+  'test-to-url': './node_modules/mocha/bin/_mocha ' +
+    ' toUrl/testToUrl.js',
+  'test-transform': './node_modules/mocha/bin/_mocha ' +
+    ' transform/testTransform.js',
   validate: 'echo "validate"',
 };
 

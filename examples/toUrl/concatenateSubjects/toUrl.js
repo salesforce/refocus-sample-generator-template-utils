@@ -18,7 +18,8 @@
 
 module.exports = {
 
- /*
+ /* Creates an url string by concatenating all the subjects/aspects
+  * names and including them in the expression.
   * @param {Object} ctx - The context from the Sample Generator
   * @param {Array} aspects - Array of one or more aspects
   * @param {Array} subjects - Array of one or more subjects
@@ -35,10 +36,15 @@ module.exports = {
 
   /**
    * Helpers (optional)
-   *
    * Define helper functions here if you need to be able to test them directly.
    */
   helpers: {
+
+    /**
+     * Returns a string concatenated of the elements in the array.
+     * @param  {Array} arr - Array of objects have the name attribute.
+     * @returns {String} of concatenated names.
+     */
     concatArray(arr) {
       return arr.map((e) => e.name).join(',');
     },
