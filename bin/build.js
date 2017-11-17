@@ -9,13 +9,16 @@
  */
 
 /**
- * bin/buildTransform.js
+ * bin/build.js
  */
 const cu = require('../src/compressUtils');
 const startTime = Date.now();
 
 cu.buildTransform()
-.then(() =>
-  console.log(`Done building transform (${Date.now() - startTime}ms)`))
+.then(() => {
+  console.log(`Done building transform (${Date.now() - startTime}ms)`)
+  return cu.buildToUrl()
+})
+.then(() => console.log(`Done building toUrl (${Date.now() - startTime}ms)`))
 .catch((err) => console.error(err));
 

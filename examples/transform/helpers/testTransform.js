@@ -14,7 +14,7 @@ const helpers = require('./transform.js').helpers;
 const tu = require('../utils/testUtils');
 
 describe('transform tests >', () => {
-  before(tu.buildTransform);
+  before(tu.build);
 
   /*
    * Helpers (optional)

@@ -7,19 +7,24 @@ const projectName = require('../package.json').name;
 let sgt;
 
 module.exports = {
-  buildTransform(done) {
-    exec('sgtu-build-transform', (err) => {
+  build(done) {
+    exec('sgtu-build', (err) => {
       if (err) return done(err);
       sgt = require(`../${projectName}.json`);
       done();
     });
-  },
+  }, // buildTransform
+
+  generateUrl(ctx, aspects, subjects) {
+    return this.evalToUrlFunction(sgt.connection.toUrl, ctx, aspects, subjects);
+  }, // generateUrl
 
   doTransform(ctx, aspects, subj, res) {
-    return this.evalFunction(sgt.transform.transform, ctx, aspects, subj, res);
-  },
+    return this.evalTransformFunction(sgt.transform.transform, ctx, aspects,
+      subj, res);
+  }, // doTransform
 
-  //TODO move the status code matching to RefocusCollectorEval and use it here
+  // TODO: move the status code matching to RefocusCollectorEval and use it here
   doHandleError(statusCode, ctx, aspects, subj, res) {
     let func;
     const errorHandlers = sgt.transform.errorHandlers;
@@ -32,10 +37,10 @@ module.exports = {
       });
     }
 
-    return this.evalFunction(func, ctx, aspects, subj, res);
-  },
+    return this.evalTransformFunction(func, ctx, aspects, subj, res);
+  }, // doHandleError
 
-  evalFunction(functionBody, ctx, aspects, subj, res) {
+  evalTransformFunction(functionBody, ctx, aspects, subj, res) {
     let args;
     const bulk = sgt.connection.bulk;
     const generatorTemplate = sgt;
@@ -46,6 +51,11 @@ module.exports = {
     }
 
     return RefocusCollectorEval.safeTransform(functionBody, args);
-  },
+  }, // evalTransformFunction
+
+  evalToUrlFunction(functionBody, ctx, aspects, subjects) {
+    const args = {ctx, aspects, subjects};
+    return RefocusCollectorEval.safeToUrl(functionBody, args);
+  }, // evalToUrlFunction
 
 };

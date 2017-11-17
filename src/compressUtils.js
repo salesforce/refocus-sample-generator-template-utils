@@ -57,12 +57,14 @@ const buildToUrl = (dir = cwd) => fs.readJson(path.resolve(dir, `${name}.json`))
     contents.connection.hasOwnProperty('url') ?
   Promise.reject('SGT already has connection.url') : true)
   .then(() => compressToUrl(dir))
-  .then((code) => postCompress(code))
   .then((code) => updateTemplateToUrl(code));
 
-const compressToUrl = (dir = cwd) =>
-  fs.readFile(path.resolve(dir, 'src', 'toUrl.js'), { encoding: 'utf-8' })
-  .then((code) => doCompress(code));
+const compressToUrl = (dir = cwd) => {
+  const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
+  const toUrlExports = require(toUrlPath);
+  const toUrlString = toUrlExports.toUrl.toString();
+  return compress(toUrlString);
+};
 
 const doCompress = (code) => UglifyJS.minify(code, uglifyOpts).code;
 
@@ -73,14 +75,14 @@ const doUpdateTemplate = (attr, code, pathToFile) => fs.readJson(pathToFile)
   })
   .then((contents) => fs.writeJson(pathToFile, contents, { spaces: 2 }));
 
-const postCompress = (code) =>
-  code.replace(/^module\.\w*=function\(.*?\){/, '').replace(/};/, '');
-
 const updateTemplateToUrl = (code, dir = cwd) => {
   const f = path.resolve(dir, `${name}.json`);
   fs.readJson(f)
   .then((contents) => {
-    if (!contents.hasOwnProperty('connection')) contents.connection = {};
+    if (!contents.hasOwnProperty('connection')) {
+      contents.connection = {};
+    };
+
     contents.connection.toUrl = code;
     return contents;
   })
@@ -107,7 +109,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBulk.toString();
     bulk = isBulk(code);
     if (bulk) {
-      transformObj.transform = compressTransform(code, helpers);
+      transformObj.transform = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBulk" must ' +
         'have "subjects" param.');
@@ -118,7 +120,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBySubject.toString();
     bulk = isBulk(code);
     if (!bulk) {
-      transformObj.transform = compressTransform(code, helpers);
+      transformObj.transform = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBySubject" ' +
         'must have "subject" param.');
@@ -130,7 +132,7 @@ const buildTransform = (dir = cwd) => {
     if (bulk === undefined) bulk = isBulk(code);
     if (isBulk(code) === bulk) {
       transformObj.errorHandlers[functionName] =
-        compressTransform(code, helpers);
+        compress(code, helpers);
     } else {
       throw new Error(`Invalid function signature: "${functionName}" must ` +
         'have the same arguments as the corresponding "transformXXXXXX" ' +
@@ -159,7 +161,7 @@ function isBulk(code) {
   }
 }
 
-function compressTransform(code, helpers = {}) {
+function compress(code, helpers = {}) {
   // For default functions of the form:
   //   transformBulk(ctx, aspects, ...) {...}
   // Make sure code is a valid function declaration so uglify won't drop it.
@@ -205,6 +207,5 @@ module.exports = {
   compressToUrl,
   doCompress,
   doUpdateTemplate,
-  postCompress,
   updateTemplateToUrl,
 };

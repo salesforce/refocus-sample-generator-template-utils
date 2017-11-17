@@ -36,6 +36,7 @@ const readme = '# %s\n\n' +
 const modulesToInstall = [
   '@salesforce/refocus-collector-eval',
   'chai',
+  'chai-url',
   'istanbul',
   'mocha',
   'nock',
@@ -48,7 +49,8 @@ const scriptsToAdd = {
   'template-init': 'sgtu-init',
   test: 'echo "test"',
   'test-connection': 'echo "test-connection"',
-  'test-to-url': 'echo "test-to-url"',
+  'test-to-url': 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
+    '--report lcovonly -- -R dot toUrl/testToUrl.js',
   'test-transform': 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
     '--report lcovonly -- -R dot transform/testTransform.js',
   validate: 'echo "validate"',

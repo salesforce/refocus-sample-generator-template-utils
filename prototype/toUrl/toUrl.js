@@ -13,14 +13,16 @@
  * DO NOT modify the module.exports (for testing).
  * DO NOT declare any functions OUTSIDE the body of the toUrl function
  *  itself.
- *
- * @param {Object} ctx - The context from the Sample Generator
- * @param {Array} aspects - Array of one or more aspects
- * @param {Array} subjects - Array of one or more subjects
- * @returns {String} the url
  */
-function toUrl(ctx, aspects, subjects) {
-  return '';
-}
 
-module.exports = toUrl;
+module.exports = {
+ /*
+  * @param {Object} ctx - The context from the Sample Generator
+  * @param {Array} aspects - Array of one or more aspects
+  * @param {Array} subjects - Array of one or more subjects
+  * @returns {String} the url
+  */
+ toUrl(ctx, aspects, subjects) {
+
+  },
+}
