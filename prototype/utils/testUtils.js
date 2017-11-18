@@ -16,7 +16,8 @@ module.exports = {
   }, // buildTransform
 
   generateUrl(ctx, aspects, subjects) {
-    return this.evalToUrlFunction(sgt.connection.toUrl, ctx, aspects, subjects);
+    const args = {ctx, aspects, subjects};
+    return RefocusCollectorEval.safeToUrl(functionBody, args);
   }, // generateUrl
 
   doTransform(ctx, aspects, subj, res) {
@@ -52,10 +53,5 @@ module.exports = {
 
     return RefocusCollectorEval.safeTransform(functionBody, args);
   }, // evalTransformFunction
-
-  evalToUrlFunction(functionBody, ctx, aspects, subjects) {
-    const args = {ctx, aspects, subjects};
-    return RefocusCollectorEval.safeToUrl(functionBody, args);
-  }, // evalToUrlFunction
 
 };

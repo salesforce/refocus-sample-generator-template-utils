@@ -1,5 +1,5 @@
 /**
- * src/toUrl.js
+ * toUrl.js
  *
  * Implement the toUrl function here.
  *
@@ -34,4 +34,22 @@ module.exports = {
     return baseUrl;
   },
 
+  /**
+   * Helpers (optional)
+   *
+   * Define helper functions here if you need to be able to test them directly.
+   */
+  helpers: {
+    /**
+     * Returns a string concatenated of the elements in the array.
+     * @param  {Array} arr - Array of objects have the name attribute.
+     * @returns {String} of concatenated names.
+     */
+
+    /*
+     * concatArray(arr) {
+     *  return arr.map((e) => e.name).join(',');
+     * },
+     */
+  },
 };
