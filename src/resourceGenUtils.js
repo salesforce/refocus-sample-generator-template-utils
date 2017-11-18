@@ -44,7 +44,7 @@ const modulesToInstall = [
 
 /* Scripts to add to the new project's package.json */
 const scriptsToAdd = {
-  build: 'sgtu-build-transform && sgtu-build-to-url',
+  build: 'sgtu-build',
   deploy: 'sgtu-deploy',
   'template-init': 'sgtu-init',
   test: 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
