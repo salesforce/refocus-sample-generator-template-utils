@@ -28,7 +28,7 @@ module.exports = {
   */
  toUrl(ctx, aspects, subjects) {
     let baseUrl = ctx.baseUrl;
-    const aspectNames = aspects.map((aspect) => aspect.name).join(',');
+    const aspectNames = concatArray(aspects);
     baseUrl = baseUrl + '/expression=' + ctx.window + ':subjects:all' +
     ':tests:[' + aspectNames + ']';
     return baseUrl;
@@ -45,11 +45,8 @@ module.exports = {
      * @param  {Array} arr - Array of objects have the name attribute.
      * @returns {String} of concatenated names.
      */
-
-    /*
-     * concatArray(arr) {
-     *  return arr.map((e) => e.name).join(',');
-     * },
-     */
+    concatArray(arr) {
+      return arr.map((e) => e.name).join(',');
+    },
   },
 };
