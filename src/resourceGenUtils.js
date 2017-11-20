@@ -19,9 +19,6 @@ const validatePackageName = require('validate-npm-package-name');
 const Promise = require('bluebird');
 const execSync = require('child_process').execSync;
 
-//TODO remove this once eval module is set up in npm
-const refocusCollectorPath = '../refocus-collector';
-
 /* Format of the README.md file */
 const readme = '# %s\n\n' +
   '## Description\n\n%s\n\n' +
@@ -198,7 +195,6 @@ module.exports = {
     execSync('npm init --force', { cwd, stdio: 'ignore' });
     return fs.readJson(path.resolve(dir, 'package.json'))
     .then((p) => {
-      p.refocusCollectorPath = path.resolve(refocusCollectorPath);
       if (!p.dependencies) p.dependencies = {};
       modulesToInstall.forEach((m) => p.dependencies[m] = '*');
       if (!p.scripts) p.scripts = {};
