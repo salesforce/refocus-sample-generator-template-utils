@@ -32,6 +32,7 @@ Transform Examples:
 - `errorHandlersBulk` - example errorHandlers for bulk requests
 - `errorHandlersBulk` - example errorHandlers for bySubject requests
 - `helpers` - example helper functions
+- `randomNumbers` - a bulk transform example using helpers
 
 After running the `sgtu-init` command, your project will be initialized with the following resources to help you get started:
 - `/README.md` - since *of course* you will be publishing this on github!
