@@ -13,8 +13,8 @@ const expect = require('chai').expect;
 const helpers = require('./toUrl.js').helpers;
 const tu = require('../utils/testUtils');
 
-describe('transform tests >', () => {
-  before(tu.build);
+describe('toUrl tests >', () => {
+  before(tu.buildToUrl);
 
   /*
    * Helpers (optional)

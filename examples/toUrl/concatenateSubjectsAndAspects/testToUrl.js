@@ -7,7 +7,7 @@ const expect = chai.expect;
 const tu = require('../utils/testUtils');
 
 describe('toUrl tests >', () => {
-  before(tu.build);
+  before(tu.buildToUrl);
 
   /*
    * Set up data to be used in the tests.

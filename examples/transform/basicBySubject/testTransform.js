@@ -14,12 +14,11 @@ const helpers = require('./transform.js').helpers;
 const tu = require('../utils/testUtils');
 
 describe('transform tests >', () => {
-  before(tu.build);
+  before(tu.buildTransform);
 
   /*
    * Set up data to be used in the tests.
    */
-
   const asp1 = {
     name: 'aspect1',
     timeout: '60s',

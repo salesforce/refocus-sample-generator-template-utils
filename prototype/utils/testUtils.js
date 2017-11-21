@@ -7,13 +7,21 @@ const projectName = require('../package.json').name;
 let sgt;
 
 module.exports = {
-  build(done) {
-    exec('sgtu-build', (err) => {
+  buildTransform(done) {
+    exec('sgtu-build-transform', (err) => {
       if (err) return done(err);
       sgt = require(`../${projectName}.json`);
       done();
     });
   }, // buildTransform
+
+  buildToUrl(done) {
+    exec('sgtu-build-to-url', (err) => {
+      if (err) return done(err);
+      sgt = require(`../${projectName}.json`);
+      done();
+    });
+  }, // buildToUrl
 
   generateUrl(ctx, aspects, subjects) {
     const args = {ctx, aspects, subjects};
