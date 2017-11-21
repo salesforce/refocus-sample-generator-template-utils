@@ -19,7 +19,6 @@ describe('transform tests >', () => {
   /*
    * Set up data to be used in the tests.
    */
-
   const asp1 = {
     name: 'aspect1',
     timeout: '60s',

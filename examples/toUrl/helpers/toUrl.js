@@ -1,7 +1,7 @@
 /**
  * toUrl.js
  *
- * Implement the toUrl function and the optional helper functions here.
+ * Implement the toUrl function here.
  *
  * Use context data, aspects and subjects to generate the url to connect to
  * your remote data source.
@@ -13,9 +13,11 @@
  * DO NOT modify the module.exports (for testing).
  * DO NOT declare any functions OUTSIDE the body of the toUrl function
  *  itself.
+ *
  */
 
 module.exports = {
+
  /*
   * @param {Object} ctx - The context from the Sample Generator
   * @param {Array} aspects - Array of one or more aspects
@@ -23,7 +25,7 @@ module.exports = {
   * @returns {String} the url
   */
  toUrl(ctx, aspects, subjects) {
-  return '';
+    return '';
   },
 
   /**
@@ -32,16 +34,14 @@ module.exports = {
    * Define helper functions here if you need to be able to test them directly.
    */
   helpers: {
+
     /**
      * Returns a string concatenated of the elements in the array.
      * @param  {Array} arr - Array of objects have the name attribute.
      * @returns {String} of concatenated names.
      */
-
-    /**
-     * concatArray(arr) {
-     *  return arr.map((e) => e.name).join(',');
-     * },
-     */
+    concatArray(arr) {
+      return arr.map((e) => e.name).join(',');
+    },
   },
-}
+};

@@ -17,6 +17,7 @@
   "bin": {
     "sgtu-build-to-url": "bin/buildToUrl.js",
     "sgtu-build-transform": "bin/buildTransform.js",
+    "sgtu-build": "bin/build.js",
     "sgtu-deploy": "bin/deploy.js",
     "sgtu-init": "bin/generateResources.js"
   },

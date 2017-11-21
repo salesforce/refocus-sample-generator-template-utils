@@ -57,12 +57,15 @@ const buildToUrl = (dir = cwd) => fs.readJson(path.resolve(dir, `${name}.json`))
     contents.connection.hasOwnProperty('url') ?
   Promise.reject('SGT already has connection.url') : true)
   .then(() => compressToUrl(dir))
-  .then((code) => postCompress(code))
   .then((code) => updateTemplateToUrl(code));
 
-const compressToUrl = (dir = cwd) =>
-  fs.readFile(path.resolve(dir, 'src', 'toUrl.js'), { encoding: 'utf-8' })
-  .then((code) => doCompress(code));
+const compressToUrl = (dir = cwd) => {
+  const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
+  const toUrlExports = require(toUrlPath);
+  const toUrlString = toUrlExports.toUrl.toString();
+  const helpers = toUrlExports.helpers;
+  return compress(toUrlString, helpers);
+};
 
 const doCompress = (code) => UglifyJS.minify(code, uglifyOpts).code;
 
@@ -73,14 +76,14 @@ const doUpdateTemplate = (attr, code, pathToFile) => fs.readJson(pathToFile)
   })
   .then((contents) => fs.writeJson(pathToFile, contents, { spaces: 2 }));
 
-const postCompress = (code) =>
-  code.replace(/^module\.\w*=function\(.*?\){/, '').replace(/};/, '');
-
 const updateTemplateToUrl = (code, dir = cwd) => {
   const f = path.resolve(dir, `${name}.json`);
   fs.readJson(f)
   .then((contents) => {
-    if (!contents.hasOwnProperty('connection')) contents.connection = {};
+    if (!contents.hasOwnProperty('connection')) {
+      contents.connection = {};
+    };
+
     contents.connection.toUrl = code;
     return contents;
   })
@@ -107,7 +110,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBulk.toString();
     bulk = isBulk(code);
     if (bulk) {
-      transformObj.transform = compressTransform(code, helpers);
+      transformObj.transform = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBulk" must ' +
         'have "subjects" param.');
@@ -118,7 +121,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBySubject.toString();
     bulk = isBulk(code);
     if (!bulk) {
-      transformObj.transform = compressTransform(code, helpers);
+      transformObj.transform = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBySubject" ' +
         'must have "subject" param.');
@@ -130,7 +133,7 @@ const buildTransform = (dir = cwd) => {
     if (bulk === undefined) bulk = isBulk(code);
     if (isBulk(code) === bulk) {
       transformObj.errorHandlers[functionName] =
-        compressTransform(code, helpers);
+        compress(code, helpers);
     } else {
       throw new Error(`Invalid function signature: "${functionName}" must ` +
         'have the same arguments as the corresponding "transformXXXXXX" ' +
@@ -159,18 +162,28 @@ function isBulk(code) {
   }
 }
 
-function compressTransform(code, helpers = {}) {
-  // For default functions of the form:
-  //   transformBulk(ctx, aspects, ...) {...}
-  // Make sure code is a valid function declaration so uglify won't drop it.
+/**
+ * Returns the minified code along with the helpers.
+ * @param  {String} code -  Code to be minified
+ * @param  {Object} helpers - Helper functions used by the code.
+ * @returns {String} as minified code
+ */
+function compress(code, helpers = {}) {
+  /*
+   * For default functions of the form:
+   *   transformBulk(ctx, aspects, ...) {...}
+   * Make sure code is a valid function declaration so uglify won't drop it.
+   */
   if (!code.startsWith('function')) {
     code = code.replace(/^/, 'function ');
   }
 
-  // For error handler functions of the form:
-  //   '404': function(ctx, aspects, ...) {...}
-  // Make sure code is a valid function declaration so uglify won't drop it.
-  // The "placeholder" name will be removed on minify.
+  /*
+   * For error handler functions of the form:
+   *  '404': function(ctx, aspects, ...) {...}
+   * Make sure code is a valid function declaration so uglify won't drop it.
+   * The "placeholder" name will be removed on minify.
+   */
   if (code.startsWith('function')) {
     code = code.replace(/^function\s*\(/, 'function placeholder(');
   }
@@ -179,15 +192,19 @@ function compressTransform(code, helpers = {}) {
   Object.keys(helpers).forEach((key) => {
     let helperCode = helpers[key].toString();
 
-    // For helpers of the form:
-    //   square(x) {...}
-    // Make sure code is a valid function declaration so uglify won't drop it.
+    /*
+     * For helpers of the form:
+     *   square(x) {...}
+     * Make sure code is a valid function declaration so uglify won't drop it.
+     */
     if (!helperCode.startsWith('function')) {
       helperCode = helperCode.replace(/^/, 'function ');
     }
 
-    // Concatenate the helpers directly on to the end of the function string.
-    // Uglify will rename and reformat it, or drop it if it isn't used.
+    /*
+     * Concatenate the helpers directly on to the end of the function string.
+     * Uglify will rename and reformat it, or drop it if it isn't used.
+     */
     code = code.replace(/}$/, ';' + helperCode + '}');
   });
 
@@ -205,6 +222,5 @@ module.exports = {
   compressToUrl,
   doCompress,
   doUpdateTemplate,
-  postCompress,
   updateTemplateToUrl,
 };
