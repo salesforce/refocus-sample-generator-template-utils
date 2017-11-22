@@ -168,7 +168,10 @@ module.exports = {
           },
         },
         contextDefinition: {},
-        transform: '',
+        transform: {
+          default: '',
+          errorHandlers: {},
+        },
       },
       { spaces: 2 });
   },
