@@ -36,7 +36,7 @@ const uglifyOpts = {
     reduce_vars: true,
     warnings: true,
     negate_iife: true,
-    drop_console: true,
+    drop_console: false,
     passes: 5,
     ecma: 6,
   },
