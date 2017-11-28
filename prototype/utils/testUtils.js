@@ -25,7 +25,7 @@ module.exports = {
 
   generateUrl(ctx, aspects, subjects) {
     const args = {ctx, aspects, subjects};
-    return RefocusCollectorEval.safeToUrl(sgt.connection.toUrl, args);
+    return RefocusCollectorEval.safeToUrl(sgt.connection.toUrl, args, true);
   }, // generateUrl
 
   doTransform(ctx, aspects, subj, res) {
@@ -59,7 +59,7 @@ module.exports = {
       args = { ctx, aspects, subject: subj, res, generatorTemplate };
     }
 
-    return RefocusCollectorEval.safeTransform(functionBody, args);
+    return RefocusCollectorEval.safeTransform(functionBody, args, true);
   }, // evalTransformFunction
 
 };
