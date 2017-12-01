@@ -24,14 +24,23 @@ commander
 .action(name => projectName = name)
 .parse(process.argv);
 
+const { transform, toUrl } = commander;
+const projectText = `initializing project "${projectName}"`;
+const transformText = transform ? ` with transform example "${transform}"`: '';
+const andWith = transform && toUrl ? 'and' : 'with';
+const toUrlText = toUrl ? ` ${andWith} toUrl example "${toUrl}"`: '';
+
+
+console.log(projectText + transformText + toUrlText + ':');
+
 rgu.createDir(projectName)
-.then(() => rgu.copyPrototype(commander.transform, commander.toUrl))
+.then(() => rgu.copyPrototype(transform, toUrl))
+.then(() => rgu.copyPackages())
 .then(() => rgu.setupPackageJson())
 .then(() => rgu.getPackageInfo())
 .then((packageInfo) => {
   rgu.createTemplateJson(packageInfo);
   rgu.createReadme(packageInfo);
 })
-.then(() => rgu.install())
 .then(() => console.log(`Done generating resources (${Date.now() - startTime}ms)`))
 .catch((err) => console.log(`ERROR: ${err.message}`));

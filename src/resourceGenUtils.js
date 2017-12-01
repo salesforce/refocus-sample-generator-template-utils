@@ -18,6 +18,7 @@ let cwd = process.cwd();
 const validatePackageName = require('validate-npm-package-name');
 const Promise = require('bluebird');
 const execSync = require('child_process').execSync;
+const devDependencies = require('../package.json').devDependencies;
 
 /* Format of the README.md file */
 const readme = '# %s\n\n' +
@@ -28,16 +29,6 @@ const readme = '# %s\n\n' +
   'and toUrl function:\n\nTODO\n\n' +
   '## Transform Algorithm\n\nTODO write a description of the transform ' +
   'algorithm\n';
-
-/* Dependencies to add to the new project's package.json */
-const modulesToInstall = [
-  '@salesforce/refocus-collector-eval',
-  'chai',
-  'chai-url',
-  'istanbul',
-  'mocha',
-  'nock',
-];
 
 /* Scripts to add to the new project's package.json */
 const scriptsToAdd = {
@@ -72,15 +63,6 @@ module.exports = {
     } else if (validate.warnings) {
       return Promise.reject(new Error(validate.warnings[0]));
     }
-  },
-
-  /**
-   * Install dependencies
-   */
-  install: () => {
-    console.log('installing dependencies...');
-    execSync('npm install', { cwd, stdio: 'ignore' });
-    return Promise.resolve();
   },
 
   /**
@@ -186,6 +168,18 @@ module.exports = {
     path.resolve(dir, 'package.json')),
 
   /**
+   * Copies devDependencies from this project to the new project
+   */
+  copyPackages: () => {
+    console.log('copying packages...');
+    Object.keys(devDependencies).forEach((m) => {
+      const fromDir = path.resolve(__dirname, '..', 'node_modules', m);
+      const toDir = path.resolve(cwd, 'node_modules', m);
+      fs.copySync(fromDir, toDir);
+    });
+  },
+
+  /**
    * Initializes the package.json file, then adds scripts and dependencies.
    *
    * @param {String} dir - The directory to find the package.json file.
@@ -199,7 +193,9 @@ module.exports = {
     return fs.readJson(path.resolve(dir, 'package.json'))
     .then((p) => {
       if (!p.dependencies) p.dependencies = {};
-      modulesToInstall.forEach((m) => p.dependencies[m] = '*');
+      Object.keys(devDependencies).forEach((m) => {
+        p.dependencies[m] = devDependencies[m];
+      });
       if (!p.scripts) p.scripts = {};
       Object.keys(scriptsToAdd)
       .forEach((key) => p.scripts[key] = scriptsToAdd[key]);
