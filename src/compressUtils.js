@@ -262,7 +262,7 @@ function validateCtxDef(ctxDef) {
  * Make sure the contextDefinitions in transform and toUrl do not conflict
  * @throws {Error} if there is a conflict
  */
-function checkConflictingCtxDefs() {
+function checkConflictingCtxDefs(dir = cwd) {
   const transformPath = path.resolve(dir, 'transform', 'transform.js');
   const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
   const transformCtxDef = require(transformPath).contextDefinition;
@@ -283,6 +283,7 @@ function checkConflictingCtxDefs() {
       }
     }
   });
+  return Promise.resolve();
 }
 
 module.exports = {
