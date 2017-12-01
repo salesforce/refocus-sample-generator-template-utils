@@ -14,7 +14,8 @@
 const cu = require('../src/compressUtils');
 const startTime = Date.now();
 
-cu.buildTransform()
+cu.checkConflictingCtxDefs()
+.then(() => cu.buildTransform())
 .then(() => {
   console.log(`Done building transform (${Date.now() - startTime}ms)`)
   return cu.buildToUrl()

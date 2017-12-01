@@ -24,6 +24,7 @@ module.exports = {
   }, // buildToUrl
 
   generateUrl(ctx, aspects, subjects) {
+    assignContext(ctx, sgt.contextDefinition);
     const args = {ctx, aspects, subjects};
     return RefocusCollectorEval.safeToUrl(sgt.connection.toUrl, args, true);
   }, // generateUrl
@@ -50,6 +51,7 @@ module.exports = {
   }, // doHandleError
 
   evalTransformFunction(functionBody, ctx, aspects, subj, res) {
+    assignContext(ctx, sgt.contextDefinition);
     let args;
     const bulk = sgt.connection.bulk;
     const generatorTemplate = sgt;
@@ -63,3 +65,29 @@ module.exports = {
   }, // evalTransformFunction
 
 };
+
+function assignContext(ctx, def) {
+  if (!ctx || !def) return;
+
+  Object.keys(ctx).forEach((key) => {
+    if (!def[key]) {
+      throw new Error(
+        `context variable "${key}" was passed to the function but is not ` +
+        `defined in the contextDefinition`
+      );
+    }
+  });
+
+  Object.keys(def).forEach((key) => {
+    if (!ctx[key] && def[key].required) {
+      throw new Error(
+        `contextDefinition.${key} is marked as required but was not included ` +
+        `when calling this function`
+      );
+    }
+
+    if (!ctx[key] && def[key].default) {
+      ctx[key] = def[key].default;
+    }
+  });
+}
