@@ -43,13 +43,15 @@ After running the `sgtu-init` command, your project will be initialized with the
 - `/toUrl/testToUrl.js` - implement unit tests for your toUrl function here (if needed)
 - `/test/connection.js` - implement unit tests for your connection here
 
-Project initialization also adds some dependencies and scripts to your package.json which will help you validate, test, build and install your sample generator template:
+Project initialization also adds some dependencies and scripts to your package.json which will help you validate, test, build and install your sample generator template. Note that these are copied from this project, so if you haven't updated this project in a while you should run `npm update` before running `sgtu-init`.
 
 ### Dependencies
-- nock
-- mocha
+- @salesforce/refocus-collector-eval
 - chai
+- chai-url
 - istanbul
+- mocha
+- nock
 
 ### Scripts
 - `deploy`

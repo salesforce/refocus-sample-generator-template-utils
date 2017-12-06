@@ -21,6 +21,14 @@
     "sgtu-deploy": "bin/deploy.js",
     "sgtu-init": "bin/generateResources.js"
   },
+  "devDependencies": {
+    "@salesforce/refocus-collector-eval": "*",
+    "chai": "*",
+    "chai-url": "*",
+    "istanbul": "*",
+    "mocha": "*",
+    "nock": "*"
+  },
   "scripts": {
     "jscs-enforce": "./node_modules/jscs/bin/jscs src test",
     "test": "npm run jscs-enforce"
