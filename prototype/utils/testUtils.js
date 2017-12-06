@@ -46,6 +46,6 @@ module.exports = {
       args.subject = subj;
     }
 
-    return RefocusCollectorEval.safeTransform(fn, args);
+    return RefocusCollectorEval.safeTransform(fn, args, true);
   }, // doTransform
 };
