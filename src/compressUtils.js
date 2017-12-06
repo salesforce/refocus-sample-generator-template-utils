@@ -110,7 +110,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBulk.toString();
     bulk = isBulk(code);
     if (bulk) {
-      transformObj.transform = compress(code, helpers);
+      transformObj.default = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBulk" must ' +
         'have "subjects" param.');
@@ -121,7 +121,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBySubject.toString();
     bulk = isBulk(code);
     if (!bulk) {
-      transformObj.transform = compress(code, helpers);
+      transformObj.default = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBySubject" ' +
         'must have "subject" param.');
@@ -132,8 +132,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformExports.errorHandlers[functionName].toString();
     if (bulk === undefined) bulk = isBulk(code);
     if (isBulk(code) === bulk) {
-      transformObj.errorHandlers[functionName] =
-        compress(code, helpers);
+      transformObj.errorHandlers[functionName] = compress(code, helpers);
     } else {
       throw new Error(`Invalid function signature: "${functionName}" must ` +
         'have the same arguments as the corresponding "transformXXXXXX" ' +

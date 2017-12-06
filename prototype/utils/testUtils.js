@@ -24,42 +24,28 @@ module.exports = {
   }, // buildToUrl
 
   generateUrl(ctx, aspects, subjects) {
-    const args = {ctx, aspects, subjects};
-    return RefocusCollectorEval.safeToUrl(sgt.connection.toUrl, args, true);
+    sgt = require(`../${projectName}.json`);
+    const args = { ctx, aspects, subjects };
+    return RefocusCollectorEval.safeToUrl(sgt.connection.toUrl, args);
   }, // generateUrl
 
   doTransform(ctx, aspects, subj, res) {
-    return this.evalTransformFunction(sgt.transform.transform, ctx, aspects,
-      subj, res);
-  }, // doTransform
-
-  // TODO: move the status code matching to RefocusCollectorEval and use it here
-  doHandleError(statusCode, ctx, aspects, subj, res) {
-    let func;
-    const errorHandlers = sgt.transform.errorHandlers;
-    if (errorHandlers) {
-      Object.keys(errorHandlers).forEach((statusMatcher) => {
-        const re = new RegExp(statusMatcher);
-        if (re.test(statusCode)) {
-          func = errorHandlers[statusMatcher];
-        }
-      });
-    }
-
-    return this.evalTransformFunction(func, ctx, aspects, subj, res);
-  }, // doHandleError
-
-  evalTransformFunction(functionBody, ctx, aspects, subj, res) {
-    let args;
+    sgt = require(`../${projectName}.json`);
+    const fn =
+      RefocusCollectorEval.getTransformFunction(sgt.transform, res.statusCode);
+    const args = {
+      aspects,
+      ctx,
+      generatorTemplate: sgt,
+      res,
+    };
     const bulk = sgt.connection.bulk;
-    const generatorTemplate = sgt;
     if (bulk) {
-      args = { ctx, aspects, subjects: subj, res, generatorTemplate };
+      args.subjects = subj;
     } else {
-      args = { ctx, aspects, subject: subj, res, generatorTemplate };
+      args.subject = subj;
     }
 
-    return RefocusCollectorEval.safeTransform(functionBody, args, true);
-  }, // evalTransformFunction
-
+    return RefocusCollectorEval.safeTransform(fn, args, true);
+  }, // doTransform
 };
