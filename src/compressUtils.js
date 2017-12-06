@@ -52,54 +52,48 @@ const uglifyOpts = {
   warnings: true,
 };
 
-const buildToUrl = (dir = cwd) => fs.readJson(path.resolve(dir, `${name}.json`))
-  .then((contents) => contents.hasOwnProperty('connection') &&
-    contents.connection.hasOwnProperty('url') ?
-  Promise.reject('SGT already has connection.url') : true)
-  .then(() => compressToUrl(dir))
-  .then((code) => updateTemplateToUrl(code));
-
-const compressToUrl = (dir = cwd) => {
+function buildToUrl(dir = cwd) {
   const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
   const toUrlExports = require(toUrlPath);
   const toUrlString = toUrlExports.toUrl.toString();
-  const helpers = toUrlExports.helpers;
-  return compress(toUrlString, helpers);
-};
+  const ctxDef = toUrlExports.contextDefinition || {};
+  const helpers = toUrlExports.helpers || {};
 
-const doCompress = (code) => UglifyJS.minify(code, uglifyOpts).code;
+  validateCtxDef(ctxDef);
+  validateCtxUsages(toUrlString, ctxDef);
+  const code = compress(toUrlString, helpers);
 
-const doUpdateTemplate = (attr, code, pathToFile) => fs.readJson(pathToFile)
-  .then((contents) => {
-    contents[attr] = code;
-    return contents;
-  })
-  .then((contents) => fs.writeJson(pathToFile, contents, { spaces: 2 }));
-
-const updateTemplateToUrl = (code, dir = cwd) => {
   const f = path.resolve(dir, `${name}.json`);
-  fs.readJson(f)
+  return fs.readJson(f)
   .then((contents) => {
     if (!contents.hasOwnProperty('connection')) {
       contents.connection = {};
-    };
+    }
+
+    if (contents.connection.hasOwnProperty('url')) {
+      Promise.reject('SGT already has connection.url');
+    }
 
     contents.connection.toUrl = code;
+    Object.assign(contents.contextDefinition, ctxDef);
     return contents;
   })
   .then((contents) => fs.writeJson(f, contents, { spaces: 2 }));
-};
+}
 
-const buildTransform = (dir = cwd) => {
+function buildTransform(dir = cwd) {
   const transformPath = path.resolve(dir, 'transform', 'transform.js');
   const transformExports = require(transformPath);
   const transformBulk = transformExports.transformBulk;
   const transformBySubject = transformExports.transformBySubject;
   const errorHandlers = transformExports.errorHandlers
     ? Object.keys(transformExports.errorHandlers) : [];
-  const helpers = transformExports.helpers;
+  const ctxDef = transformExports.contextDefinition || {};
+  const helpers = transformExports.helpers || {};
   const transformObj = { errorHandlers: {}, };
   let bulk;
+
+  validateCtxDef(ctxDef);
 
   if (transformBulk && transformBySubject) {
     throw new Error('Only one transform function can be defined. Comment ' +
@@ -110,6 +104,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBulk.toString();
     bulk = isBulk(code);
     if (bulk) {
+      validateCtxUsages(code, ctxDef);
       transformObj.transform = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBulk" must ' +
@@ -121,6 +116,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformBySubject.toString();
     bulk = isBulk(code);
     if (!bulk) {
+      validateCtxUsages(code, ctxDef);
       transformObj.transform = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBySubject" ' +
@@ -132,6 +128,7 @@ const buildTransform = (dir = cwd) => {
     let code = transformExports.errorHandlers[functionName].toString();
     if (bulk === undefined) bulk = isBulk(code);
     if (isBulk(code) === bulk) {
+      validateCtxUsages(code, ctxDef);
       transformObj.errorHandlers[functionName] =
         compress(code, helpers);
     } else {
@@ -147,6 +144,7 @@ const buildTransform = (dir = cwd) => {
   .then((contents) => {
     contents.transform = transformObj;
     contents.connection.bulk = bulk;
+    Object.assign(contents.contextDefinition, ctxDef);
     return contents;
   })
   .then((contents) => fs.writeJson(f, contents, { spaces: 2 }));
@@ -168,7 +166,7 @@ function isBulk(code) {
  * @param  {Object} helpers - Helper functions used by the code.
  * @returns {String} as minified code
  */
-function compress(code, helpers = {}) {
+function compress(code, helpers) {
   /*
    * For default functions of the form:
    *   transformBulk(ctx, aspects, ...) {...}
@@ -216,11 +214,80 @@ function compress(code, helpers = {}) {
   return code;
 }
 
+/**
+ * Make sure any context variables used by the function are defined in the
+ * contextDefinition object.
+ * @param  {String} code - The function to be checked.
+ * @param  {Object} ctxDef - The contextDefinition object.
+ * @throws {Error} if there is an invalid use of a context variable.
+ */
+function validateCtxUsages(code, ctxDef) {
+  let match;
+  let ctxVars = [];
+  const re1 = /\bctx\s*\.\s*(\w+)/g; // match ctx.var
+  const re2 = /\bctx\s*\[\s*(['"`])?(.*)\1\s*\]/g; // match ctx[var]
+  while (match = re1.exec(code)) ctxVars.push(match[1]);
+  while (match = re2.exec(code)) ctxVars.push(match[2]);
+
+  ctxVars.forEach((key) => {
+    if (!ctxDef[key]) {
+      throw new Error(
+        `context variable "${key}" used in transform is not defined in ` +
+        `contextDefinition`
+      );
+    }
+  });
+}
+
+/**
+ * Make sure the context variables defined in the contextDefinition are valid.
+ * @param  {Object} ctxDef - The contextDefinition object.
+ * @throws {Error} if any of the variables are invalid.
+ */
+function validateCtxDef(ctxDef) {
+  Object.keys(ctxDef).forEach((key) => {
+    if (!ctxDef[key].description) {
+      throw new Error(`contextDefinition.${key}: description required`);
+    }
+
+    if (ctxDef[key].required && ctxDef[key].default) {
+      throw new Error(
+        `contextDefinition.${key}: default not needed if required is true`
+      );
+    }
+  });
+}
+
+/**
+ * Make sure the contextDefinitions in transform and toUrl do not conflict
+ * @throws {Error} if there is a conflict
+ */
+function checkConflictingCtxDefs(dir = cwd) {
+  const transformPath = path.resolve(dir, 'transform', 'transform.js');
+  const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
+  const transformCtxDef = require(transformPath).contextDefinition;
+  const toUrlCtxDef = require(toUrlPath).contextDefinition;
+  Object.keys(transformCtxDef).forEach((key) => {
+    const transformCtxVar = transformCtxDef[key];
+    const toUrlCtxVar = toUrlCtxDef[key];
+    if (transformCtxVar && toUrlCtxVar) {
+      if (
+        transformCtxVar.description !== toUrlCtxVar.description
+        || transformCtxVar.required !== toUrlCtxVar.required
+        || transformCtxVar.default !== toUrlCtxVar.default //TODO object?
+      ) {
+        throw new Error(
+          `contextDefinition.${key}: conflicting definitions in ` +
+          `transform.js and toUrl.js`
+        );
+      }
+    }
+  });
+  return Promise.resolve();
+}
+
 module.exports = {
   buildToUrl,
   buildTransform,
-  compressToUrl,
-  doCompress,
-  doUpdateTemplate,
-  updateTemplateToUrl,
+  checkConflictingCtxDefs,
 };

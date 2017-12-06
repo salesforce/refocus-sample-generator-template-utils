@@ -25,13 +25,40 @@ describe('transform tests >', () => {
     ];
     const ctx = {
       alternateMessageCode: 'Nooo!',
-      separator: '\n',
     };
     const res = {
       text: '100\n114\n72\n-123456',
     };
 
-    it('OK, one aspect, multiple subjects', () => {
+    it('OK, one aspect, multiple subjects, default separator', () => {
+      const samples = tu.doTransform(ctx, aspects, subjects, res);
+      console.log(samples)
+      expect(samples).to.be.an('array').with.length(4);
+      expect(samples[0]).to.deep.equal({
+        name: 'MyRoot.s1|aspect1',
+        value: '100',
+        messageCode: '100',
+      });
+      expect(samples[1]).to.deep.equal({
+        name: 'MyRoot.s2|aspect1',
+        value: '114',
+        messageCode: '114',
+      });
+      expect(samples[2]).to.deep.equal({
+        name: 'MyRoot.s3|aspect1',
+        value: '72',
+        messageCode: '72',
+      });
+      expect(samples[3]).to.deep.equal({
+        name: 'MyRoot.s4|aspect1',
+        value: '-123456',
+        messageCode: 'Nooo!',
+      });
+    });
+
+    it('OK, one aspect, multiple subjects, alternate separator', () => {
+      ctx.separator = '|';
+      res.text = '100|114|72|-123456';
       const samples = tu.doTransform(ctx, aspects, subjects, res);
       console.log(samples)
       expect(samples).to.be.an('array').with.length(4);

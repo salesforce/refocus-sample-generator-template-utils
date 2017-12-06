@@ -16,14 +16,30 @@
  */
 
 module.exports = {
- /*
+  /**
   * @param {Object} ctx - The context from the Sample Generator
   * @param {Array} aspects - Array of one or more aspects
   * @param {Array} subjects - Array of one or more subjects
   * @returns {String} the url
   */
- toUrl(ctx, aspects, subjects) {
-  return '';
+  toUrl(ctx, aspects, subjects) {
+    return '';
+  },
+
+  /**
+   * ContextDefinition (optional)
+   *
+   * Define context variables that the transform function relies on here.
+   * The values that get passed in to the transform will be assigned in the
+   * Sample Generator. You can also specify a default value here, to be used if
+   * "required" is false and no value is set.
+   */
+  contextDefinition: {
+    //var1: {
+    //  description: 'description...',
+    //  required: false,
+    //  default: 4,
+    //},
   },
 
   /**

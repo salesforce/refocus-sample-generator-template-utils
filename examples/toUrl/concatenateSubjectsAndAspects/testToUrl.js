@@ -30,7 +30,6 @@ describe('toUrl tests >', () => {
   };
   const ctx = {
     baseUrl: 'https://dummyUrl.io',
-    window: '-15m',
   };
   const aspects = [aspect1, aspect2];
   const subjects = [subject1, subject2];
@@ -41,12 +40,22 @@ describe('toUrl tests >', () => {
    * returned string is an expected url
    */
   describe('generateUrl >', () => {
-   it('generateUrl', () => {
+   it('generateUrl, default window', () => {
      const url = tu.generateUrl(ctx, aspects, subjects);
 
      expect(url).to.have.protocol('https');
      expect(url).to.contain.hostname('dummyurl.io');
      expect(url).to.contain.path('/expression=-15m:subjects:' +
+      '[subject1,subject2]:tests:[aspect1,aspect2]');
+   });
+
+   it('generateUrl, alternate window', () => {
+     ctx.window = '-22m';
+     const url = tu.generateUrl(ctx, aspects, subjects);
+
+     expect(url).to.have.protocol('https');
+     expect(url).to.contain.hostname('dummyurl.io');
+     expect(url).to.contain.path('/expression=-22m:subjects:' +
       '[subject1,subject2]:tests:[aspect1,aspect2]');
    });
   });

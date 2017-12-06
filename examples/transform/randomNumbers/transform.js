@@ -48,6 +48,26 @@ module.exports = {
     }));
   },
 
+  /**
+   * ContextDefinition (optional)
+   *
+   * Define context variables that the transform function relies on here.
+   * The values that get passed in to the transform will be assigned in the
+   * Sample Generator. You can also specify a default value here, to be used if
+   * "required" is false and no value is set.
+   */
+  contextDefinition: {
+    separator: {
+      description: 'the separator to use when splitting the response',
+      required: false,
+      default: '\n',
+    },
+    alternateMessageCode: {
+      description: 'the message code to use if the message is greater than 5 characters',
+      required: true,
+    }
+  },
+
   helpers: {
     /**
      * The sample's message code can only be 5 characters max, so if the
