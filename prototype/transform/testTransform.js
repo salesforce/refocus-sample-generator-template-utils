@@ -48,20 +48,21 @@ describe('transform tests >', () => {
 
   /*
    * Error Handlers (optional)
-   * Execute your errorHandlers with doHandleError and check that the returned
-   * samples have the expected values. doHandleError includes validation - you
+   * Execute your errorHandlers with doTransform and check that the returned
+   * samples have the expected values. doTransform includes validation - you
    * can assume the result is an array of valid sample objects.
    */
   //describe('handle errors >', () => {
   //  // bulk
   //  it('handle errors - 404', () => {
-  //    const samples = tu.doHandleError('404', ctx, aspects, subjects, res);
-  //    expect(samples).to.be.an('array').with.length(2);
+  //    const res = { statusCode: 404 };
+  //    const samples = tu.doTransform(ctx, aspects, subjects, res);
   //  });
   //
   //  // by subject
   //  it('handle errors - 404', () => {
-  //    const samples = tu.doHandleError('404', ctx, aspects, subject1, res);
+  //    const res = { statusCode: 404 };
+  //    const samples = tu.doTransform(ctx, aspects, subject1, res);
   //    expect(samples).to.be.an('array').with.length(1);
   //  });
   //});

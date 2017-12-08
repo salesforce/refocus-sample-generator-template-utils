@@ -105,7 +105,7 @@ function buildTransform(dir = cwd) {
     bulk = isBulk(code);
     if (bulk) {
       validateCtxUsages(code, ctxDef);
-      transformObj.transform = compress(code, helpers);
+      transformObj.default = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBulk" must ' +
         'have "subjects" param.');
@@ -117,7 +117,7 @@ function buildTransform(dir = cwd) {
     bulk = isBulk(code);
     if (!bulk) {
       validateCtxUsages(code, ctxDef);
-      transformObj.transform = compress(code, helpers);
+      transformObj.default = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBySubject" ' +
         'must have "subject" param.');
@@ -129,8 +129,7 @@ function buildTransform(dir = cwd) {
     if (bulk === undefined) bulk = isBulk(code);
     if (isBulk(code) === bulk) {
       validateCtxUsages(code, ctxDef);
-      transformObj.errorHandlers[functionName] =
-        compress(code, helpers);
+      transformObj.errorHandlers[functionName] = compress(code, helpers);
     } else {
       throw new Error(`Invalid function signature: "${functionName}" must ` +
         'have the same arguments as the corresponding "transformXXXXXX" ' +

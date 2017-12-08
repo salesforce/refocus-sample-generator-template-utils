@@ -37,13 +37,14 @@ describe('transform tests >', () => {
 
   /*
    * Error Handlers (optional)
-   * Execute your errorHandlers with doHandleError and check that the returned
-   * samples have the expected values. doHandleError includes validation - you
+   * Execute your errorHandlers with doTransform and check that the returned
+   * samples have the expected values. doTransform includes validation - you
    * can assume the result is an array of valid sample objects.
    */
   describe('handle errors >', () => {
     it('400', () => {
-      const samples = tu.doHandleError(400, ctx, aspects, subject1, res);
+      const res = { statusCode: 400 };
+      const samples = tu.doTransform(ctx, aspects, subject1, res);
       expect(samples).to.be.an('array').with.length(2);
       expect(samples[0]).to.deep.equal({
         name: 'root.node.subject1|aspect1',
@@ -60,7 +61,8 @@ describe('transform tests >', () => {
     });
 
     it('501', () => {
-      const samples = tu.doHandleError(501, ctx, aspects, subject1, res);
+      const res = { statusCode: 501 };
+      const samples = tu.doTransform(ctx, aspects, subject1, res);
       expect(samples).to.be.an('array').with.length(2);
       expect(samples[0]).to.deep.equal({
         name: 'root.node.subject1|aspect1',
@@ -77,7 +79,8 @@ describe('transform tests >', () => {
     });
 
     it('403', () => {
-      const samples = tu.doHandleError(403, ctx, aspects, subject1, res);
+      const res = { statusCode: 403 };
+      const samples = tu.doTransform(ctx, aspects, subject1, res);
       expect(samples).to.be.an('array').with.length(2);
       expect(samples[0]).to.deep.equal({
         name: 'root.node.subject1|aspect1',
