@@ -1,15 +1,16 @@
 /**
- * testToUrl.js
+ * testConnection.js
  */
 const chai = require('chai');
 chai.use(require('chai-url'));
 const expect = chai.expect;
+const helpers = require('./connection.js').helpers;
 const tu = require('../utils/testUtils');
 
-describe('toUrl tests >', () => {
-  before(tu.buildToUrl);
+describe('connection tests >', () => {
+  before(tu.buildConnection);
 
-  /*
+  /**
    * Set up data to be used in the tests.
    */
   const aspect1 = {
@@ -34,14 +35,15 @@ describe('toUrl tests >', () => {
   const aspects = [aspect1, aspect2];
   const subjects = [subject1, subject2];
 
-  /*
-   * toUrl
-   * Execute your toUrl function by calling generateUrl and check that the
+  /**
+   * ToUrl (optional)
+   *
+   * Execute your toUrl function by calling prepareUrl and check that the
    * returned string is an expected url
    */
-  describe('generateUrl >', () => {
-   it('generateUrl, default window', () => {
-     const url = tu.generateUrl(ctx, aspects, subjects);
+  describe('prepareUrl >', () => {
+   it('prepareUrl, default window', () => {
+     const url = tu.prepareUrl(ctx, aspects, subjects);
 
      expect(url).to.have.protocol('https');
      expect(url).to.contain.hostname('dummyurl.io');
@@ -49,14 +51,35 @@ describe('toUrl tests >', () => {
       '[subject1,subject2]:tests:[aspect1,aspect2]');
    });
 
-   it('generateUrl, alternate window', () => {
+   it('prepareUrl, alternate window', () => {
      ctx.window = '-22m';
-     const url = tu.generateUrl(ctx, aspects, subjects);
+     const url = tu.prepareUrl(ctx, aspects, subjects);
 
      expect(url).to.have.protocol('https');
      expect(url).to.contain.hostname('dummyurl.io');
      expect(url).to.contain.path('/expression=-22m:subjects:' +
       '[subject1,subject2]:tests:[aspect1,aspect2]');
    });
+  });
+
+  /**
+   * Helpers (optional)
+   *
+   * Test helpers directly.
+   */
+  describe('helpers >', () => {
+    it('concatArray', () => {
+      const subject1 = {
+        absolutePath: 'root.node.subject1',
+        name: 'subject1',
+      };
+      const subject2 = {
+        absolutePath: 'root.node.subject2',
+        name: 'subject2',
+      };
+      const subjects = [subject1, subject2];
+      const concatenatedSubjectNames = helpers.concatArray(subjects);
+      expect(concatenatedSubjectNames).to.equal('subject1,subject2');
+    });
   });
 });
