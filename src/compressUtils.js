@@ -52,16 +52,29 @@ const uglifyOpts = {
   warnings: true,
 };
 
-function buildToUrl(dir = cwd) {
-  const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
-  const toUrlExports = require(toUrlPath);
-  const toUrlString = toUrlExports.toUrl.toString();
-  const ctxDef = toUrlExports.contextDefinition || {};
-  const helpers = toUrlExports.helpers || {};
+function buildConnection(dir = cwd) {
+  const connectionPath = path.resolve(dir, 'connection', 'connection.js');
+  const connectionExports = require(connectionPath);
+  const url = connectionExports.url;
+  const toUrl = connectionExports.toUrl;
+  const headers = connectionExports.headers;
+  const ctxDef = connectionExports.contextDefinition || {};
+  const helpers = connectionExports.helpers || {};
+  let toUrlString;
+
+  if (!url && !toUrl) {
+    throw new Error('You must define either "url" or "toUrl".');
+  } else if (url && toUrl) {
+    throw new Error('"url" and "toUrl" cannot both be defined. Remove one.');
+  }
 
   validateCtxDef(ctxDef);
-  validateCtxUsages(toUrlString, ctxDef);
-  const code = compress(toUrlString, helpers);
+
+  if (toUrl) {
+    toUrlString = toUrl.toString();
+    validateCtxUsages(toUrlString, ctxDef, 'toUrl');
+    toUrlString = compress(toUrlString, helpers);
+  }
 
   const f = path.resolve(dir, `${name}.json`);
   return fs.readJson(f)
@@ -70,11 +83,26 @@ function buildToUrl(dir = cwd) {
       contents.connection = {};
     }
 
-    if (contents.connection.hasOwnProperty('url')) {
-      Promise.reject('SGT already has connection.url');
+    const connection = contents.connection;
+
+    if (url) {
+      connection.url = url;
+      if (connection.hasOwnProperty('toUrl')) {
+        delete connection.toUrl;
+      }
     }
 
-    contents.connection.toUrl = code;
+    if (toUrl) {
+      connection.toUrl = toUrlString;
+      if (connection.hasOwnProperty('url')) {
+        delete connection.url;
+      }
+    }
+
+    if (headers) {
+      connection.headers = headers;
+    }
+
     Object.assign(contents.contextDefinition, ctxDef);
     return contents;
   })
@@ -104,7 +132,7 @@ function buildTransform(dir = cwd) {
     let code = transformBulk.toString();
     bulk = isBulk(code);
     if (bulk) {
-      validateCtxUsages(code, ctxDef);
+      validateCtxUsages(code, ctxDef, 'transform');
       transformObj.default = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBulk" must ' +
@@ -116,7 +144,7 @@ function buildTransform(dir = cwd) {
     let code = transformBySubject.toString();
     bulk = isBulk(code);
     if (!bulk) {
-      validateCtxUsages(code, ctxDef);
+      validateCtxUsages(code, ctxDef, 'transform');
       transformObj.default = compress(code, helpers);
     } else {
       throw new Error('Invalid function signature: "transformBySubject" ' +
@@ -128,7 +156,7 @@ function buildTransform(dir = cwd) {
     let code = transformExports.errorHandlers[functionName].toString();
     if (bulk === undefined) bulk = isBulk(code);
     if (isBulk(code) === bulk) {
-      validateCtxUsages(code, ctxDef);
+      validateCtxUsages(code, ctxDef, 'transform');
       transformObj.errorHandlers[functionName] = compress(code, helpers);
     } else {
       throw new Error(`Invalid function signature: "${functionName}" must ` +
@@ -218,9 +246,10 @@ function compress(code, helpers) {
  * contextDefinition object.
  * @param  {String} code - The function to be checked.
  * @param  {Object} ctxDef - The contextDefinition object.
+ * @param  {String} fName - The name of the function being checked.
  * @throws {Error} if there is an invalid use of a context variable.
  */
-function validateCtxUsages(code, ctxDef) {
+function validateCtxUsages(code, ctxDef, fName) {
   let match;
   let ctxVars = [];
   const re1 = /\bctx\s*\.\s*(\w+)/g; // match ctx.var
@@ -231,7 +260,7 @@ function validateCtxUsages(code, ctxDef) {
   ctxVars.forEach((key) => {
     if (!ctxDef[key]) {
       throw new Error(
-        `context variable "${key}" used in transform is not defined in ` +
+        `context variable "${key}" used in ${fName} is not defined in ` +
         `contextDefinition`
       );
     }
@@ -258,26 +287,26 @@ function validateCtxDef(ctxDef) {
 }
 
 /**
- * Make sure the contextDefinitions in transform and toUrl do not conflict
+ * Make sure the contextDefinitions in transform and connection do not conflict
  * @throws {Error} if there is a conflict
  */
 function checkConflictingCtxDefs(dir = cwd) {
   const transformPath = path.resolve(dir, 'transform', 'transform.js');
-  const toUrlPath = path.resolve(dir, 'toUrl', 'toUrl.js');
+  const connectionPath = path.resolve(dir, 'connection', 'connection.js');
   const transformCtxDef = require(transformPath).contextDefinition;
-  const toUrlCtxDef = require(toUrlPath).contextDefinition;
+  const connectionCtxDef = require(connectionPath).contextDefinition;
   Object.keys(transformCtxDef).forEach((key) => {
     const transformCtxVar = transformCtxDef[key];
-    const toUrlCtxVar = toUrlCtxDef[key];
-    if (transformCtxVar && toUrlCtxVar) {
+    const connectionCtxVar = connectionCtxDef[key];
+    if (transformCtxVar && connectionCtxVar) {
       if (
-        transformCtxVar.description !== toUrlCtxVar.description
-        || transformCtxVar.required !== toUrlCtxVar.required
-        || transformCtxVar.default !== toUrlCtxVar.default //TODO object?
+        transformCtxVar.description !== connectionCtxVar.description
+        || transformCtxVar.required !== connectionCtxVar.required
+        || transformCtxVar.default !== connectionCtxVar.default
       ) {
         throw new Error(
           `contextDefinition.${key}: conflicting definitions in ` +
-          `transform.js and toUrl.js`
+          `transform.js and connection.js`
         );
       }
     }
@@ -286,7 +315,7 @@ function checkConflictingCtxDefs(dir = cwd) {
 }
 
 module.exports = {
-  buildToUrl,
+  buildConnection,
   buildTransform,
   checkConflictingCtxDefs,
 };
