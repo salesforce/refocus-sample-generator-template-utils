@@ -57,6 +57,7 @@ describe('transform tests >', () => {
   //  it('handle errors - 404', () => {
   //    const res = { statusCode: 404 };
   //    const samples = tu.doTransform(ctx, aspects, subjects, res);
+  //    expect(samples).to.be.an('array').with.length(2);
   //  });
   //
   //  // by subject
