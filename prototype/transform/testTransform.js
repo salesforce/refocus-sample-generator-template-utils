@@ -6,9 +6,9 @@ const helpers = require('./transform.js').helpers;
 const tu = require('../utils/testUtils');
 
 describe('transform tests >', () => {
-  before(tu.build);
+  before(tu.buildTransform);
 
-  /*
+  /**
    * Set up data to be used in the tests.
    */
   const aspect1 = {
@@ -26,8 +26,9 @@ describe('transform tests >', () => {
   const subjects = [subject1, subject2];
   const res = {};
 
-  /*
+  /**
    * Transform
+   *
    * Execute your transform function with doTransform and check that the returned
    * samples have the expected values. doTransform includes validation - you can
    * assume the result is an array of valid sample objects.
@@ -46,7 +47,7 @@ describe('transform tests >', () => {
   //  });
   //});
 
-  /*
+  /**
    * Error Handlers (optional)
    * Execute your errorHandlers with doTransform and check that the returned
    * samples have the expected values. doTransform includes validation - you
@@ -68,8 +69,9 @@ describe('transform tests >', () => {
   //  });
   //});
 
-  /*
+  /**
    * Helpers (optional)
+   *
    * Test helpers directly.
    */
   //describe('helpers >', () => {

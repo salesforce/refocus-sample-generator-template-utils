@@ -6,9 +6,8 @@
  * Use context data, aspects, subject(s), and the response from the remote data
  * source to generate samples to send to Refocus.
  *
- * Your transform implementation must return an array of valid samples. The
- * size of the array should equal the number of subjects * the number of
- * aspects.
+ * Your transform implementation must return an array of valid samples. The size
+ * of the array should equal the number of subjects * the number of aspects.
  *
  * Each sample should have a messageBody no longer than 4096 characters. If the
  * message is longer than that it will be truncated at 4096 by default.
@@ -68,6 +67,11 @@ module.exports = {
     }
   },
 
+  /**
+   * Helpers (optional)
+   *
+   * Define helper functions here if you need to be able to test them directly.
+   */
   helpers: {
     /**
      * The sample's message code can only be 5 characters max, so if the
