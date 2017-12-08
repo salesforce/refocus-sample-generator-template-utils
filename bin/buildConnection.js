@@ -9,11 +9,11 @@
  */
 
 /**
- * bin/buildToUrl.js
+ * bin/buildConnection.js
  */
 const cu = require('../src/compressUtils');
 const startTime = Date.now();
 
-cu.buildToUrl()
-.then(() => console.log(`Done building toUrl (${Date.now() - startTime}ms)`))
+cu.buildConnection()
+.then(() => console.log(`Done building connection (${Date.now() - startTime}ms)`))
 .catch((err) => console.error(err));

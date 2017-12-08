@@ -18,8 +18,8 @@ cu.checkConflictingCtxDefs()
 .then(() => cu.buildTransform())
 .then(() => {
   console.log(`Done building transform (${Date.now() - startTime}ms)`)
-  return cu.buildToUrl()
+  return cu.buildConnection()
 })
-.then(() => console.log(`Done building toUrl (${Date.now() - startTime}ms)`))
+.then(() => console.log(`Done building connection (${Date.now() - startTime}ms)`))
 .catch((err) => console.error(err));
 

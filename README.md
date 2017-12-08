@@ -19,10 +19,10 @@ $ npm link
 Run `sgtu-init <projectName>` to create a new Refocus Sample Generator Template project.
 
 ```
-$ sgtu-init <projectName> [--transform <exampleName>] [--toUrl <exampleName>]
+$ sgtu-init <projectName> [--transform <exampleName>] [--connection <exampleName>]
 ```
 
-The optional `transform` and `toUrl` arguments can initialize your project based on one of the examples in the `/examples` directory.
+The optional `transform` and `connection` arguments can initialize your project based on one of the examples in the `/examples` directory.
 
 Transform Examples:
 - `mockBulk` - creates mock samples based only on the aspects and subjects passed in.
@@ -39,9 +39,8 @@ After running the `sgtu-init` command, your project will be initialized with the
 - `/[your-template-name].json` - sample generator template json
 - `/transform/transform.js` - implement your transform function here
 - `/transform/testTransform.js` - implement unit tests for your transform function here
-- `/toUrl/toUrl.js` - implement your toUrl function here (if needed)
-- `/toUrl/testToUrl.js` - implement unit tests for your toUrl function here (if needed)
-- `/test/connection.js` - implement unit tests for your connection here
+- `/connection/connection.js` - implement your connection here (if needed)
+- `/connection/testConnection.js` - implement unit tests for your connection here (if needed)
 
 Project initialization also adds some dependencies and scripts to your package.json which will help you validate, test, build and install your sample generator template. Note that these are copied from this project, so if you haven't updated this project in a while you should run `npm update` before running `sgtu-init`.
 
@@ -57,7 +56,6 @@ Project initialization also adds some dependencies and scripts to your package.j
 - `deploy`
 - `test`
 - `test-connection`
-- `test-to-url`
 - `test-transform`
 - `validate`
 
@@ -113,13 +111,13 @@ Write your tests in the stubbed out `/transform/testTransform.js` file.
 
 ### toUrl
 
-If you need to do more complex transformations to generate a URL, rather than just simple variable substitutions, go to  /src/toUrl.js and implement your logic in the function which is already stubbed out in that file. The function must return a string. The function body has access to these variables:
+If you need to do more complex transformations to generate a URL, rather than just simple variable substitutions, go to  /connection/connection.js and implement your logic in the function which is already stubbed out in that file. The function must return a string. The function body has access to these variables:
 
 - `context` - a reference to the sample generator context data, with defaults applied.
 - `aspects` - an array of one or more aspects as specified by the sample generator.
 - `subjects` - an array of one or more subjects as specified by the sample generator.
 
-Write your tests in the stubbed out `/test/toUrl.js` file.
+Write your tests in the stubbed out `/connection/testConnection.js` file.
 
 ## Finish describing the SGT
 
@@ -141,7 +139,6 @@ These scripts have been added to your `package.json`:
 
 - `test`
 - `test-connection`
-- `test-to-url`
 - `test-transform`
 
 You can run any of these scripts from the command line by calling `npm run [SCRIPT-NAME]`.

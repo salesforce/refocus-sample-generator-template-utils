@@ -14,7 +14,7 @@
     "validate-npm-package-name": "^3.0.0"
   },
   "bin": {
-    "sgtu-build-to-url": "bin/buildToUrl.js",
+    "sgtu-build-connection": "bin/buildConnection.js",
     "sgtu-build-transform": "bin/buildTransform.js",
     "sgtu-build": "bin/build.js",
     "sgtu-deploy": "bin/deploy.js",
