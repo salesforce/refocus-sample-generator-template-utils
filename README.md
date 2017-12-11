@@ -22,7 +22,7 @@ Run `sgtu-init <projectName>` to create a new Refocus Sample Generator Template 
 $ sgtu-init <projectName> [--transform <exampleName>] [--connection <exampleName>]
 ```
 
-The optional `transform` and `connection` arguments can initialize your project based on one of the examples in the `/examples` directory.
+The optional `transform` and `connection` arguments can initialize your project based on examples in the `/examples` directory.
 
 Transform Examples:
 - `mockBulk` - creates mock samples based only on the aspects and subjects passed in.
@@ -39,8 +39,8 @@ After running the `sgtu-init` command, your project will be initialized with the
 - `/[your-template-name].json` - sample generator template json
 - `/transform/transform.js` - implement your transform function here
 - `/transform/testTransform.js` - implement unit tests for your transform function here
-- `/connection/connection.js` - implement your connection here (if needed)
-- `/connection/testConnection.js` - implement unit tests for your connection here (if needed)
+- `/connection/connection.js` - implement your connection here
+- `/connection/testConnection.js` - implement unit tests for your connection here
 
 Project initialization also adds some dependencies and scripts to your package.json which will help you validate, test, build and install your sample generator template. Note that these are copied from this project, so if you haven't updated this project in a while you should run `npm update` before running `sgtu-init`.
 
@@ -61,39 +61,21 @@ Project initialization also adds some dependencies and scripts to your package.j
 
 ## Development (aka "What do I do next?")
 
-### Connection Information
+### Connection
 
-Update the connection attribute of the generated json file with the details on how to connect to the data source.
+Go to `/connection/connection.js` and implement either `url` or `toUrl`.
+- `url` (String) You may embed substitution variables in the string using double curly braces, e.g. http://www.xyz.com?id={{key}}. The variable names must all be defined in the `contextDefinition`. Omit the `url` attribute if you intend to implement a `toUrl` function instead.
 
-- `bulk` (Boolean, optional, default=`false`) - set to `false` if you want to send one request for each of the designated subjects; set to `true` if you want to collect data for all of the designated subjects in a single request.
-- `headers` (Object, optional) - headers to include in the request. For each named header, if you define it using an object, the Sample Generator is expected to provide the value; if you define it with a string, the header is set using that value.
-- `method` (String, default=`GET` [`DELETE`|`GET`|`HEAD`|`PATCH`|`POST`|`PUT`])
-- `timeout` (Number, optional, default=[the Refocus Collector's default value], max=[some hard-coded max]) - the number of milliseconds to wait before aborting the request. If undefined or non-numeric values or greater than max, the connection will use the Refocus Collector's default value.
-- `url` (String) - you may embed substitution variables in the string using double curly braces, e.g. http://www.xyz.com?id={{key}}. The variable names must all be defined in the `contextDefinition`. Omit the `url` attribute if you intend to implement a `toUrl` function instead.
+- `toUrl` (Function) Use this if you need to do more complex transformations to generate a URL, rather than just simple variable substitutions. Implement your logic in the function body that is already stubbed out. The function must return a string. The function body has access to these variables:
 
-For example:
+  - `context` - a reference to the sample generator context data, with defaults applied.
+  - `aspects` - an array of one or more aspects as specified by the sample generator.
+  - `subjects` - an array of one or more subjects as specified by the sample generator.
 
-```json
-"connection": {
-  "bulk": false,
-  "headers": {
-    "Authorization": "{{token}}",
-    "Accept": "application/json"
-  },
-  "timeout": 10000,
-  "url": "{{baseUrl}}/v1/xyz?key={{aspect[0].name}}&&id={{subject.name}}"
-}
-```
+You can also optionally implement `headers` if you need to send custom headers in the request:
+- `headers` (Object, optional) For each named header, if you define it using an object, the Sample Generator is expected to provide the value; if you define it with a string, the header is set using that value. You may embed substitution variables in the string values using double curly braces, e.g. Accept: 'application/{{contentType}}. The variable names must all be defined in the `contextDefinition`.
 
-You must also specify some connection test metadata in /test/connection.js.
-
-### Context Definition
-
-Update the contextDefinition attribute of the generated json file to define any variables you need to make available to your url (via double curly braces) or to your toUrl and transform functions via the functions' context argument `ctx`. Each key defined here must provide an object with the following attributes:
-
-- `description` (String, required) - provide enough detail for the user to understand what value to provide
-- `required` (Boolean, optional, default = `false`) - set to `true` if your users *must* provide a value for this context variable in their sample generators.
-- `default` (Any, optional) - a value to populate the context variable when your users do not provide a value in their sample generators.
+Write your tests in the stubbed out `/connection/testConnection.js` file.
 
 ### Transform
 
@@ -109,15 +91,20 @@ Provide guidance for the developer to answer stuff like “how are you handling 
 
 Write your tests in the stubbed out `/transform/testTransform.js` file.
 
-### toUrl
+### Context Definition (Optional)
 
-If you need to do more complex transformations to generate a URL, rather than just simple variable substitutions, go to  /connection/connection.js and implement your logic in the function which is already stubbed out in that file. The function must return a string. The function body has access to these variables:
+Update the contextDefinition attributes in `connection/connection.js` and `transform/transform.js` to define any variables you need to make available to your url or headers (via double curly braces) or to your toUrl and transform functions via the functions' context argument `ctx`. Each key defined here must provide an object with the following attributes:
 
-- `context` - a reference to the sample generator context data, with defaults applied.
-- `aspects` - an array of one or more aspects as specified by the sample generator.
-- `subjects` - an array of one or more subjects as specified by the sample generator.
+- `description` (String, required) - provide enough detail for the user to understand what value to provide
+- `required` (Boolean, optional, default = `false`) - set to `true` if your users *must* provide a value for this context variable in their sample generators.
+- `default` (Any, optional) - a value to populate the context variable when your users do not provide a value in their sample generators.
 
-Write your tests in the stubbed out `/connection/testConnection.js` file.
+### Other Connection Information (optional)
+
+If you need to change the method or the timeout used in the request, edit the connection attribute of the generated json file directly:
+
+- `method` (String, default=`GET` [`DELETE`|`GET`|`HEAD`|`PATCH`|`POST`|`PUT`])
+- `timeout` (Number, optional, default=[the Refocus Collector's default value], max=[some hard-coded max]) - the number of milliseconds to wait before aborting the request. If undefined or non-numeric values or greater than max, the connection will use the Refocus Collector's default value.
 
 ## Finish describing the SGT
 
