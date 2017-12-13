@@ -8,8 +8,8 @@ const tu = require('../utils/testUtils');
 describe('transform tests >', () => {
   before(tu.buildTransform);
 
-  /*
-   * Transform Tests
+  /**
+   * Transform
    *
    * Execute your transform function with doTransform and check that the
    * returned samples have the expected values. doTransform includes validation
@@ -85,8 +85,9 @@ describe('transform tests >', () => {
     });
   });
 
-  /*
+  /**
    * Helpers (optional)
+   *
    * Test helpers directly.
    */
   describe('helpers >', () => {

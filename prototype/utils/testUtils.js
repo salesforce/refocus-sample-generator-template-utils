@@ -1,7 +1,7 @@
 /**
  * utils/testUtils.js
  */
-const RefocusCollectorEval = require('@salesforce/refocus-collector-eval');
+const rce = require('@salesforce/refocus-collector-eval');
 const exec = require('child_process').exec;
 const projectName = require('../package.json').name;
 let sgt;
@@ -41,25 +41,31 @@ module.exports = {
     });
   }, // buildTransform
 
-  buildToUrl(done) {
-    exec('sgtu-build-to-url', (err) => {
+  buildConnection(done) {
+    exec('sgtu-build-connection', (err) => {
       if (err) return done(err);
       sgt = require(`../${projectName}.json`);
       done();
     });
-  }, // buildToUrl
+  }, // buildConnection
 
-  generateUrl(ctx, aspects, subjects) {
+  prepareUrl(ctx, aspects, subjects) {
     sgt = require(`../${projectName}.json`);
     assignContext(ctx, sgt.contextDefinition);
-    const args = { ctx, aspects, subjects };
-    return RefocusCollectorEval.safeToUrl(sgt.connection.toUrl, args, true);
-  }, // generateUrl
+    return rce.prepareUrl(ctx, aspects, subjects, sgt.connection, true);
+  }, // prepareUrl
+
+  prepareHeaders(ctx) {
+    sgt = require(`../${projectName}.json`);
+    assignContext(ctx, sgt.contextDefinition);
+    return rce.prepareHeaders(sgt.connection.headers, ctx);
+  }, // prepareHeaders
 
   doTransform(ctx, aspects, subj, res) {
     sgt = require(`../${projectName}.json`);
+    if (!res.statusCode) res.statusCode = 200;
     const fn =
-      RefocusCollectorEval.getTransformFunction(sgt.transform, res.statusCode);
+      rce.getTransformFunction(sgt.transform, res.statusCode);
     const args = {
       aspects,
       ctx,
@@ -73,6 +79,6 @@ module.exports = {
       args.subject = subj;
     }
 
-    return RefocusCollectorEval.safeTransform(fn, args, true);
+    return rce.safeTransform(fn, args, true);
   }, // evalTransformFunction
 };

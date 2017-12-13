@@ -36,10 +36,9 @@ const scriptsToAdd = {
   deploy: 'sgtu-deploy',
   'template-init': 'sgtu-init',
   test: 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
-    '--report lcovonly -- -R dot transform/testTransform.js toUrl/testToUrl.js ',
-  'test-connection': 'echo "test-connection"',
-  'test-to-url': './node_modules/mocha/bin/_mocha ' +
-    ' toUrl/testToUrl.js',
+    '--report lcovonly -- -R dot transform/testTransform.js connection/testConnection.js ',
+  'test-connection': './node_modules/mocha/bin/_mocha ' +
+    ' connection/testConnection.js',
   'test-transform': './node_modules/mocha/bin/_mocha ' +
     ' transform/testTransform.js',
   validate: 'echo "validate"',
@@ -67,24 +66,24 @@ module.exports = {
 
   /**
    * Copy the prototype directory to the specified location.
-   * Copy transform and toUrl examples if specified
+   * Copy transform and connection examples if specified
    *
    * @param {String} transformExample - the name of the transform example to
    *  be used.
-   * @param {String} toUrlExample - the name of the toUrl example to be used.
+   * @param {String} connectionExample - the name of the connection example to be used.
    * @param {String} toDir - The destination directory. Defaults to
    *  process.cwd
    * @returns {Promise} which resolves to the response from the copy command,
    *  or an error.
    */
-  copyPrototype: (transformExample, urlExample, toDir = cwd) => {
+  copyPrototype: (transformExample, connectionExample, toDir = cwd) => {
     console.log('copying files to new project...');
     let transformFromDir = path.resolve(__dirname, '../prototype/transform');
-    let urlFromDir = path.resolve(__dirname, '../prototype/toUrl');
+    let urlFromDir = path.resolve(__dirname, '../prototype/connection');
     const utilsFromDir = path.resolve(__dirname, '../prototype/utils');
 
     const transformToDir = path.resolve(toDir, 'transform');
-    const urlToDir = path.resolve(toDir, 'toUrl');
+    const urlToDir = path.resolve(toDir, 'connection');
     const utilsToDir = path.resolve(toDir, 'utils');
 
     if (transformExample) {
@@ -92,8 +91,9 @@ module.exports = {
         `../examples/transform/${transformExample}`);
     }
 
-    if (urlExample) {
-      urlFromDir = path.resolve(__dirname, `../examples/toUrl/${urlExample}`);
+    if (connectionExample) {
+      urlFromDir = path.resolve(__dirname,
+        `../examples/connection/${connectionExample}`);
     }
 
     return fs.copy(utilsFromDir, utilsToDir)

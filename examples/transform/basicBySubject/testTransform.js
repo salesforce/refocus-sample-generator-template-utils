@@ -1,12 +1,4 @@
 /**
- * Copyright (c) 2017, salesforce.com, inc.
- * All rights reserved.
- * Licensed under the BSD 3-Clause license.
- * For full license text, see LICENSE.txt file in the repo root or
- * https://opensource.org/licenses/BSD-3-Clause
- */
-
-/**
  * testTransform.js
  */
 const expect = require('chai').expect;
@@ -16,7 +8,7 @@ const tu = require('../utils/testUtils');
 describe('transform tests >', () => {
   before(tu.buildTransform);
 
-  /*
+  /**
    * Set up data to be used in the tests.
    */
   const asp1 = {
@@ -29,8 +21,9 @@ describe('transform tests >', () => {
   };
   const ctx = {};
 
-  /*
+  /**
    * Transform
+   *
    * Execute your transform function with doTransform and check that the returned
    * samples have the expected values. doTransform includes validation - you can
    * assume the result is an array of valid sample objects.
@@ -81,8 +74,9 @@ describe('transform tests >', () => {
     });
   });
 
-  /*
+  /**
    * Helpers (optional)
+   *
    * Test helpers directly.
    */
   describe('helpers >', () => {

@@ -1,12 +1,4 @@
 /**
- * Copyright (c) 2017, salesforce.com, inc.
- * All rights reserved.
- * Licensed under the BSD 3-Clause license.
- * For full license text, see LICENSE.txt file in the repo root or
- * https://opensource.org/licenses/BSD-3-Clause
- */
-
-/**
  * transform.js
  *
  * Implement the transform function here.
@@ -14,8 +6,8 @@
  * Use context data, aspects, subject(s), and the response from the remote data
  * source to generate samples to send to Refocus.
  *
- * Your transform implementation must return an array of valid samples. The size of
- * the array should equal the number of subjects * the number of aspects.
+ * Your transform implementation must return an array of valid samples. The size
+ * of the array should equal the number of subjects * the number of aspects.
  *
  * Each sample should have a messageBody no longer than 4096 characters. If the
  * message is longer than that it will be truncated at 4096 by default.

@@ -20,21 +20,21 @@ commander
 .arguments('<projectName>')
 .option('-t, --transform <exampleName>', 'The name of the transform ' +
   'example to use')
-.option('-u, --toUrl <exampleName>', 'The name of the toUrl example to use')
+.option('-c, --connection <exampleName>', 'The name of the connection example to use')
 .action(name => projectName = name)
 .parse(process.argv);
 
-const { transform, toUrl } = commander;
+const { transform, connection } = commander;
 const projectText = `initializing project "${projectName}"`;
 const transformText = transform ? ` with transform example "${transform}"`: '';
-const andWith = transform && toUrl ? 'and' : 'with';
-const toUrlText = toUrl ? ` ${andWith} toUrl example "${toUrl}"`: '';
+const andWith = transform && connection ? 'and' : 'with';
+const connectionText = connection ? ` ${andWith} connection example "${connection}"`: '';
 
 
-console.log(projectText + transformText + toUrlText + ':');
+console.log(projectText + transformText + connectionText + ':');
 
 rgu.createDir(projectName)
-.then(() => rgu.copyPrototype(transform, toUrl))
+.then(() => rgu.copyPrototype(transform, connection))
 .then(() => rgu.copyPackages())
 .then(() => rgu.setupPackageJson())
 .then(() => rgu.getPackageInfo())
