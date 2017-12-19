@@ -34,6 +34,13 @@ Transform Examples:
 - `helpers` - example helper functions
 - `randomNumbers` - a bulk transform example using helpers
 
+Connection Examples:
+- `basic` - specifies a url string and headers object
+- `basicSubstitution` - specifies a url string and headers object with substitution variables
+- `concatenateAspects` - generates a url based on the provided aspect names
+- `concatenateSubjectsAndAspects` - generates a url based on the provided aspect and subject names
+- `helpers` - example helper functions
+
 After running the `sgtu-init` command, your project will be initialized with the following resources to help you get started:
 - `/README.md` - since *of course* you will be publishing this on github!
 - `/[your-template-name].json` - sample generator template json
