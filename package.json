@@ -5,10 +5,15 @@
   "main": "index.js",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "chai-as-promised": "^7.1.1",
     "commander": "^2.12.2",
+    "coveralls": "^3.0.0",
     "fs-extra": "^4.0.3",
     "joi": "^10.6.0",
     "jscs": "^3.0.7",
+    "mock-fs": "^4.4.2",
+    "mock-require": "^3.0.1",
+    "nock": "^9.1.6",
     "superagent": "^3.8.1",
     "uglify-es": "^3.2.1",
     "validate-npm-package-name": "^3.0.0"
@@ -25,13 +30,27 @@
     "chai": "*",
     "chai-url": "*",
     "istanbul": "*",
-    "mocha": "*",
-    "nock": "*"
+    "mocha": "*"
   },
   "scripts": {
-    "jscs-enforce": "./node_modules/jscs/bin/jscs src test",
-    "test": "npm run jscs-enforce"
+    "jscs-enforce": "./node_modules/jscs/bin/jscs src test bin prototype",
+    "run-examples": "./runExample.sh all",
+    "run-tests": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive ./test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test": "npm run jscs-enforce && npm run run-examples && npm run run-tests"
   },
   "author": "Salesforce CX Tools",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salesforce/refocus-sample-generator-template-utils.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/salesforce/refocus-sample-generator-template-utils/issues"
+  },
+  "homepage": "https://github.com/salesforce/refocus-sample-generator-template-utils#readme"
 }

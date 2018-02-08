@@ -11,6 +11,7 @@ function runExample {
   sgtu-init $dir $1 $2
   cd $dir
   npm run test
+  if [ $? != 0 ]; then exit; fi
   cd ..
 }
 
