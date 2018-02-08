@@ -26,10 +26,9 @@ commander
 
 const { transform, connection } = commander;
 const projectText = `initializing project "${projectName}"`;
-const transformText = transform ? ` with transform example "${transform}"`: '';
+const transformText = transform ? ` with transform example "${transform}"` : '';
 const andWith = transform && connection ? 'and' : 'with';
-const connectionText = connection ? ` ${andWith} connection example "${connection}"`: '';
-
+const connectionText = connection ? ` ${andWith} connection example "${connection}"` : '';
 
 console.log(projectText + transformText + connectionText + ':');
 
