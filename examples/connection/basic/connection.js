@@ -19,7 +19,7 @@ module.exports = {
    * Specify a url string to use for collection.
    * You can use context variables with {{var}}.
    */
-  url: 'https://www.example.com/expression=-15m:subjects:all:tests:all',
+  url: 'https://www.example.com?expression=-15m:subjects:all:tests:all',
 
   /**
    * Headers (optional)

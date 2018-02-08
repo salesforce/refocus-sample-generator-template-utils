@@ -69,15 +69,15 @@ describe('transform tests >', () => {
    */
   describe('helpers >', () => {
     it('generateSampleName', () => {
-      const subject = {absolutePath: 'aaa.bbb.ccc'};
-      const aspect = {name: 'ddd'};
+      const subject = { absolutePath: 'aaa.bbb.ccc' };
+      const aspect = { name: 'ddd' };
       const sampleName = helpers.generateSampleName(subject, aspect);
       expect(sampleName).to.equal('aaa.bbb.ccc|ddd');
     });
 
     it('generateSampleUrl', () => {
-      const subject = {name: 'ccc'};
-      const aspect = {name: 'ddd'};
+      const subject = { name: 'ccc' };
+      const aspect = { name: 'ddd' };
       const sampleUrl = helpers.generateSampleUrl(subject, aspect);
       expect(sampleUrl).to.equal('http://www.example.com/ddd?data=ccc');
     });

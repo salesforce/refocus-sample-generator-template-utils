@@ -16,10 +16,10 @@ describe('transform tests >', () => {
     timeout: '60s',
   };
   const subject1 = {
-    absolutePath: 'root.node.subject1'
+    absolutePath: 'root.node.subject1',
   };
   const subject2 = {
-    absolutePath: 'root.node.subject2'
+    absolutePath: 'root.node.subject2',
   };
 
   const ctx = {};

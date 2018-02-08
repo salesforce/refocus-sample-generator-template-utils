@@ -19,7 +19,7 @@ module.exports = {
    * Specify a url string to use for collection.
    * You can use context variables with {{var}}.
    */
-  url: 'https://{{baseUrl}}/expression={{window}}:subjects:all:tests:all',
+  url: 'https://{{baseUrl}}?expression={{window}}:subjects:all:tests:all',
 
   /**
    * Headers (optional)
@@ -52,12 +52,12 @@ module.exports = {
     type: {
       description: 'The content-type type',
       required: false,
-      default: 'text'
+      default: 'text',
     },
     subtype: {
       description: 'The content-type subtype',
       required: false,
-      default: 'plain'
+      default: 'plain',
     },
   },
 

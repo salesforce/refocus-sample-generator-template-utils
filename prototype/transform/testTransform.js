@@ -16,10 +16,10 @@ describe('transform tests >', () => {
     timeout: '60s',
   };
   const subject1 = {
-    absolutePath: 'root.node.subject1'
+    absolutePath: 'root.node.subject1',
   };
   const subject2 = {
-    absolutePath: 'root.node.subject2'
+    absolutePath: 'root.node.subject2',
   };
   const ctx = {};
   const aspects = [aspect1];
@@ -33,19 +33,21 @@ describe('transform tests >', () => {
    * samples have the expected values. doTransform includes validation - you can
    * assume the result is an array of valid sample objects.
    */
-  //describe('transform >', () => {
-  //  // bulk
-  //  it('transform', () => {
-  //    const samples = tu.doTransform(ctx, aspects, subjects, res);
-  //    expect(samples).to.be.an('array').with.length(2);
-  //  });
-  //
-  //  // by subject
-  //  it('transform', () => {
-  //    const samples = tu.doTransform(ctx, aspects, subject1, res);
-  //    expect(samples).to.be.an('array').with.length(1);
-  //  });
-  //});
+  /*
+  describe('transform >', () => {
+    // bulk
+    it('transform', () => {
+      const samples = tu.doTransform(ctx, aspects, subjects, res);
+      expect(samples).to.be.an('array').with.length(2);
+    });
+
+    // by subject
+    it('transform', () => {
+      const samples = tu.doTransform(ctx, aspects, subject1, res);
+      expect(samples).to.be.an('array').with.length(1);
+    });
+  });
+  */
 
   /**
    * Error Handlers (optional)
@@ -53,34 +55,38 @@ describe('transform tests >', () => {
    * samples have the expected values. doTransform includes validation - you
    * can assume the result is an array of valid sample objects.
    */
-  //describe('handle errors >', () => {
-  //  // bulk
-  //  it('handle errors - 404', () => {
-  //    const res = { statusCode: 404 };
-  //    const samples = tu.doTransform(ctx, aspects, subjects, res);
-  //    expect(samples).to.be.an('array').with.length(2);
-  //  });
-  //
-  //  // by subject
-  //  it('handle errors - 404', () => {
-  //    const res = { statusCode: 404 };
-  //    const samples = tu.doTransform(ctx, aspects, subject1, res);
-  //    expect(samples).to.be.an('array').with.length(1);
-  //  });
-  //});
+  /*
+  describe('handle errors >', () => {
+    // bulk
+    it('handle errors - 404', () => {
+      const res = { statusCode: 404 };
+      const samples = tu.doTransform(ctx, aspects, subjects, res);
+      expect(samples).to.be.an('array').with.length(2);
+    });
+
+    // by subject
+    it('handle errors - 404', () => {
+      const res = { statusCode: 404 };
+      const samples = tu.doTransform(ctx, aspects, subject1, res);
+      expect(samples).to.be.an('array').with.length(1);
+    });
+  });
+  */
 
   /**
    * Helpers (optional)
    *
    * Test helpers directly.
    */
-  //describe('helpers >', () => {
-  //  it('generateSampleName', () => {
-  //    const subject = {absolutePath: 'aaa.bbb.ccc'};
-  //    const aspect = {name: 'ddd'};
-  //    const sampleName = helpers.generateSampleName(subject, aspect);
-  //    expect(sampleName).to.equal('aaa.bbb.ccc|ddd');
-  //  });
-  //});
+  /*
+  describe('helpers >', () => {
+    it('generateSampleName', () => {
+      const subject = {absolutePath: 'aaa.bbb.ccc'};
+      const aspect = {name: 'ddd'};
+      const sampleName = helpers.generateSampleName(subject, aspect);
+      expect(sampleName).to.equal('aaa.bbb.ccc|ddd');
+    });
+  });
+  */
 
 });

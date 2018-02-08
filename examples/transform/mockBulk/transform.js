@@ -66,10 +66,11 @@ module.exports = {
     generateSampleName(subject, aspect) {
       return `${subject.absolutePath}|${aspect.name}`;
     },
+
     generateSampleUrl(subject, aspect) {
       return `http://www.example.com/${aspect.name}?data=${subject.name}`;
-    }
+    },
   },
 
-}
+};
 

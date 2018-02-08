@@ -19,7 +19,9 @@ module.exports = {
    * Specify a url string to use for collection.
    * You can use context variables with {{var}}.
    */
-  //url: 'http://www.example.com',
+  /*
+  url: 'http://www.example.com',
+  */
 
   /**
    * ToUrl (optional)
@@ -30,9 +32,11 @@ module.exports = {
    * @param {Array} subjects - Array of one or more subjects
    * @returns {String} the url to be used for collection
    */
-  //toUrl(ctx, aspects, subjects) {
-  //  return 'http://www.example.com';
-  //},
+  /*
+  toUrl(ctx, aspects, subjects) {
+    return 'http://www.example.com';
+  },
+  */
 
   /**
    * Headers (optional)
@@ -40,9 +44,11 @@ module.exports = {
    * Specify the HTTP headers to include in the request.
    * You can use context variables with {{var}}.
    */
-  //headers: {
-  //  Accept: 'application/json',
-  //},
+  /*
+  headers: {
+    Accept: 'application/json',
+  },
+  */
 
   /**
    * ContextDefinition (optional)
@@ -53,11 +59,13 @@ module.exports = {
    * "required" is false and no value is set.
    */
   contextDefinition: {
-    //var1: {
-    //  description: 'description...',
-    //  required: false,
-    //  default: 4,
-    //},
+    /*
+    var1: {
+      description: 'description...',
+      required: false,
+      default: 4,
+    },
+    */
   },
 
   /**
@@ -66,8 +74,10 @@ module.exports = {
    * Define helper functions to be used in toUrl.
    */
   helpers: {
-    //concatArray(arr) {
-    //  return arr.map((e) => e.name).join(',');
-    //},
+    /*
+    concatArray(arr) {
+      return arr.map((e) => e.name).join(',');
+    },
+    */
   },
-}
+};
