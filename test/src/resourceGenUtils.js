@@ -9,10 +9,7 @@
 /**
  * test/resourceGenUtils.js
  */
-const chai = require('chai');
-const expect = chai.expect;
-chai.use(require('chai-as-promised'));
-chai.should();
+const expect = require('chai').expect;
 const rgu = require('../../src/resourceGenUtils');
 const mockFs = require('mock-fs');
 const path = require('path');
@@ -48,16 +45,14 @@ describe('test/resourceGenUtils.js >', () => {
 
     it('new directory is created', () => {
       expect(fs.existsSync('./my-project')).to.be.false;
-      return rgu.createDir('my-project')
-      .then(() =>
-        expect(fs.existsSync('./my-project')).to.be.true
-      );
+      rgu.createDir('my-project');
+      expect(fs.existsSync('./my-project')).to.be.true;
     });
 
     it('invalid name', () => {
       expect(fs.existsSync('MyProject')).to.be.false;
-      return rgu.createDir('MyProject')
-      .should.be.rejectedWith('name can no longer contain capital letters');
+      expect(() => rgu.createDir('MyProject'))
+      .to.throw('name can no longer contain capital letters');
     });
   });
 
@@ -78,118 +73,110 @@ describe('test/resourceGenUtils.js >', () => {
 
     it('prototype dir is copied to new project', () => {
       expect(fs.existsSync('./my-project')).to.be.true;
-      const filenames = fs.readdirSync('./my-project');
-      expect(filenames).to.be.empty;
-      return rgu.copyPrototype()
-      .then(() => {
-        expectFilesEqual(
-          './my-project/utils/testUtils.js',
-          './prototype/utils/testUtils.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/connection.js',
-          './prototype/connection/connection.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/testConnection.js',
-          './prototype/connection/testConnection.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/transform.js',
-          './prototype/transform/transform.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/testTransform.js',
-          './prototype/transform/testTransform.js'
-        );
-      });
+      expect(fs.readdirSync('./my-project')).to.be.empty;
+
+      rgu.copyPrototype(null, null);
+      expectFilesEqual(
+        './my-project/utils/testUtils.js',
+        './prototype/utils/testUtils.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/connection.js',
+        './prototype/connection/connection.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/testConnection.js',
+        './prototype/connection/testConnection.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/transform.js',
+        './prototype/transform/transform.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/testTransform.js',
+        './prototype/transform/testTransform.js'
+      );
     });
 
     it('transformExample', () => {
       expect(fs.existsSync('./my-project')).to.be.true;
-      const filenames = fs.readdirSync('./my-project');
-      expect(filenames).to.be.empty;
-      return rgu.copyPrototype('basicBulk')
-      .then(() => {
-        expectFilesEqual(
-          './my-project/utils/testUtils.js',
-          './prototype/utils/testUtils.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/connection.js',
-          './prototype/connection/connection.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/testConnection.js',
-          './prototype/connection/testConnection.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/transform.js',
-          './examples/transform/basicBulk/transform.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/testTransform.js',
-          './examples/transform/basicBulk/testTransform.js'
-        );
-      });
+      expect(fs.readdirSync('./my-project')).to.be.empty;
+
+      rgu.copyPrototype('basicBulk', null);
+      expectFilesEqual(
+        './my-project/utils/testUtils.js',
+        './prototype/utils/testUtils.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/connection.js',
+        './prototype/connection/connection.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/testConnection.js',
+        './prototype/connection/testConnection.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/transform.js',
+        './examples/transform/basicBulk/transform.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/testTransform.js',
+        './examples/transform/basicBulk/testTransform.js'
+      );
     });
 
     it('connectionExample', () => {
       expect(fs.existsSync('./my-project')).to.be.true;
-      const filenames = fs.readdirSync('./my-project');
-      expect(filenames).to.be.empty;
-      return rgu.copyPrototype(null, 'basic')
-      .then(() => {
-        expectFilesEqual(
-          './my-project/utils/testUtils.js',
-          './prototype/utils/testUtils.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/connection.js',
-          './examples/connection/basic/connection.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/testConnection.js',
-          './examples/connection/basic/testConnection.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/transform.js',
-          './prototype/transform/transform.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/testTransform.js',
-          './prototype/transform/testTransform.js'
-        );
-      });
+      expect(fs.readdirSync('./my-project')).to.be.empty;
+
+      rgu.copyPrototype(null, 'basic');
+      expectFilesEqual(
+        './my-project/utils/testUtils.js',
+        './prototype/utils/testUtils.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/connection.js',
+        './examples/connection/basic/connection.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/testConnection.js',
+        './examples/connection/basic/testConnection.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/transform.js',
+        './prototype/transform/transform.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/testTransform.js',
+        './prototype/transform/testTransform.js'
+      );
     });
 
     it('both examples', () => {
       expect(fs.existsSync('./my-project')).to.be.true;
-      const filenames = fs.readdirSync('./my-project');
-      expect(filenames).to.be.empty;
-      return rgu.copyPrototype('basicBulk', 'basic')
-      .then(() => {
-        expectFilesEqual(
-          './my-project/utils/testUtils.js',
-          './prototype/utils/testUtils.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/connection.js',
-          './examples/connection/basic/connection.js'
-        );
-        expectFilesEqual(
-          './my-project/connection/testConnection.js',
-          './examples/connection/basic/testConnection.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/transform.js',
-          './examples/transform/basicBulk/transform.js'
-        );
-        expectFilesEqual(
-          './my-project/transform/testTransform.js',
-          './examples/transform/basicBulk/testTransform.js'
-        );
-      });
+      expect(fs.readdirSync('./my-project')).to.be.empty;
+
+      rgu.copyPrototype('basicBulk', 'basic');
+      expectFilesEqual(
+        './my-project/utils/testUtils.js',
+        './prototype/utils/testUtils.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/connection.js',
+        './examples/connection/basic/connection.js'
+      );
+      expectFilesEqual(
+        './my-project/connection/testConnection.js',
+        './examples/connection/basic/testConnection.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/transform.js',
+        './examples/transform/basicBulk/transform.js'
+      );
+      expectFilesEqual(
+        './my-project/transform/testTransform.js',
+        './examples/transform/basicBulk/testTransform.js'
+      );
     });
   });
 
@@ -230,24 +217,23 @@ describe('test/resourceGenUtils.js >', () => {
 
     it('package.json is created', () => {
       expect(fs.existsSync(`./${projectName}/package.json`)).to.be.false;
-      return rgu.setupPackageJson(`./${projectName}`)
-      .then(() => {
-        expect(fs.existsSync(`./${projectName}/package.json`)).to.be.true;
-        const contents = fs.readJsonSync(`./${projectName}/package.json`);
-        console.log(contents);
-        expect(contents).to.have.keys(
-          'name', 'version', 'description', 'main', 'dependencies',
-          'scripts', 'keywords', 'author', 'license'
-        );
-        expect(contents.dependencies).to.have.keys(
-          '@salesforce/refocus-collector-eval', 'chai', 'chai-url', 'istanbul',
-          'mocha'
-        );
-        expect(contents.scripts).to.have.keys(
-          'test', 'build', 'deploy', 'template-init', 'test-connection',
-          'test-transform', 'validate'
-        );
-      });
+
+      rgu.setupPackageJson(`./${projectName}`);
+      expect(fs.existsSync(`./${projectName}/package.json`)).to.be.true;
+
+      const contents = fs.readJsonSync(`./${projectName}/package.json`);
+      expect(contents).to.have.keys(
+        'name', 'version', 'description', 'main', 'dependencies',
+        'scripts', 'keywords', 'author', 'license'
+      );
+      expect(contents.dependencies).to.have.keys(
+        '@salesforce/refocus-collector-eval', 'chai', 'chai-url', 'istanbul',
+        'mocha'
+      );
+      expect(contents.scripts).to.have.keys(
+        'test', 'build', 'deploy', 'template-init', 'test-connection',
+        'test-transform', 'validate'
+      );
     });
   });
 
@@ -277,10 +263,8 @@ describe('test/resourceGenUtils.js >', () => {
     });
 
     it('getPackageInfo', function () {
-      return rgu.getPackageInfo()
-      .then((contents) => {
-        expect(contents).to.have.keys('name', 'version', 'description', 'main');
-      });
+      const contents = rgu.getPackageInfo();
+      expect(contents).to.have.keys('name', 'version', 'description', 'main');
     });
   });
 
@@ -302,17 +286,15 @@ describe('test/resourceGenUtils.js >', () => {
     it('sgt file is created', () => {
       expect(fs.existsSync('./my-project')).to.be.true;
       expect(fs.existsSync('./my-project/my-project.json')).to.be.false;
-      return rgu.createTemplateJson(packageInfo)
-      .then(() => {
-        expect(fs.existsSync('./my-project/my-project.json')).to.be.true;
-        return fs.readJson('./my-project/my-project.json');
-      })
-      .then((contents) => {
-        expect(contents).to.have.keys(
-          'name', 'version', 'description', 'tags', 'author', 'repository',
-          'connection', 'contextDefinition', 'transform'
-        );
-      });
+
+      rgu.createTemplateJson(packageInfo);
+      expect(fs.existsSync('./my-project/my-project.json')).to.be.true;
+
+      const contents = fs.readJsonSync('./my-project/my-project.json');
+      expect(contents).to.have.keys(
+        'name', 'version', 'description', 'tags', 'author', 'repository',
+        'connection', 'contextDefinition', 'transform'
+      );
     });
   });
 
@@ -330,14 +312,14 @@ describe('test/resourceGenUtils.js >', () => {
     it('README file is created', () => {
       expect(fs.existsSync('./my-project')).to.be.true;
       expect(fs.existsSync('./my-project/README.md')).to.be.false;
-      return rgu.createReadme(packageInfo)
-      .then(() => {
-        expect(fs.existsSync('./my-project/README.md')).to.be.true;
-        const contents = fs.readFileSync('./my-project/README.md').toString();
-        expect(contents).to.include('# my-project');
-        expect(contents).to.include('## Description\n\ndescription...');
-        expect(contents).to.include('## Context Variables\n\n The following ');
-      });
+
+      rgu.createReadme(packageInfo);
+      expect(fs.existsSync('./my-project/README.md')).to.be.true;
+
+      const contents = fs.readFileSync('./my-project/README.md').toString();
+      expect(contents).to.include('# my-project');
+      expect(contents).to.include('## Description\n\ndescription...');
+      expect(contents).to.include('## Context Variables\n\n The following ');
     });
   });
 

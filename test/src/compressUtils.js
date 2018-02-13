@@ -9,10 +9,7 @@
 /**
  * test/compressUtils.js
  */
-const chai = require('chai');
-const expect = chai.expect;
-chai.use(require('chai-as-promised'));
-chai.should();
+const expect = require('chai').expect;
 const cu = require('../../src/compressUtils');
 const mockFs = require('mock-fs');
 const mockRequire = require('mock-require');
@@ -92,11 +89,9 @@ describe('test/compressUtils.js >', () => {
       cu.doBuildConnection(mockConnection, expectedSGT.connection);
       expectedSGT.contextDefinition = mockConnection.contextDefinition;
 
-      return cu.buildConnection('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildConnection('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
     it('pre-existing contextDefinition', () => {
@@ -120,11 +115,9 @@ describe('test/compressUtils.js >', () => {
       cu.doBuildConnection(mockConnection, expectedSGT.connection);
       expectedSGT.contextDefinition = expectedContextDefinition;
 
-      return cu.buildConnection('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildConnection('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
     it('no pre-existing contextDefinition', () => {
@@ -136,11 +129,9 @@ describe('test/compressUtils.js >', () => {
       cu.doBuildConnection(mockConnection, expectedSGT.connection);
       expectedSGT.contextDefinition = mockConnection.contextDefinition;
 
-      return cu.buildConnection('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildConnection('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
     it('no pre-existing connection', () => {
@@ -152,11 +143,9 @@ describe('test/compressUtils.js >', () => {
       cu.doBuildConnection(mockConnection, expectedSGT.connection);
       expectedSGT.contextDefinition = mockConnection.contextDefinition;
 
-      return cu.buildConnection('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildConnection('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
   });
@@ -274,11 +263,9 @@ describe('test/compressUtils.js >', () => {
       expectedSGT.connection.bulk = true;
       expectedSGT.contextDefinition = mockTransformBulk.contextDefinition;
 
-      return cu.buildTransform('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildTransform('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
     it('bySubject', () => {
@@ -290,11 +277,9 @@ describe('test/compressUtils.js >', () => {
       expectedSGT.connection.bulk = false;
       expectedSGT.contextDefinition = mockTransformBulk.contextDefinition;
 
-      return cu.buildTransform('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildTransform('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
     it('pre-existing contextDefinition', () => {
@@ -318,11 +303,9 @@ describe('test/compressUtils.js >', () => {
       expectedSGT.connection.bulk = true;
       expectedSGT.contextDefinition = expectedContextDefinition;
 
-      return cu.buildTransform('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildTransform('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
     it('no pre-existing contextDefinition', () => {
@@ -336,11 +319,9 @@ describe('test/compressUtils.js >', () => {
       expectedSGT.connection.bulk = true;
       expectedSGT.contextDefinition = mockTransformBulk.contextDefinition;
 
-      return cu.buildTransform('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildTransform('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
 
     it('no pre-existing connection', () => {
@@ -354,11 +335,9 @@ describe('test/compressUtils.js >', () => {
       expectedSGT.connection.bulk = true;
       expectedSGT.contextDefinition = mockTransformBulk.contextDefinition;
 
-      return cu.buildTransform('./my-sgt')
-      .then(() => fs.readJson('./my-sgt/my-sgt.json'))
-      .then((sgt) => {
-        expect(sgt).to.deep.equal(expectedSGT);
-      });
+      cu.buildTransform('./my-sgt');
+      const sgt = fs.readJsonSync('./my-sgt/my-sgt.json');
+      expect(sgt).to.deep.equal(expectedSGT);
     });
   });
 
@@ -1334,7 +1313,7 @@ describe('test/compressUtils.js >', () => {
       const mockTransformCtxDef = {};
 
       mock(mockConnectionCtxDef, mockTransformCtxDef);
-      return cu.checkConflictingCtxDefs().should.be.fulfilled;
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
     });
 
     it('no overlap ok', () => {
@@ -1346,7 +1325,7 @@ describe('test/compressUtils.js >', () => {
       };
 
       mock(mockConnectionCtxDef, mockTransformCtxDef);
-      return cu.checkConflictingCtxDefs().should.be.fulfilled;
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
     });
 
     it('shared variables ok', () => {
@@ -1360,14 +1339,14 @@ describe('test/compressUtils.js >', () => {
       };
 
       mock(mockConnectionCtxDef, mockTransformCtxDef);
-      return cu.checkConflictingCtxDefs().should.be.fulfilled;
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
     });
 
     it('exact match ok', () => {
       const mockConnectionCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
       const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
       mock(mockConnectionCtxDef, mockTransformCtxDef);
-      return cu.checkConflictingCtxDefs().should.be.fulfilled;
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
     });
 
     it('conflicting description', () => {
@@ -1375,7 +1354,7 @@ describe('test/compressUtils.js >', () => {
       const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
       mockTransformCtxDef.ctx1 = 'ctx1...';
       mock(mockConnectionCtxDef, mockTransformCtxDef);
-      return cu.checkConflictingCtxDefs().should.be.rejectedWith(
+      expect(() => cu.checkConflictingCtxDefs()).to.throw(
         'contextDefinition.ctx1: conflicting definitions in transform.js and ' +
         'connection.js'
       );
@@ -1386,7 +1365,7 @@ describe('test/compressUtils.js >', () => {
       const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
       delete mockTransformCtxDef.ctx2.required;
       mock(mockConnectionCtxDef, mockTransformCtxDef);
-      return cu.checkConflictingCtxDefs().should.be.rejectedWith(
+      expect(() => cu.checkConflictingCtxDefs()).to.throw(
         'contextDefinition.ctx2: conflicting definitions in transform.js and ' +
         'connection.js'
       );
@@ -1397,7 +1376,7 @@ describe('test/compressUtils.js >', () => {
       const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
       mockConnectionCtxDef.ctx2.default = '3';
       mock(mockConnectionCtxDef, mockTransformCtxDef);
-      return cu.checkConflictingCtxDefs().should.be.rejectedWith(
+      expect(() => cu.checkConflictingCtxDefs()).to.throw(
         'contextDefinition.ctx2: conflicting definitions in transform.js and ' +
         'connection.js'
       );

@@ -14,6 +14,5 @@
 const cu = require('../src/compressUtils');
 const startTime = Date.now();
 
-cu.buildConnection()
-.then(() => console.log(`Done building connection (${Date.now() - startTime}ms)`))
-.catch((err) => console.error(err));
+cu.buildConnection();
+console.log(`Done building connection (${Date.now() - startTime}ms)`);

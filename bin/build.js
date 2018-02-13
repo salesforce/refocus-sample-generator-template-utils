@@ -14,12 +14,9 @@
 const cu = require('../src/compressUtils');
 const startTime = Date.now();
 
-cu.checkConflictingCtxDefs()
-.then(() => cu.buildTransform())
-.then(() => {
-  console.log(`Done building transform (${Date.now() - startTime}ms)`);
-  return cu.buildConnection();
-})
-.then(() => console.log(`Done building connection (${Date.now() - startTime}ms)`))
-.catch((err) => console.error(err));
+cu.checkConflictingCtxDefs();
+cu.buildTransform();
+console.log(`Done building transform (${Date.now() - startTime}ms)`);
+cu.buildConnection();
+console.log(`Done building connection (${Date.now() - startTime}ms)`);
 

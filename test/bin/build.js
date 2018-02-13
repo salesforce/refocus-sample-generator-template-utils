@@ -32,7 +32,6 @@ describe('test/build.js >', () => {
     const forkedProcess = fork('../bin/build.js', [], opts);
     forkedProcess.on('close', () => {
       const sgt = fs.readJsonSync(`./${projectName}/${projectName}.json`);
-      console.log(sgt);
       expect(sgt.connection).to.include.key('toUrl');
       expect(sgt.transform.default).to.not.be.empty;
       expect(sgt.contextDefinition).to.not.be.empty;

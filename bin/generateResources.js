@@ -32,14 +32,11 @@ const connectionText = connection ? ` ${andWith} connection example "${connectio
 
 console.log(projectText + transformText + connectionText + ':');
 
-rgu.createDir(projectName)
-.then(() => rgu.copyPrototype(transform, connection))
-.then(() => rgu.copyPackages())
-.then(() => rgu.setupPackageJson())
-.then(() => rgu.getPackageInfo())
-.then((packageInfo) => {
-  rgu.createTemplateJson(packageInfo);
-  rgu.createReadme(packageInfo);
-})
-.then(() => console.log(`Done generating resources (${Date.now() - startTime}ms)`))
-.catch((err) => console.log(`ERROR: ${err.message}`));
+rgu.createDir(projectName);
+rgu.copyPrototype(transform, connection);
+rgu.copyPackages();
+rgu.setupPackageJson();
+const packageInfo = rgu.getPackageInfo();
+rgu.createTemplateJson(packageInfo);
+rgu.createReadme(packageInfo);
+console.log(`Done generating resources (${Date.now() - startTime}ms)`);

@@ -56,11 +56,12 @@ module.exports = {
     const validate = validatePackageName(projectName);
     if (validate.validForNewPackages) {
       const dir = path.resolve(cwd, projectName);
-      return fs.mkdir(dir).then(() => cwd = dir);
+      fs.mkdirSync(dir);
+      cwd = dir;
     } else if (validate.errors) {
-      return Promise.reject(new Error(validate.errors[0]));
+      throw new Error(validate.errors[0]);
     } else if (validate.warnings) {
-      return Promise.reject(new Error(validate.warnings[0]));
+      throw new Error(validate.warnings[0]);
     }
   },
 
@@ -96,9 +97,9 @@ module.exports = {
         `../examples/connection/${connectionExample}`);
     }
 
-    return fs.copy(utilsFromDir, utilsToDir)
-    .then(() => fs.copy(transformFromDir, transformToDir))
-    .then(() => fs.copy(connectionFromDir, urlToDir));
+    fs.copySync(utilsFromDir, utilsToDir);
+    fs.copySync(transformFromDir, transformToDir);
+    fs.copySync(connectionFromDir, urlToDir);
   },
 
   /**
@@ -123,18 +124,15 @@ module.exports = {
    */
   setupPackageJson: (dir = cwd) => {
     execSync('npm init --force', { cwd: dir, stdio: 'ignore' });
-    return fs.readJson(path.resolve(dir, 'package.json'))
-    .then((p) => {
-      if (!p.dependencies) p.dependencies = {};
-      Object.keys(devDependencies).forEach((m) => {
-        p.dependencies[m] = devDependencies[m];
-      });
-      if (!p.scripts) p.scripts = {};
-      Object.keys(scriptsToAdd)
-      .forEach((key) => p.scripts[key] = scriptsToAdd[key]);
-      return fs.writeJson(path.resolve(dir, 'package.json'), p,
-        { spaces: 2 });
+    const p = fs.readJsonSync(path.resolve(dir, 'package.json'));
+    if (!p.dependencies) p.dependencies = {};
+    Object.keys(devDependencies).forEach((m) => {
+      p.dependencies[m] = devDependencies[m];
     });
+    if (!p.scripts) p.scripts = {};
+    Object.keys(scriptsToAdd)
+    .forEach((key) => p.scripts[key] = scriptsToAdd[key]);
+    fs.writeJsonSync(path.resolve(dir, 'package.json'), p, { spaces: 2 });
   },
 
   /**
@@ -147,7 +145,7 @@ module.exports = {
    *  file, or an error.
    */
   getPackageInfo: (dir = cwd) =>
-    fs.readJson(path.resolve(dir, 'package.json')),
+    fs.readJsonSync(path.resolve(dir, 'package.json')),
 
   /**
    * Create the sample generator template json file in the specified location.
@@ -162,7 +160,7 @@ module.exports = {
   createTemplateJson: (packageInfo, dir = cwd) => {
     const filename = `${packageInfo.name}.json`;
     console.log(`creating ${filename}...`);
-    return fs.writeJson(
+    fs.writeJsonSync(
       path.resolve(dir, filename),
       {
         name: packageInfo.name,
@@ -199,7 +197,7 @@ module.exports = {
    */
   createReadme: (packageInfo, dir = cwd) => {
     console.log('creating README...');
-    return fs.writeFile(
+    fs.writeFileSync(
       path.resolve(dir, 'README.md'),
       util.format(readme, packageInfo.name,
         packageInfo.description || 'A Refocus Sample Generator Template.'),

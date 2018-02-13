@@ -58,15 +58,12 @@ function buildConnection(dir = cwd) {
   const ctxDef = connectionExports.contextDefinition;
 
   const f = path.resolve(dir, `${name}.json`);
-  return fs.readJson(f)
-  .then((contents) => {
-    if (!contents.connection) contents.connection = {};
-    if (!contents.contextDefinition) contents.contextDefinition = {};
-    doBuildConnection(connectionExports, contents.connection);
-    Object.assign(contents.contextDefinition, ctxDef);
-    return contents;
-  })
-  .then((contents) => fs.writeJson(f, contents, { spaces: 2 }));
+  const contents =  fs.readJsonSync(f);
+  if (!contents.connection) contents.connection = {};
+  if (!contents.contextDefinition) contents.contextDefinition = {};
+  doBuildConnection(connectionExports, contents.connection);
+  Object.assign(contents.contextDefinition, ctxDef);
+  fs.writeJsonSync(f, contents, { spaces: 2 });
 }
 
 function doBuildConnection(connectionExports, connectionObj) {
@@ -123,18 +120,14 @@ function buildTransform(dir = cwd) {
   const ctxDef = transformExports.contextDefinition;
   const { transformObj, bulk } = doBuildTransform(transformExports);
 
-  // return promise to update template file
   const f = path.resolve(dir, `${name}.json`);
-  return fs.readJson(f)
-  .then((contents) => {
-    if (!contents.connection) contents.connection = {};
-    if (!contents.contextDefinition) contents.contextDefinition = {};
-    contents.transform = transformObj;
-    contents.connection.bulk = bulk;
-    Object.assign(contents.contextDefinition, ctxDef);
-    return contents;
-  })
-  .then((contents) => fs.writeJson(f, contents, { spaces: 2 }));
+  const contents = fs.readJsonSync(f);
+  if (!contents.connection) contents.connection = {};
+  if (!contents.contextDefinition) contents.contextDefinition = {};
+  contents.transform = transformObj;
+  contents.connection.bulk = bulk;
+  Object.assign(contents.contextDefinition, ctxDef);
+  fs.writeJsonSync(f, contents, { spaces: 2 });
 }
 
 function doBuildTransform(transformExports) {
@@ -368,24 +361,21 @@ function checkConflictingCtxDefs(dir = cwd) {
   const transformCtxDef = require(transformPath).contextDefinition || {};
   const connectionCtxDef = require(connectionPath).contextDefinition || {};
 
-  return new Promise((resolve, reject) => {
-    Object.keys(transformCtxDef).forEach((key) => {
-      const transformCtxVar = transformCtxDef[key];
-      const connectionCtxVar = connectionCtxDef[key];
-      if (transformCtxVar && connectionCtxVar) {
-        if (
-          transformCtxVar.description !== connectionCtxVar.description
-          || transformCtxVar.required !== connectionCtxVar.required
-          || transformCtxVar.default !== connectionCtxVar.default
-        ) {
-          reject(new Error(
-            `contextDefinition.${key}: conflicting definitions in ` +
-            `transform.js and connection.js`
-          ));
-        }
+  Object.keys(transformCtxDef).forEach((key) => {
+    const transformCtxVar = transformCtxDef[key];
+    const connectionCtxVar = connectionCtxDef[key];
+    if (transformCtxVar && connectionCtxVar) {
+      if (
+        transformCtxVar.description !== connectionCtxVar.description
+        || transformCtxVar.required !== connectionCtxVar.required
+        || transformCtxVar.default !== connectionCtxVar.default
+      ) {
+        throw new Error(
+          `contextDefinition.${key}: conflicting definitions in ` +
+          `transform.js and connection.js`
+        );
       }
-    });
-    resolve();
+    }
   });
 }
 
