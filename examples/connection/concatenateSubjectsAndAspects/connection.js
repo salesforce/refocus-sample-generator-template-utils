@@ -25,7 +25,7 @@ module.exports = {
     let baseUrl = ctx.baseUrl;
     const aspectNames = concatArray(aspects);
     const subjectNames = concatArray(subjects);
-    baseUrl = baseUrl + `/expression=${ctx.window}:subjects:[${subjectNames}]` +
+    baseUrl = baseUrl + `?expression=${ctx.window}:subjects:[${subjectNames}]` +
     `:tests:[${aspectNames}]`;
     return baseUrl;
   },
@@ -47,7 +47,7 @@ module.exports = {
       description: 'the window value to be set in the url',
       required: false,
       default: '-15m',
-    }
+    },
   },
 
   /**

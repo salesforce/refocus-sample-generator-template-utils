@@ -12,39 +12,22 @@
  * bin/deploy.js
  */
 const u = require('../src/deployUtils');
-const usage = '\nUsage:\n' +
-  '  sgtu-deploy TEMPLATE_FILE REFOCUS_URL REFOCUS_TOKEN\n\n' +
-  '  Note: TEMPLATE_FILE, REFOCUS_URL and REFOCUS_TOKEN are all required.\n';
 const startTime = Date.now();
-const templateFile = process.argv[2];
-const refocusUrl = process.argv[3];
-const refocusToken = process.argv[4];
+const commander = require('commander');
+let templateFile;
+let refocusUrl;
+let refocusToken;
 
-if (process.argv.length < 5) {
-  console.error(usage);
-  process.exit(1);
-}
+commander
+.arguments('<templateFile> <refocusUrl> <refocusToken>')
+.action((tf, ru, rt) => {
+  templateFile = tf;
+  refocusUrl = ru;
+  refocusToken = rt;
+})
+.parse(process.argv);
 
 u.deploy(templateFile, refocusUrl, refocusToken)
 .then(() => console.log(`Done deploying ${templateFile} to ${refocusUrl} ` +
   ` (${Date.now() - startTime}ms)`))
 .catch((err) => console.error(err));
-
-// const t = {
-//   transform: '',
-//   name: 'aa1',
-//   version: '1.0.0',
-//   connection: {
-//     method: 'GET',
-//     url: 'http://a.c.com',
-//   },
-//   author: {
-//     name: 'asd',
-//     // email: 'asd@asf.com',
-//     // url: 'http://asd.asd.com',
-//   },
-// };
-// u.deploy(t, refocusUrl, refocusToken)
-// .then(() => console.log(`Done deploying ${templateFile} to ${refocusUrl} ` +
-//   ` (${Date.now() - startTime}ms)`))
-// .catch((err) => console.error(err));

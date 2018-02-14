@@ -4,65 +4,68 @@
 const rce = require('@salesforce/refocus-collector-eval');
 const exec = require('child_process').exec;
 const projectName = require('../package.json').name;
-let sgt;
-
-function assignContext(ctx, def) {
-  if (!ctx || !def) return;
-
-  Object.keys(ctx).forEach((key) => {
-    if (!def[key]) {
-      throw new Error(
-        `context variable "${key}" was passed to the function but is not ` +
-        `defined in the contextDefinition`
-      );
-    }
-  });
-
-  Object.keys(def).forEach((key) => {
-    if (!ctx[key] && def[key].required) {
-      throw new Error(
-        `contextDefinition.${key} is marked as required but was not included ` +
-        `when calling this function`
-      );
-    }
-
-    if (!ctx[key] && def[key].default) {
-      ctx[key] = def[key].default;
-    }
-  });
-} // assignContext
+const fs = require('fs-extra');
 
 module.exports = {
-  buildTransform(done) {
-    exec('sgtu-build-transform', (err) => {
-      if (err) return done(err);
-      sgt = require(`../${projectName}.json`);
-      done();
+  assignContext(ctx, def) {
+    if (!ctx || !def) return;
+
+    Object.keys(ctx).forEach((key) => {
+      if (!def[key]) {
+        throw new Error(
+          `context variable "${key}" was passed to the function but is not ` +
+          `defined in the contextDefinition`
+        );
+      }
+    });
+
+    Object.keys(def).forEach((key) => {
+      if (!ctx[key] && def[key].required) {
+        throw new Error(
+          `contextDefinition.${key} is marked as required but was not included ` +
+          `when calling this function`
+        );
+      }
+
+      if (!ctx[key] && def[key].default) {
+        ctx[key] = def[key].default;
+      }
+    });
+  }, // assignContext
+
+  buildTransform() {
+    return new Promise((resolve, reject) => {
+      exec('sgtu-build-transform', (err) => {
+        if (err) reject(err);
+        resolve();
+      });
     });
   }, // buildTransform
 
-  buildConnection(done) {
-    exec('sgtu-build-connection', (err) => {
-      if (err) return done(err);
-      sgt = require(`../${projectName}.json`);
-      done();
+  buildConnection() {
+    return new Promise((resolve, reject) => {
+      exec('sgtu-build-connection', (err) => {
+        if (err) reject(err);
+        resolve();
+      });
     });
   }, // buildConnection
 
   prepareUrl(ctx, aspects, subjects) {
-    sgt = require(`../${projectName}.json`);
-    assignContext(ctx, sgt.contextDefinition);
+    const sgt = fs.readJsonSync(`./${projectName}.json`);
+    this.assignContext(ctx, sgt.contextDefinition);
     return rce.prepareUrl(ctx, aspects, subjects, sgt.connection, true);
   }, // prepareUrl
 
   prepareHeaders(ctx) {
-    sgt = require(`../${projectName}.json`);
-    assignContext(ctx, sgt.contextDefinition);
+    const sgt = fs.readJsonSync(`./${projectName}.json`);
+    this.assignContext(ctx, sgt.contextDefinition);
     return rce.prepareHeaders(sgt.connection.headers, ctx);
   }, // prepareHeaders
 
   doTransform(ctx, aspects, subj, res) {
-    sgt = require(`../${projectName}.json`);
+    const sgt = fs.readJsonSync(`./${projectName}.json`);
+    this.assignContext(ctx, sgt.contextDefinition);
     if (!res.statusCode) res.statusCode = 200;
     const fn =
       rce.getTransformFunction(sgt.transform, res.statusCode);

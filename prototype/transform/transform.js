@@ -34,9 +34,11 @@ module.exports = {
    * @param {http.ServerResponse} res - The response object
    * @returns {Array} an array of samples
    */
-  //transformBulk(ctx, aspects, subjects, res) {
-  // return [];
-  //},
+  /*
+  transformBulk(ctx, aspects, subjects, res) {
+   return [];
+  },
+  */
 
   /**
    * Use this function signature if you collect data for a single subject at
@@ -48,9 +50,11 @@ module.exports = {
    * @param {http.ServerResponse} res - The response object
    * @returns {Array} an array of samples
    */
-  //transformBySubject(ctx, aspects, subject, res) {
-  //  return [];
-  //},
+  /*
+  transformBySubject(ctx, aspects, subject, res) {
+    return [];
+  },
+  */
 
   /**
    * Error Handlers (optional)
@@ -63,9 +67,11 @@ module.exports = {
    * The function signature should correspond to the transform function defined above.
    */
   errorHandlers: {
-    //'404': function(ctx, aspects, subjects, res) {
-    //  return [];
-    //},
+    /*
+    '404': function(ctx, aspects, subjects, res) {
+      return [];
+    },
+    */
   },
 
   /**
@@ -77,11 +83,13 @@ module.exports = {
    * "required" is false and no value is set.
    */
   contextDefinition: {
-    //var1: {
-    //  description: 'description...',
-    //  required: false,
-    //  default: 4,
-    //},
+    /*
+    var1: {
+      description: 'description...',
+      required: false,
+      default: 4,
+    },
+    */
   },
 
   /**
@@ -90,10 +98,12 @@ module.exports = {
    * Define helper functions here if you need to be able to test them directly.
    */
   helpers: {
-    //generateSampleName(subject, aspect) {
-    //  return `${subject.absolutePath}|${aspect.name}`;
-    //},
+    /*
+    generateSampleName(subject, aspect) {
+      return `${subject.absolutePath}|${aspect.name}`;
+    },
+    */
   },
 
-}
+};
 

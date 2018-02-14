@@ -42,24 +42,24 @@ describe('connection tests >', () => {
    * returned string is an expected url
    */
   describe('prepareUrl >', () => {
-   it('prepareUrl, default window', () => {
-     const url = tu.prepareUrl(ctx, aspects, subjects);
+    it('prepareUrl, default window', () => {
+      const url = tu.prepareUrl(ctx, aspects, subjects);
 
-     expect(url).to.have.protocol('https');
-     expect(url).to.contain.hostname('dummyurl.io');
-     expect(url).to.contain.path('/expression=-15m:subjects:' +
-      '[subject1,subject2]:tests:[aspect1,aspect2]');
-   });
+      expect(url).to.have.protocol('https');
+      expect(url).to.contain.hostname('dummyurl.io');
+      expect(url).to.contain.path('?expression=-15m:subjects:' +
+       '[subject1,subject2]:tests:[aspect1,aspect2]');
+    });
 
-   it('prepareUrl, alternate window', () => {
-     ctx.window = '-22m';
-     const url = tu.prepareUrl(ctx, aspects, subjects);
+    it('prepareUrl, alternate window', () => {
+      ctx.window = '-22m';
+      const url = tu.prepareUrl(ctx, aspects, subjects);
 
-     expect(url).to.have.protocol('https');
-     expect(url).to.contain.hostname('dummyurl.io');
-     expect(url).to.contain.path('/expression=-22m:subjects:' +
-      '[subject1,subject2]:tests:[aspect1,aspect2]');
-   });
+      expect(url).to.have.protocol('https');
+      expect(url).to.contain.hostname('dummyurl.io');
+      expect(url).to.contain.path('?expression=-22m:subjects:' +
+       '[subject1,subject2]:tests:[aspect1,aspect2]');
+    });
   });
 
   /**

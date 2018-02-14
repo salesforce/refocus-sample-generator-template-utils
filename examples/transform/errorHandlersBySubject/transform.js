@@ -34,9 +34,11 @@ module.exports = {
    * @param {http.ServerResponse} res - The response object
    * @returns {Array} an array of samples
    */
-  //transformBulk(ctx, aspects, subjects, res) {
-  // return [];
-  //},
+  /*
+  transformBulk(ctx, aspects, subjects, res) {
+    return [];
+  },
+  */
 
   /**
    * Use this function signature if you collect data for a single subject at
@@ -48,9 +50,11 @@ module.exports = {
    * @param {http.ServerResponse} res - The response object
    * @returns {Array} an array of samples
    */
-  //transformBySubject(ctx, aspects, subject, res) {
-  //  return [];
-  //},
+  /*
+  transformBySubject(ctx, aspects, subject, res) {
+    return [];
+  },
+  */
 
   /**
    * Error Handlers (optional)
@@ -114,5 +118,5 @@ module.exports = {
     },
   },
 
-}
+};
 

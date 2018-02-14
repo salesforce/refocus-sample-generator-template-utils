@@ -16,13 +16,13 @@ describe('connection tests >', () => {
    * returned string is the expected url
    */
   describe('prepareUrl >', () => {
-   it('prepareUrl', () => {
-     const url = tu.prepareUrl();
+    it('prepareUrl', () => {
+      const url = tu.prepareUrl();
 
-     expect(url).to.have.protocol('https');
-     expect(url).to.contain.hostname('example.com');
-     expect(url).to.contain.path('/expression=-15m:subjects:all:tests:all');
-   });
+      expect(url).to.have.protocol('https');
+      expect(url).to.contain.hostname('example.com');
+      expect(url).to.contain.path('?expression=-15m:subjects:all:tests:all');
+    });
   });
 
   /**

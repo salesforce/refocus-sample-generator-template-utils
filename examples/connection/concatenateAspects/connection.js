@@ -24,7 +24,7 @@ module.exports = {
   toUrl(ctx, aspects, subjects) {
     let baseUrl = ctx.baseUrl;
     const aspectNames = concatArray(aspects);
-    baseUrl = baseUrl + '/expression=' + ctx.window + ':subjects:all' +
+    baseUrl = baseUrl + '?expression=' + ctx.window + ':subjects:all' +
     ':tests:[' + aspectNames + ']';
     return baseUrl;
   },

@@ -23,13 +23,13 @@ describe('connection tests >', () => {
    * returned string is the expected url.
    */
   describe('prepareUrl >', () => {
-   it('prepareUrl, default window', () => {
-     const url = tu.prepareUrl(ctx);
+    it('prepareUrl, default window', () => {
+      const url = tu.prepareUrl(ctx);
 
-     expect(url).to.have.protocol('https');
-     expect(url).to.contain.hostname('dummyurl.io');
-     expect(url).to.contain.path('/expression=-15m:subjects:all:tests:all');
-   });
+      expect(url).to.have.protocol('https');
+      expect(url).to.contain.hostname('dummyurl.io');
+      expect(url).to.contain.path('?expression=-15m:subjects:all:tests:all');
+    });
 
     it('prepareUrl, alternate window', () => {
       ctx.window = '-22m';
@@ -37,7 +37,7 @@ describe('connection tests >', () => {
 
       expect(url).to.have.protocol('https');
       expect(url).to.contain.hostname('dummyurl.io');
-      expect(url).to.contain.path('/expression=-22m:subjects:all:tests:all');
+      expect(url).to.contain.path('?expression=-22m:subjects:all:tests:all');
     });
   });
 

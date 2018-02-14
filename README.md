@@ -57,7 +57,6 @@ Project initialization also adds some dependencies and scripts to your package.j
 - chai-url
 - istanbul
 - mocha
-- nock
 
 ### Scripts
 - `deploy`

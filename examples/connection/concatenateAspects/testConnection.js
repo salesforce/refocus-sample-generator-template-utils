@@ -22,10 +22,10 @@ describe('connection tests >', () => {
     timeout: '60s',
   };
   const subject1 = {
-    absolutePath: 'root.node.subject1'
+    absolutePath: 'root.node.subject1',
   };
   const subject2 = {
-    absolutePath: 'root.node.subject2'
+    absolutePath: 'root.node.subject2',
   };
   const ctx = {
     baseUrl: 'https://dummyUrl.io',
@@ -40,14 +40,14 @@ describe('connection tests >', () => {
    * returned string is an expected url
    */
   describe('prepareUrl >', () => {
-   it('prepareUrl, default window', () => {
-     const url = tu.prepareUrl(ctx, aspects, subjects);
+    it('prepareUrl, default window', () => {
+      const url = tu.prepareUrl(ctx, aspects, subjects);
 
-     expect(url).to.have.protocol('https');
-     expect(url).to.contain.hostname('dummyurl.io');
-     expect(url).to.contain.path('/expression=-15m:subjects:all:' +
-      'tests:[aspect1,aspect2]');
-   });
+      expect(url).to.have.protocol('https');
+      expect(url).to.contain.hostname('dummyurl.io');
+      expect(url).to.contain.path('?expression=-15m:subjects:all:' +
+       'tests:[aspect1,aspect2]');
+    });
 
     it('prepareUrl, alternate window', () => {
       ctx.window = '-22m';
@@ -55,7 +55,7 @@ describe('connection tests >', () => {
 
       expect(url).to.have.protocol('https');
       expect(url).to.contain.hostname('dummyurl.io');
-      expect(url).to.contain.path('/expression=-22m:subjects:all:' +
+      expect(url).to.contain.path('?expression=-22m:subjects:all:' +
         'tests:[aspect1,aspect2]');
     });
   });

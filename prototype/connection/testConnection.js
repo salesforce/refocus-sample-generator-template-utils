@@ -43,13 +43,13 @@ describe('connection tests >', () => {
    * returned string is the expected url
    */
   /*
-   * describe('prepareUrl >', () => {
-   *   it('prepareUrl', () => {
-   *     const url = tu.prepareUrl(ctx);
-   *     expect(url).to.have.protocol('https');
-   *   });
-   * });
-   */
+  describe('prepareUrl >', () => {
+    it('prepareUrl', () => {
+      const url = tu.prepareUrl(ctx);
+      expect(url).to.have.protocol('https');
+    });
+  });
+  */
 
   /**
    * ToUrl (optional)
@@ -58,13 +58,13 @@ describe('connection tests >', () => {
    * returned string is an expected url
    */
   /*
-   * describe('prepareUrl >', () => {
-   *   it('prepareUrl', () => {
-   *     const url = tu.prepareUrl(ctx, aspects, subjects);
-   *     expect(url).to.have.protocol('https');
-   *   });
-   * });
-   */
+  describe('prepareUrl >', () => {
+    it('prepareUrl', () => {
+      const url = tu.prepareUrl(ctx, aspects, subjects);
+      expect(url).to.have.protocol('https');
+    });
+  });
+  */
 
   /**
    * Headers (optional)
@@ -73,26 +73,27 @@ describe('connection tests >', () => {
    * object contains the expected headers.
    */
   /*
-   * describe('prepareHeaders >', () => {
-   *   it('prepareHeaders', () => {
-   *     const headers = tu.prepareHeaders(ctx);
-   *     expect(headers).to.have.property('Accept', 'application/json');
-   *   });
-   * });
-   */
+  describe('prepareHeaders >', () => {
+    it('prepareHeaders', () => {
+      const headers = tu.prepareHeaders(ctx);
+      expect(headers).to.have.property('Accept', 'application/json');
+    });
+  });
+  */
 
   /**
    * Helpers (optional)
    *
    * Test helpers directly.
    */
-  /* describe('helpers >', () => {
-   *   it('concatArray', () => {
-   *     const subjects = [{name: 's1'}, {name: 's2'}];
-   *     const concatenatedSubjectNames = helpers.concatArray(subjects);
-   *     expect(concatenatedSubjectNames).to.equal('s1,s2');
-   *   });
-   * });
-   */
+  /*
+  describe('helpers >', () => {
+    it('concatArray', () => {
+      const subjects = [{name: 's1'}, {name: 's2'}];
+      const concatenatedSubjectNames = helpers.concatArray(subjects);
+      expect(concatenatedSubjectNames).to.equal('s1,s2');
+    });
+  });
+  */
 
 });

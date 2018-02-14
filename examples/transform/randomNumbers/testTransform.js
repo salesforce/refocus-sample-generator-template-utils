@@ -32,7 +32,6 @@ describe('transform tests >', () => {
 
     it('OK, one aspect, multiple subjects, default separator', () => {
       const samples = tu.doTransform(ctx, aspects, subjects, res);
-      console.log(samples)
       expect(samples).to.be.an('array').with.length(4);
       expect(samples[0]).to.deep.equal({
         name: 'MyRoot.s1|aspect1',
@@ -60,7 +59,6 @@ describe('transform tests >', () => {
       ctx.separator = '|';
       res.text = '100|114|72|-123456';
       const samples = tu.doTransform(ctx, aspects, subjects, res);
-      console.log(samples)
       expect(samples).to.be.an('array').with.length(4);
       expect(samples[0]).to.deep.equal({
         name: 'MyRoot.s1|aspect1',
@@ -141,11 +139,11 @@ describe('transform tests >', () => {
     }); // sampleName
 
     describe('splitString >', () => {
-      it('OK, default separator', () => {
-        expect(helpers.splitString('1\n2\n3')).to.deep.equal(['1', '2', '3']);
+      it('OK, \n', () => {
+        expect(helpers.splitString('1\n2\n3', '\n')).to.deep.equal(['1', '2', '3']);
       });
 
-      it('OK, non-default separator', () => {
+      it('OK, $', () => {
         expect(helpers.splitString('a$bcd$efgh', '$')).
         to.deep.equal(['a', 'bcd', 'efgh']);
       });

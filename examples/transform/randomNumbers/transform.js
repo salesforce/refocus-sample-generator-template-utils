@@ -64,7 +64,7 @@ module.exports = {
     alternateMessageCode: {
       description: 'the message code to use if the message is greater than 5 characters',
       required: true,
-    }
+    },
   },
 
   /**
@@ -108,7 +108,7 @@ module.exports = {
      * @returns {Array} Array of strings, or empty array if str is empty or not
      *  a string
      */
-    splitString(str, sep = '\n') {
+    splitString(str, sep) {
       if (!str || typeof str !== 'string') return [];
       return str.split(sep);
     }, // split
