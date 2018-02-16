@@ -23,7 +23,7 @@ describe('test/build.js >', () => {
   });
   after(() => fs.remove(`./${projectName}`));
 
-  it('build', (done) => {
+  it.skip('build', (done) => {
     const sgt = fs.readJsonSync(`./${projectName}/${projectName}.json`);
     expect(sgt.connection).to.not.include.keys('url', 'toUrl');
     expect(sgt.transform.default).to.be.empty;
