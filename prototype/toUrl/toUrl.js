@@ -43,7 +43,7 @@ module.exports = {
   },
 
   /**
-   * Helpers (optional)
+   * Helpers (optional) ---
    *
    * Define helper functions here if you need to be able to test them directly.
    */
@@ -60,4 +60,4 @@ module.exports = {
      * },
      */
   },
-}
+};
