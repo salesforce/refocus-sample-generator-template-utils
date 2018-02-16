@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/salesforce/refocus-sample-generator-template-utils/badge.svg?branch=master)](https://coveralls.io/github/salesforce/refocus-sample-generator-template-utils?branch=master)
+
 # refocus-sample-generator-template-utils (Refocus Sample Generator Template Utilities)
 
 A sample generator template is just a json document, so of course you can write one by hand, but why bother? We hope you'll take advantage of the tooling provided here to make it easy for any developer with some javascript knowledge to write, test and deploy new Sample Generator Templates.
