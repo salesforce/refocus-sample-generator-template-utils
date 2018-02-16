@@ -32,7 +32,7 @@ Transform Examples:
 - `basicBulk` - creates samples from a basic json response for bulk requests.
 - `basicBySubject` - creates samples from a basic json response for bySubject requests.
 - `errorHandlersBulk` - example errorHandlers for bulk requests.
-- `errorHandlersBulk` - example errorHandlers for bySubject requests
+- `errorHandlersBulk` - example errorHandlers for bySubject requests.
 - `helpers` - example helper functions
 - `randomNumbers` - a bulk transform example using helpers
 
