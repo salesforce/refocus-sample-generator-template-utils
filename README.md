@@ -31,8 +31,8 @@ Transform Examples:
 - `mockBySubject` - creates mock samples based only on the aspects and subject passed in.
 - `basicBulk` - creates samples from a basic json response for bulk requests.
 - `basicBySubject` - creates samples from a basic json response for bySubject requests.
-- `errorHandlersBulk` - example errorHandlers for bulk requests
-- `errorHandlersBulk` - example errorHandlers for bySubject requests
+- `errorHandlersBulk` - example errorHandlers for bulk requests.
+- `errorHandlersBulk` - example errorHandlers for bySubject requests.
 - `helpers` - example helper functions
 - `randomNumbers` - a bulk transform example using helpers
 
