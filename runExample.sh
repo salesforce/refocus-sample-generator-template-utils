@@ -5,7 +5,7 @@
 # ./runExample -c connectionExample
 # ./runExample all
 
-dir=test-project
+dir=reserved-project-name-for-automated-tests
 function runExample {
   rm -rf $dir
   sgtu-init $dir $1 $2
@@ -13,6 +13,7 @@ function runExample {
   npm run test
   if [ $? != 0 ]; then exit; fi
   cd ..
+  rm -rf $dir
 }
 
 if [ $1 == all ]

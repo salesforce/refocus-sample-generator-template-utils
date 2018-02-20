@@ -30,7 +30,6 @@ const uglifyOpts = {
     if_return: true,
     inline: true,
     join_vars: true,
-    cascade: true,
     collapse_vars: true,
     reduce_vars: true,
     warnings: true,
@@ -278,9 +277,13 @@ function compress(code, helpers) {
   });
 
   // Minify code.
-  code = UglifyJS.minify(code, uglifyOpts).code;
+  const minifyResult = UglifyJS.minify(code, uglifyOpts);
+  if (minifyResult.error) {
+    throw new Error(`error minifying code:\n${minifyResult.error}\n${code}`);
+  }
 
   // Extract the function body so it can be executed directly.
+  code = minifyResult.code;
   code = code.replace(/^.*?{/, '').replace(/}$/, '');
   return code;
 }
