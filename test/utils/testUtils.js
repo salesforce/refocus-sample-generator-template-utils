@@ -7,7 +7,7 @@
  */
 
 /**
- * test/testUtils.js
+ * test/utils/testUtils.js
  */
 const expect = require('chai').expect;
 const fs = require('fs-extra');
@@ -15,7 +15,7 @@ const projectName = 'reserved-project-name-for-automated-tests';
 const fork = require('child_process').fork;
 let tu;
 
-describe('test/testUtils.js >', function () {
+describe('test/utils/testUtils.js >', function () {
   this.timeout(3000);
 
   function setup(transformExample, connectionExample) {

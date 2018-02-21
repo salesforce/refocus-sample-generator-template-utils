@@ -7,7 +7,7 @@
  */
 
 /**
- * test/resourceGenUtils.js
+ * test/src/resourceGenUtils.js
  */
 const expect = require('chai').expect;
 const rgu = require('../../src/resourceGenUtils');
@@ -16,7 +16,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const projectName = 'reserved-project-name-for-automated-tests';
 
-describe('test/resourceGenUtils.js >', () => {
+describe('test/src/resourceGenUtils.js >', () => {
 
   function mockDir(path1) {
     const dir = {};

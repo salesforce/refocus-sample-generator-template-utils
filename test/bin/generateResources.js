@@ -7,7 +7,7 @@
  */
 
 /**
- * test/generateResources.js
+ * test/bin/generateResources.js
  */
 const chai = require('chai');
 const expect = chai.expect;
@@ -15,7 +15,7 @@ const fs = require('fs-extra');
 const fork = require('child_process').fork;
 const projectName = 'reserved-project-name-for-automated-tests';
 
-describe('test/generateResources.js >', () => {
+describe('test/bin/generateResources.js >', () => {
   beforeEach(() => fs.remove(`./${projectName}`));
   afterEach(() => fs.remove(`./${projectName}`));
 

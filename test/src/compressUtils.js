@@ -7,7 +7,7 @@
  */
 
 /**
- * test/compressUtils.js
+ * test/src/compressUtils.js
  */
 const expect = require('chai').expect;
 const cu = require('../../src/compressUtils');
@@ -16,7 +16,7 @@ const mockRequire = require('mock-require');
 const path = require('path');
 const fs = require('fs-extra');
 
-describe('test/compressUtils.js >', () => {
+describe('test/src/compressUtils.js >', () => {
 
   describe('buildConnection >', () => {
     const mockConnection = {

@@ -7,7 +7,7 @@
  */
 
 /**
- * test/deployUtils.js
+ * test/src/deployUtils.js
  */
 const expect = require('chai').expect;
 const du = require('../../src/deployUtils');
@@ -16,7 +16,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const nock = require('nock');
 
-describe('test/deployUtils.js >', () => {
+describe('test/src/deployUtils.js >', () => {
   const templateFile = `./my-project/my-project.json`;
   const url = 'http://example.com';
   const token = 'abcdefg';
