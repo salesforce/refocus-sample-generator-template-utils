@@ -1718,6 +1718,12 @@ describe('test/src/compressUtils.js >', () => {
         'n,5)}))'
       );
     });
+
+    it('error in minify', () => {
+      const code = '{abc$!#';
+      const helpers = {};
+      expect(() => cu.compress(code, helpers)).to.throw('error minifying code');
+    });
   });
 
   describe('validateCtxUsages >', () => {
