@@ -7,7 +7,7 @@
  */
 
 /**
- * test/buildTransform.js
+ * test/bin/buildTransform.js
  */
 const chai = require('chai');
 const expect = chai.expect;
@@ -15,7 +15,7 @@ const fs = require('fs-extra');
 const fork = require('child_process').fork;
 const projectName = 'reserved-project-name-for-automated-tests';
 
-describe('test/buildTransform.js >', () => {
+describe('test/bin/buildTransform.js >', () => {
   before((done) => {
     const args = [projectName, '-t', 'basicBulk'];
     const forkedProcess = fork('./bin/generateResources.js', args);

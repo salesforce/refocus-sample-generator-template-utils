@@ -7,7 +7,7 @@
  */
 
 /**
- * test/deploy.js
+ * test/bin/deploy.js
  */
 const chai = require('chai');
 const expect = chai.expect;
@@ -15,7 +15,7 @@ const fs = require('fs-extra');
 const fork = require('child_process').fork;
 const projectName = 'reserved-project-name-for-automated-tests';
 
-describe('test/deploy.js >', () => {
+describe('test/bin/deploy.js >', () => {
   before((done) => {
     const args = [projectName, '-t', 'basicBulk', '-c', 'concatenateAspects'];
     const forkedProcess = fork('./bin/generateResources.js', args);

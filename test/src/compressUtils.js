@@ -7,7 +7,7 @@
  */
 
 /**
- * test/compressUtils.js
+ * test/src/compressUtils.js
  */
 const expect = require('chai').expect;
 const cu = require('../../src/compressUtils');
@@ -16,7 +16,7 @@ const mockRequire = require('mock-require');
 const path = require('path');
 const fs = require('fs-extra');
 
-describe('test/compressUtils.js >', () => {
+describe('test/src/compressUtils.js >', () => {
 
   describe('buildConnection >', () => {
     const mockConnection = {
@@ -1559,12 +1559,12 @@ describe('test/compressUtils.js >', () => {
       const code = transform.transformBulk.toString();
       const helpers = transform.helpers;
       expect(cu.compress(code, helpers)).to.equal(
-        'function e(subject,aspect){return`${subject.absolutePath}|${aspect.n' +
-        "ame}`}function n(e,n=4096){return e.length>n?e.substring(0,n-3)+'..." +
-        "':e}return[{name:e(subjects[0],aspects[0]),value:'1',messageCode:'00" +
-        "00',messageBody:n(aspects[0].description,5)},{name:e(subjects[1],asp" +
-        "ects[0]),value:'2',messageCode:'0000',messageBody:n(aspects[0].descr" +
-        'iption,5)}]'
+        "return[{name:e(subjects[0],aspects[0]),value:'1',messageCode:'0000'," +
+        'messageBody:n(aspects[0].description,5)},{name:e(subjects[1],aspects' +
+        "[0]),value:'2',messageCode:'0000',messageBody:n(aspects[0].descripti" +
+        'on,5)}];function e(subject,aspect){return`${subject.absolutePath}|${' +
+        'aspect.name}`}function n(e,n=4096){return e.length>n?e.substring(0,n' +
+        "-3)+'...':e}"
       );
     });
 
@@ -1717,6 +1717,12 @@ describe('test/compressUtils.js >', () => {
         "96){return e.length>n?e.substring(0,n-3)+'...':e}(aspects.descriptio" +
         'n,5)}))'
       );
+    });
+
+    it('error in minify', () => {
+      const code = '{abc$$!';
+      const helpers = {};
+      expect(() => cu.compress(code, helpers)).to.throw('error minifying code');
     });
   });
 
