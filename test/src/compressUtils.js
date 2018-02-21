@@ -1559,12 +1559,12 @@ describe('test/src/compressUtils.js >', () => {
       const code = transform.transformBulk.toString();
       const helpers = transform.helpers;
       expect(cu.compress(code, helpers)).to.equal(
-        "return[{name:e(subjects[0],aspects[0]),value:'1',messageCode:'0000'," +
-        'messageBody:n(aspects[0].description,5)},{name:e(subjects[1],aspects' +
-        "[0]),value:'2',messageCode:'0000',messageBody:n(aspects[0].descripti" +
-        'on,5)}];function e(subject,aspect){return`${subject.absolutePath}|${' +
-        'aspect.name}`}function n(e,n=4096){return e.length>n?e.substring(0,n' +
-        "-3)+'...':e}"
+        'function e(subject,aspect){return`${subject.absolutePath}|${aspect.n' +
+        "ame}`}function n(e,n=4096){return e.length>n?e.substring(0,n-3)+'..." +
+        "':e}return[{name:e(subjects[0],aspects[0]),value:'1',messageCode:'00" +
+        "00',messageBody:n(aspects[0].description,5)},{name:e(subjects[1],asp" +
+        "ects[0]),value:'2',messageCode:'0000',messageBody:n(aspects[0].descr" +
+        'iption,5)}]'
       );
     });
 
@@ -1717,12 +1717,6 @@ describe('test/src/compressUtils.js >', () => {
         "96){return e.length>n?e.substring(0,n-3)+'...':e}(aspects.descriptio" +
         'n,5)}))'
       );
-    });
-
-    it('error in minify', () => {
-      const code = '{abc$$!';
-      const helpers = {};
-      expect(() => cu.compress(code, helpers)).to.throw('error minifying code');
     });
   });
 
