@@ -35,7 +35,7 @@ const scriptsToAdd = {
   build: 'sgtu-build',
   deploy: 'sgtu-deploy',
   'template-init': 'sgtu-init',
-  test: 'istanbul cover ./node_modules/mocha/bin/_mocha ' +
+  test: './node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha ' +
     '--report lcovonly -- -R dot transform/testTransform.js connection/testConnection.js ',
   'test-connection': './node_modules/mocha/bin/_mocha ' +
     ' connection/testConnection.js',
