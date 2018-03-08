@@ -38,7 +38,7 @@ describe('test/bin/generateResources.js >', () => {
         'testUtils.js',
       ]);
       expect(fs.readdirSync(`./${projectName}/node_modules`)).to.have.members([
-        '@salesforce', 'chai', 'chai-url', 'istanbul', 'mocha',
+        '@salesforce', 'chai', 'chai-url', 'fs-extra', 'istanbul', 'mocha',
       ]);
 
       done();
