@@ -190,6 +190,7 @@ describe('test/src/resourceGenUtils.js >', () => {
           '@salesforce': mockDir('./node_modules/@salesforce'),
           chai: mockDir('./node_modules/chai'),
           'chai-url': mockDir('./node_modules/chai-url'),
+          'fs-extra': mockDir('./node_modules/fs-extra'),
           istanbul: mockDir('./node_modules/istanbul'),
           mocha: mockDir('./node_modules/mocha'),
         },
@@ -202,11 +203,11 @@ describe('test/src/resourceGenUtils.js >', () => {
 
     it('packages are copied', () => {
       expect(fs.readdirSync('./my-project/node_modules')).to.not.have.members([
-        '@salesforce', 'chai', 'chai-url', 'istanbul', 'mocha',
+        '@salesforce', 'chai', 'chai-url', 'fs-extra', 'istanbul', 'mocha',
       ]);
       rgu.copyPackages();
       expect(fs.readdirSync('./my-project/node_modules')).to.have.members([
-        '@salesforce', 'chai', 'chai-url', 'istanbul', 'mocha',
+        '@salesforce', 'chai', 'chai-url', 'fs-extra', 'istanbul', 'mocha',
       ]);
     });
   });
@@ -227,8 +228,8 @@ describe('test/src/resourceGenUtils.js >', () => {
         'scripts', 'keywords', 'author', 'license'
       );
       expect(contents.dependencies).to.have.keys(
-        '@salesforce/refocus-collector-eval', 'chai', 'chai-url', 'istanbul',
-        'mocha'
+        '@salesforce/refocus-collector-eval', 'chai', 'chai-url', 'fs-extra',
+        'istanbul', 'mocha'
       );
       expect(contents.scripts).to.have.keys(
         'test', 'build', 'deploy', 'template-init', 'test-connection',
