@@ -28,7 +28,7 @@
     "@salesforce/refocus-collector-eval": "*",
     "chai": "*",
     "chai-url": "*",
-    "fs-extra": "*",
+    "fs-extra": "4.*",
     "istanbul": "*",
     "mocha": "*"
   },
