@@ -364,6 +364,15 @@ function checkConflictingCtxDefs(dir = cwd) {
   const transformCtxDef = require(transformPath).contextDefinition || {};
   const connectionCtxDef = require(connectionPath).contextDefinition || {};
 
+  function deepEqual(o1, o2) {
+    if (typeof o1 === 'object' && typeof o2 === 'object') {
+      return Object.keys(o1).length === Object.keys(o2).length
+        && Object.keys(o1).every((key) => deepEqual(o1[key], o2[key]));
+    } else {
+      return o1 === o2;
+    }
+  }
+
   Object.keys(transformCtxDef).forEach((key) => {
     const transformCtxVar = transformCtxDef[key];
     const connectionCtxVar = connectionCtxDef[key];
@@ -371,7 +380,7 @@ function checkConflictingCtxDefs(dir = cwd) {
       if (
         transformCtxVar.description !== connectionCtxVar.description
         || transformCtxVar.required !== connectionCtxVar.required
-        || transformCtxVar.default !== connectionCtxVar.default
+        || !deepEqual(transformCtxVar.default, connectionCtxVar.default)
       ) {
         throw new Error(
           `contextDefinition.${key}: conflicting definitions in ` +

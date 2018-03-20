@@ -1381,6 +1381,69 @@ describe('test/src/compressUtils.js >', () => {
         'connection.js'
       );
     });
+
+    it('default is an object (deep match)', () => {
+      const mockConnectionCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      mockConnectionCtxDef.ctx2.default = {
+        a: 'a',
+        b: {
+          ba: [1, 2, 3],
+          bb: {
+            bba: 4,
+          },
+        },
+      };
+      mockTransformCtxDef.ctx2.default = {
+        a: 'a',
+        b: {
+          ba: [1, 2, 3],
+          bb: {
+            bba: 4,
+          },
+        },
+      };
+      mock(mockConnectionCtxDef, mockTransformCtxDef);
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
+    });
+
+    it('default is an object (deep conflict)', () => {
+      const mockConnectionCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      mockConnectionCtxDef.ctx2.default = {
+        a: 'a',
+        b: {
+          ba: [1, 2, 3],
+          bb: {
+            bba: 4,
+          },
+        },
+      };
+      mockTransformCtxDef.ctx2.default = {
+        a: 'a',
+        b: {
+          ba: [1, 2, 3],
+          bb: {
+            bba: 3,
+          },
+        },
+      };
+      mock(mockConnectionCtxDef, mockTransformCtxDef);
+      expect(() => cu.checkConflictingCtxDefs()).to.throw(
+        'contextDefinition.ctx2: conflicting definitions in transform.js and ' +
+        'connection.js'
+      );
+    });
+
+    it('default is an empty object', () => {
+      const mockConnectionCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      mockConnectionCtxDef.ctx2.default = {};
+      mockTransformCtxDef.ctx2.default = {};
+      mock(mockConnectionCtxDef, mockTransformCtxDef);
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
+    });
+
   });
 
   describe('isBulk >', () => {
