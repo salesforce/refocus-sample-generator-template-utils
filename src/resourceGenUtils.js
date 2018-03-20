@@ -107,11 +107,31 @@ module.exports = {
    */
   copyPackages: () => {
     console.log('copying packages...');
-    Object.keys(devDependencies).forEach((m) => {
+
+    const npmLs = execSync('npm ls --dev --json', { cwd: __dirname });
+    const dependencyTree = JSON.parse(npmLs).dependencies;
+    const modulesToCopy = Object.keys(devDependencies);
+
+    getAllDependencies(modulesToCopy, dependencyTree)
+    .forEach((m) => {
       const fromDir = path.resolve(__dirname, '..', 'node_modules', m);
       const toDir = path.resolve(cwd, 'node_modules', m);
-      fs.copySync(fromDir, toDir);
+      if (fs.existsSync(fromDir)) {
+        fs.copySync(fromDir, toDir);
+      }
     });
+
+    function getAllDependencies(moduleNames, dependencyTree) {
+      let dependencies = new Set(moduleNames);
+      moduleNames.forEach((moduleName) => {
+        const dependencyNode = dependencyTree[moduleName].dependencies;
+        if (dependencyNode) {
+          getAllDependencies(Object.keys(dependencyNode), dependencyNode)
+          .forEach((dep) => dependencies.add(dep));
+        }
+      });
+      return dependencies;
+    }
   },
 
   /**
