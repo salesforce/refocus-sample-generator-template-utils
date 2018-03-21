@@ -180,7 +180,54 @@ describe('test/src/resourceGenUtils.js >', () => {
     });
   });
 
-  describe('copyPackages >', () => {
+  describe('getAllDependencies >', () => {
+    const dependencyTree = {
+      a: { version: '1.0.0' },
+      b: {
+        version: '1.0.0',
+        dependencies: {
+          c: { version: '1.0.0' },
+          d: {
+            version: '1.0.0',
+            dependencies: {
+              e: { version: '1.0.0' },
+              f: {
+                version: '1.0.0',
+                dependencies: {
+                  g: { version: '1.0.0' },
+                },
+              },
+            },
+          },
+        },
+      },
+      h: { version: '1.0.0' },
+      i: {
+        version: '1.0.0',
+        dependencies: {
+          j: { version: '1.0.0' },
+          c: { version: '1.0.0' },
+        },
+      },
+      l: {
+        version: '1.0.0',
+        dependencies: {
+          m: { version: '1.0.0' },
+        },
+      },
+    };
+
+    it('get all dependencies', () => {
+      const modulesToCopy = ['a', 'b', 'i', 'm', 'z'];
+      const dependencies = rgu.getAllDependencies(modulesToCopy, dependencyTree);
+      expect(dependencies).to.have.keys([
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'i', 'j',
+      ]);
+    });
+  });
+
+  describe('copyPackages >', function () {
+    this.timeout(5000);
     before(() => {
       mockFs({
         'my-project': {
@@ -193,6 +240,10 @@ describe('test/src/resourceGenUtils.js >', () => {
           'fs-extra': mockDir('./node_modules/fs-extra'),
           istanbul: mockDir('./node_modules/istanbul'),
           mocha: mockDir('./node_modules/mocha'),
+          abbrev: mockDir('./node_modules/abbrev'), // dependency
+          ajv: mockDir('./node_modules/ajv'), // not dependency
+          'align-text': mockDir('./node_modules/align-text'), // dependency
+          asn1: mockDir('./node_modules/asn1'), // not dependency
         },
       });
     });
@@ -202,12 +253,11 @@ describe('test/src/resourceGenUtils.js >', () => {
     });
 
     it('packages are copied', () => {
-      expect(fs.readdirSync('./my-project/node_modules')).to.not.have.members([
-        '@salesforce', 'chai', 'chai-url', 'fs-extra', 'istanbul', 'mocha',
-      ]);
+      expect(fs.readdirSync('./my-project/node_modules')).to.be.empty;
       rgu.copyPackages();
       expect(fs.readdirSync('./my-project/node_modules')).to.have.members([
         '@salesforce', 'chai', 'chai-url', 'fs-extra', 'istanbul', 'mocha',
+        'abbrev', 'align-text',
       ]);
     });
   });

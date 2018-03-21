@@ -44,6 +44,26 @@ const scriptsToAdd = {
   validate: 'echo "validate"',
 };
 
+/**
+ * Traverses the dependency tree to find all required modules.
+ * @param {Array} moduleNames - The top-level modules to search
+ * @param {Object} dependencyTree - A tree of modules and their dependencies
+ * @returns {Set} A flattened, unique list of dependencies
+ */
+function getAllDependencies(moduleNames, dependencyTree) {
+  let allDependencies = new Set();
+  moduleNames.forEach((moduleName) => {
+    const module = dependencyTree[moduleName];
+    if (module) allDependencies.add(moduleName);
+    const nextDependencies = module && module.dependencies;
+    if (nextDependencies) {
+      getAllDependencies(Object.keys(nextDependencies), nextDependencies)
+      .forEach((dep) => allDependencies.add(dep));
+    }
+  });
+  return allDependencies;
+}
+
 module.exports = {
   /**
    * Create a directory for the new project
@@ -120,19 +140,9 @@ module.exports = {
         fs.copySync(fromDir, toDir);
       }
     });
-
-    function getAllDependencies(moduleNames, dependencyTree) {
-      let dependencies = new Set(moduleNames);
-      moduleNames.forEach((moduleName) => {
-        const dependencyNode = dependencyTree[moduleName].dependencies;
-        if (dependencyNode) {
-          getAllDependencies(Object.keys(dependencyNode), dependencyNode)
-          .forEach((dep) => dependencies.add(dep));
-        }
-      });
-      return dependencies;
-    }
   },
+
+  getAllDependencies,
 
   /**
    * Initializes the package.json file, then adds scripts and dependencies.
