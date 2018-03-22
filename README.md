@@ -101,7 +101,13 @@ Write your tests in the stubbed out `/transform/testTransform.js` file.
 
 ### Context Definition (Optional)
 
-Update the contextDefinition attributes in `connection/connection.js` and `transform/transform.js` to define any variables you need to make available to your url or headers (via double curly braces) or to your toUrl and transform functions via the functions' context argument `ctx`. Each key defined here must provide an object with the following attributes:
+Update the contextDefinition attributes in `connection/connection.js` and `transform/transform.js` to define any variables you need to make available to your url or headers (via double curly braces) or to your toUrl and transform functions via the functions' context argument `ctx`.
+
+If there is a variable that will be used in both the connection and transform, define it in both places. Otherwise, you only need to define it in the file it will be used in.
+
+Context Variables defined here will be copied to the Sample Generator Template JSON file. You can also define them directly in the SGT, and leave it blank in the connection and transform files.
+
+Each key defined here must provide an object with the following attributes:
 
 - `description` (String, required) - provide enough detail for the user to understand what value to provide
 - `required` (Boolean, optional, default = `false`) - set to `true` if your users *must* provide a value for this context variable in their sample generators.
