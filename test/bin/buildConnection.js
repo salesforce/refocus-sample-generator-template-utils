@@ -15,7 +15,8 @@ const fs = require('fs-extra');
 const fork = require('child_process').fork;
 const projectName = 'reserved-project-name-for-automated-tests';
 
-describe('test/bin/buildConnection.js >', () => {
+describe('test/bin/buildConnection.js >', function () {
+  this.timeout(5000);
   before((done) => {
     const args = [projectName, '-c', 'concatenateAspects'];
     const forkedProcess = fork('./bin/generateResources.js', args);

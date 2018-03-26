@@ -44,6 +44,26 @@ const scriptsToAdd = {
   validate: 'echo "validate"',
 };
 
+/**
+ * Traverses the dependency tree to find all required modules.
+ * @param {Array} moduleNames - The top-level modules to search
+ * @param {Object} dependencyTree - A tree of modules and their dependencies
+ * @returns {Set} A flattened, unique list of dependencies
+ */
+function getAllDependencies(moduleNames, dependencyTree) {
+  let allDependencies = new Set();
+  moduleNames.forEach((moduleName) => {
+    const module = dependencyTree[moduleName];
+    if (module) allDependencies.add(moduleName);
+    const nextDependencies = module && module.dependencies;
+    if (nextDependencies) {
+      getAllDependencies(Object.keys(nextDependencies), nextDependencies)
+      .forEach((dep) => allDependencies.add(dep));
+    }
+  });
+  return allDependencies;
+}
+
 module.exports = {
   /**
    * Create a directory for the new project
@@ -107,12 +127,22 @@ module.exports = {
    */
   copyPackages: () => {
     console.log('copying packages...');
-    Object.keys(devDependencies).forEach((m) => {
+
+    const npmLs = execSync('npm ls --dev --json', { cwd: __dirname });
+    const dependencyTree = JSON.parse(npmLs).dependencies;
+    const modulesToCopy = Object.keys(devDependencies);
+
+    getAllDependencies(modulesToCopy, dependencyTree)
+    .forEach((m) => {
       const fromDir = path.resolve(__dirname, '..', 'node_modules', m);
       const toDir = path.resolve(cwd, 'node_modules', m);
-      fs.copySync(fromDir, toDir);
+      if (fs.existsSync(fromDir)) {
+        fs.copySync(fromDir, toDir);
+      }
     });
   },
+
+  getAllDependencies,
 
   /**
    * Initializes the package.json file, then adds scripts and dependencies.

@@ -5,15 +5,22 @@
 # ./runExample -c connectionExample
 # ./runExample all
 
-dir=reserved-project-name-for-automated-tests
+# This should only be called from the sgt-utils project directory
+
+newProject=reserved-project-name-for-automated-tests
+baseDir=`pwd`
 function runExample {
-  rm -rf $dir
-  sgtu-init $dir $1 $2
-  cd $dir
+  # need to go one dir up from the sgt-utils project to make sure the copy works
+  # outside the scope of its node modules
+  cd ..
+  rm -rf $newProject
+  sgtu-init $newProject $1 $2
+  cd $newProject
   npm run test
   if [ $? != 0 ]; then exit; fi
   cd ..
-  rm -rf $dir
+  cd $baseDir
+  rm -rf $newProject
 }
 
 if [ $1 == all ]

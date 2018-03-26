@@ -16,7 +16,7 @@ const fork = require('child_process').fork;
 let tu;
 
 describe('test/utils/testUtils.js >', function () {
-  this.timeout(3000);
+  this.timeout(5000);
 
   function setup(transformExample, connectionExample) {
     fs.removeSync(`./${projectName}`);
