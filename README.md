@@ -169,14 +169,10 @@ It is highly recommended to put the entire project under source control, e.g. gi
 Upload your brand new sample generator template into an instance of Refocus. Note: Upload should run test and build and validate before actually uploading.
 
 ```
-$ npm run deploy TEMPLATE_FILE REFOCUS_URL REFOCUS_TOKEN
+$ npm run deploy TEMPLATE_FILE REFOCUS_URL REFOCUS_TOKEN --isPublished=<true|false>
 ```
 
-By default, the new sample generator template is posted with "isPublished" set to false. You can override that by passing the `-p` or `--isPublished` option to set it to true, e.g.
-
-```
-$ npm run deploy TEMPLATE_FILE REFOCUS_URL REFOCUS_TOKEN --isPublished
-```
+Use `--isPublished <true|false>` to specify whether you want your new sample generator template to be posted with "isPublished" set to true or false.
 
 ## Maintenance
 

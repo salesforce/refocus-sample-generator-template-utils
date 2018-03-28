@@ -17,7 +17,7 @@ const commander = require('commander');
 
 commander
 .arguments('<templateFile> <refocusUrl> <refocusToken>')
-.option('-p, --isPublished', 'set isPublished=true')
+.option('--isPublished <true|false>', 'set isPublished to true|false')
 .parse(process.argv);
 
 if (commander.args.length < 3) {
@@ -25,8 +25,18 @@ if (commander.args.length < 3) {
   process.exit(1);
 }
 
+if (!commander.hasOwnProperty('isPublished')) {
+  console.error('\nError: --isPublished <true|false> is required.\n');
+  process.exit(1);
+}
+
+if (!['true', 'false'].includes(commander.isPublished.toLowerCase())) {
+  console.error('\nError: --isPublished <true|false> is required.\n');
+  process.exit(1);
+}
+
 const [templateFile, refocusUrl, refocusToken] = commander.args;
-const isPublished = commander.isPublished || false;
+const isPublished = commander.isPublished.toLowerCase() === 'true';
 console.log(`Deploying ${templateFile} to ${refocusUrl} with ` +
   `isPublished=${isPublished}...`);
 

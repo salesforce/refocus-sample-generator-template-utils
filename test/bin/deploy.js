@@ -33,11 +33,11 @@ describe('test/bin/deploy.js >', function () {
    * nock doesn't work for a forked process, so the best we can do here is send
    * the request to localhost and expect an error.
    */
-  it('provide 3 args but no isPublished flag', (done) => {
+  it('provide 3 args and isPublished flag set to false', (done) => {
     const templateFile = `./${projectName}/${projectName}.json`;
     const refocusUrl = 'http://localhost';
     const refocusToken = 'abcdefg';
-    const args = [templateFile, refocusUrl, refocusToken];
+    const args = [templateFile, refocusUrl, refocusToken, '--isPublished=false'];
     const forkedProcess = fork('./bin/deploy.js', args, { silent: true });
     forkedProcess.stdout.on('data', (data) => {
       expect(data.toString())
@@ -47,10 +47,7 @@ describe('test/bin/deploy.js >', function () {
     forkedProcess.stderr.on('data', (data) => {
       expect(data.toString()).to.include('Error: connect ECONNREFUSED');
     });
-    forkedProcess.on('exit', (code) => {
-      expect(code).to.equal(0);
-      done();
-    });
+    forkedProcess.on('exit', (code) => done());
   });
 
   it('missing args', (done) => {
@@ -62,26 +59,19 @@ describe('test/bin/deploy.js >', function () {
     forkedProcess.stderr.on('data', (data) => {
       expect(data.toString())
       .to.include('Error: <templateFile> <refocusUrl> <refocusToken> args are required.');
-    });
-    forkedProcess.on('exit', (code) => {
-      expect(code).to.equal(1);
       done();
     });
   });
 
-  it('set isPublished using short option -p', (done) => {
+  it('missing isPublished', (done) => {
     const templateFile = `./${projectName}/${projectName}.json`;
     const refocusUrl = 'http://localhost';
     const refocusToken = 'abcdefg';
-    const args = [templateFile, refocusUrl, refocusToken, '-p'];
+    const args = [templateFile, refocusUrl, refocusToken];
     const forkedProcess = fork('./bin/deploy.js', args, { silent: true });
-    forkedProcess.stdout.on('data', (data) => {
+    forkedProcess.stderr.on('data', (data) => {
       expect(data.toString())
-      .to.include(`Deploying ${templateFile} to ${refocusUrl} with ` +
-        'isPublished=true...');
-    });
-    forkedProcess.on('exit', (code) => {
-      expect(code).to.equal(0);
+      .to.include('Error: --isPublished <true|false> is required.');
       done();
     });
   });
@@ -90,15 +80,25 @@ describe('test/bin/deploy.js >', function () {
     const templateFile = `./${projectName}/${projectName}.json`;
     const refocusUrl = 'http://localhost';
     const refocusToken = 'abcdefg';
-    const args = [templateFile, refocusUrl, refocusToken, '-p'];
+    const args = [templateFile, refocusUrl, refocusToken, '--isPublished=true'];
     const forkedProcess = fork('./bin/deploy.js', args, { silent: true });
     forkedProcess.stdout.on('data', (data) => {
       expect(data.toString())
       .to.include(`Deploying ${templateFile} to ${refocusUrl} with ` +
         'isPublished=true...');
+      done();
     });
-    forkedProcess.on('exit', (code) => {
-      expect(code).to.equal(0);
+  });
+
+  it('invalid value for isPublished', (done) => {
+    const templateFile = `./${projectName}/${projectName}.json`;
+    const refocusUrl = 'http://localhost';
+    const refocusToken = 'abcdefg';
+    const args = [templateFile, refocusUrl, refocusToken, '--isPublished foo'];
+    const forkedProcess = fork('./bin/deploy.js', args, { silent: true });
+    forkedProcess.stderr.on('data', (data) => {
+      expect(data.toString())
+      .to.include('Error: --isPublished <true|false> is required.');
       done();
     });
   });
