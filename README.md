@@ -172,6 +172,12 @@ Upload your brand new sample generator template into an instance of Refocus. Not
 $ npm run deploy TEMPLATE_FILE REFOCUS_URL REFOCUS_TOKEN
 ```
 
+By default, the new sample generator template is posted with "isPublished" set to false. You can override that by passing the `-p` or `--isPublished` option to set it to true, e.g.
+
+```
+$ npm run deploy TEMPLATE_FILE REFOCUS_URL REFOCUS_TOKEN --isPublished
+```
+
 ## Maintenance
 
 ### Versioning

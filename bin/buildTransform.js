@@ -16,4 +16,3 @@ const startTime = Date.now();
 
 cu.buildTransform();
 console.log(`Done building transform (${Date.now() - startTime}ms)`);
-

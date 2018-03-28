@@ -27,13 +27,13 @@ const cwd = process.cwd();
  * @returns {Promise} which resolves to the http response from Refocus or an
  *  error
  */
-function deploy(template, url, token) {
+function deploy(template, url, token, isPublished = false) {
   if (typeof template === 'string') {
     return fs.readJson(template)
-    .then((contents) => deployTemplate(contents, url, token));
+    .then((contents) => deployTemplate(contents, url, token, isPublished));
   }
 
-  return deployTemplate(template, url, token);
+  return deployTemplate(template, url, token, isPublished);
 } // deploy
 
 /**
@@ -46,7 +46,8 @@ function deploy(template, url, token) {
  * @returns {Promise} which resolves to the http response from Refocus or an
  *  error
  */
-function deployTemplate(templateJson, url, token) {
+function deployTemplate(templateJson, url, token, isPublished = false) {
+  templateJson.isPublished = isPublished;
   return req.post(`${url}${path}`)
     .send(templateJson)
     .set({
