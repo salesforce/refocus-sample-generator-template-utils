@@ -19,4 +19,3 @@ cu.buildTransform();
 console.log(`Done building transform (${Date.now() - startTime}ms)`);
 cu.buildConnection();
 console.log(`Done building connection (${Date.now() - startTime}ms)`);
-
