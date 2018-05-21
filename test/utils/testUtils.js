@@ -226,7 +226,6 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
-            timeout: '5m',
           },
         ];
         const subjects = [
@@ -251,7 +250,6 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
-            timeout: '5m',
           },
         ];
         const subject = { absolutePath: 'aaa.bbb' };
@@ -271,7 +269,6 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
-            timeout: '5m',
           },
         ];
         const subject = { absolutePath: 'aaa.bbb' };
@@ -291,7 +288,6 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
-            timeout: '5m',
           },
         ];
         const subject = { absolutePath: 'aaa.bbb' };
@@ -313,7 +309,6 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
-            timeout: '5m',
           },
         ];
         const subjects = [

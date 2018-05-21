@@ -29,7 +29,8 @@ module.exports = {
    * for *all* the subjects in a single request.
    *
    * @param {Object} ctx - The context from the Sample Generator
-   * @param {Array} aspects - Array of one or more aspects
+   * @param {Array} aspects - Array of one or more aspects (where each object
+   *  in the array has a "name" attribute)
    * @param {Array} subjects - Array of one or more subjects
    * @param {http.ServerResponse} res - The response object
    * @returns {Array} an array of samples

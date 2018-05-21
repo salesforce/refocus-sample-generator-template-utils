@@ -17,7 +17,8 @@ module.exports = {
    * Creates a url string by concatenating all the subjects/aspects
    * names and including them in the expression.
    * @param {Object} ctx - The context from the Sample Generator
-   * @param {Array} aspects - Array of one or more aspects
+   * @param {Array} aspects - Array of one or more aspects (where each object
+   *  in the array has a "name" attribute)
    * @param {Array} subjects - Array of one or more subjects
    * @returns {String} the url
    */

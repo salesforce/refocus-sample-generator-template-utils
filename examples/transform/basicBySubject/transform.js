@@ -27,7 +27,8 @@ module.exports = {
    * a time from your connection.url.
    *
    * @param {Object} ctx - The context from the Sample Generator
-   * @param {Array} aspects - Array of one or more aspects
+   * @param {Array} aspects - Array of one or more aspects (where each object
+   *  in the array has a "name" attribute)
    * @param {Object} subject - A single subject object
    * @param {http.ServerResponse} res - The response object
    * @returns {Array} an array of samples
