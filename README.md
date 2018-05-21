@@ -77,7 +77,7 @@ Go to `/connection/connection.js` and implement either `url` or `toUrl`.
 - `toUrl` (Function) Use this if you need to do more complex transformations to generate a URL, rather than just simple variable substitutions. Implement your logic in the function body that is already stubbed out. The function must return a string. The function body has access to these variables:
 
   - `context` - a reference to the sample generator context data, with defaults applied.
-  - `aspects` - an array of one or more aspects as specified by the sample generator.
+  - `aspects` - an array of one or more aspects as specified by the sample generator. Each object in the array has a "name" attribute.
   - `subjects` - an array of one or more subjects as specified by the sample generator.
 
 You can also optionally implement `headers` if you need to send custom headers in the request:
@@ -90,7 +90,7 @@ Write your tests in the stubbed out `/connection/testConnection.js` file.
 Go to `/transform/transform.js` and implement your logic in the function which is already stubbed out in that file. The function must return an array of samples. The function body has access to these variables:
 
 - `context` - a reference to the sample generator context data, with defaults applied.
-- `aspects` - an array of one or more aspects as specified by the sample generator.
+- `aspects` - an array of one or more aspects as specified by the sample generator. Each object in the array has a "name" attribute.
 - `subject` - if connection.bulk is set to false, this is a reference to the subject.
 - `subjects` - if connection.bulk is set to true, this is reference to the array of subjects.
 - `res` - a reference to the HTTP response. See https://nodejs.org/api/http.html#http_class_http_incomingmessage for more details on the format of the HTTP response. Typically, the body of the response will be in res.body or res.text, depending on the content type.

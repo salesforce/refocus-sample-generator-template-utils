@@ -29,7 +29,8 @@ module.exports = {
    *
    * @param {Object} ctx - The context from the Sample Generator, expected to
    *  have "alternateMessageCode" and "separator" attributes.
-   * @param {Array} aspects - Expecting an array of one aspect.
+   * @param {Array} aspects - Array of one or more aspects (where each object
+   *  in the array has a "name" attribute)
    * @param {Array} subjects - Expecting an array of one or more subjects.
    * @param {http.ServerResponse} res - The response object, expected to have
    *  a "text" attribute containing a list of random integers, one per line.
