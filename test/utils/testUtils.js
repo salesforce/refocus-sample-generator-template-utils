@@ -180,7 +180,7 @@ describe('test/utils/testUtils.js >', function () {
         const sgt = fs.readJsonSync(`./${projectName}.json`);
         expect(sgt.connection).to.have.property('url');
         expect(sgt.contextDefinition).to.have.keys(
-          'baseUrl', 'window', 'type', 'subtype'
+          'baseUrl', 'window', 'type', 'subtype', 'token',
         );
       });
     });
@@ -194,6 +194,7 @@ describe('test/utils/testUtils.js >', function () {
       const sgt = fs.readJsonSync(`./${projectName}.json`);
       const ctx = {
         baseUrl: 'example.com',
+        token: 'abcd',
       };
       const preparedUrl = tu.prepareUrl(ctx);
       expect(preparedUrl).to.equal(
@@ -209,10 +210,14 @@ describe('test/utils/testUtils.js >', function () {
     it('rce.prepareHeaders is called with assigned context', () => {
       const ctx = {
         baseUrl: 'example.com',
+        token: 'abcd',
         subtype: 'xml',
       };
       const preparedHeaders = tu.prepareHeaders(ctx);
-      expect(preparedHeaders).to.deep.equal({ Accept: 'text/xml' });
+      expect(preparedHeaders).to.deep.equal({
+        Accept: 'text/xml',
+        Authorization: 'abcd',
+      });
     });
   });
 
@@ -226,6 +231,7 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
+            timeout: '30s',
           },
         ];
         const subjects = [
@@ -250,6 +256,7 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
+            timeout: '30s',
           },
         ];
         const subject = { absolutePath: 'aaa.bbb' };
@@ -269,6 +276,7 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
+            timeout: '30s',
           },
         ];
         const subject = { absolutePath: 'aaa.bbb' };
@@ -288,6 +296,7 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
+            timeout: '30s',
           },
         ];
         const subject = { absolutePath: 'aaa.bbb' };
@@ -309,6 +318,7 @@ describe('test/utils/testUtils.js >', function () {
         const aspects = [
           {
             name: 'aspect1',
+            timeout: '30s',
           },
         ];
         const subjects = [

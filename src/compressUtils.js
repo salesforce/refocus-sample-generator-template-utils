@@ -380,6 +380,7 @@ function checkConflictingCtxDefs(dir = cwd) {
       if (
         transformCtxVar.description !== connectionCtxVar.description
         || transformCtxVar.required !== connectionCtxVar.required
+        || transformCtxVar.encrypted !== connectionCtxVar.encrypted
         || !deepEqual(transformCtxVar.default, connectionCtxVar.default)
       ) {
         throw new Error(
