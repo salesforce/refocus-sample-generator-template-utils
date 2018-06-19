@@ -14,6 +14,7 @@ describe('connection tests >', () => {
    */
   const ctx = {
     baseUrl: 'dummyUrl.io',
+    token: 'abcdefghijklmnopqrst',
   };
 
   /**
@@ -64,6 +65,16 @@ describe('connection tests >', () => {
       ctx.subtype = 'json';
       const headers = tu.prepareHeaders(ctx);
       expect(headers).to.have.property('Accept', 'application/json');
+    });
+
+    it('token', () => {
+      const headers = tu.prepareHeaders(ctx);
+      expect(headers).to.have.property('Authorization', 'abcdefghijklmnopqrst');
+    });
+
+    it('token missing (error)', () => {
+      delete ctx.token;
+      expect(() => tu.prepareHeaders(ctx)).to.throw();
     });
   });
 });

@@ -1294,15 +1294,18 @@ describe('test/src/compressUtils.js >', () => {
       ctx1: {
         description: 'ctx1',
         required: true,
+        encrypted: true,
       },
       ctx2: {
         description: 'ctx2',
         required: false,
+        encrypted: false,
         default: '2',
       },
       ctx3: {
         description: 'ctx3',
         required: false,
+        encrypted: false,
       },
     };
 
@@ -1364,6 +1367,17 @@ describe('test/src/compressUtils.js >', () => {
       const mockConnectionCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
       const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
       delete mockTransformCtxDef.ctx2.required;
+      mock(mockConnectionCtxDef, mockTransformCtxDef);
+      expect(() => cu.checkConflictingCtxDefs()).to.throw(
+        'contextDefinition.ctx2: conflicting definitions in transform.js and ' +
+        'connection.js'
+      );
+    });
+
+    it('conflicting encrypted', () => {
+      const mockConnectionCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      const mockTransformCtxDef = JSON.parse(JSON.stringify(mockCtxDef));
+      mockConnectionCtxDef.ctx2.encrypted = true;
       mock(mockConnectionCtxDef, mockTransformCtxDef);
       expect(() => cu.checkConflictingCtxDefs()).to.throw(
         'contextDefinition.ctx2: conflicting definitions in transform.js and ' +
@@ -2027,6 +2041,16 @@ describe('test/src/compressUtils.js >', () => {
       expect(() => cu.validateCtxDef(ctxDef)).to.not.throw();
     });
 
+    it('encrypted', () => {
+      const ctxDef = {
+        ctx1: {
+          description: 'ctx1',
+          encrypted: true,
+        },
+      };
+      expect(() => cu.validateCtxDef(ctxDef)).to.not.throw();
+    });
+
     it('required, default specified (error)', () => {
       const ctxDef = {
         ctx1: {
@@ -2056,6 +2080,7 @@ describe('test/src/compressUtils.js >', () => {
         ctx1: {
           description: 'ctx1',
           required: false,
+          encrypted: false,
           default: 'ctx1',
         },
         ctx2: {
@@ -2065,6 +2090,7 @@ describe('test/src/compressUtils.js >', () => {
         ctx3: {
           description: 'ctx3',
           required: false,
+          encrypted: true,
         },
       };
       expect(() => cu.validateCtxDef(ctxDef)).to.not.throw();
@@ -2075,6 +2101,7 @@ describe('test/src/compressUtils.js >', () => {
         ctx1: {
           description: 'ctx1',
           required: false,
+          encrypted: false,
           default: 'ctx1',
         },
         ctx2: {
@@ -2084,6 +2111,7 @@ describe('test/src/compressUtils.js >', () => {
         ctx3: {
           description: 'ctx3',
           required: true,
+          encrypted: true,
           default: 'ctx3',
         },
       };

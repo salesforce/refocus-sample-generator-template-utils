@@ -79,16 +79,19 @@ module.exports = {
   /**
    * ContextDefinition (optional)
    *
-   * Define context variables that the transform function relies on here.
-   * The values that get passed in to the transform will be assigned in the
-   * Sample Generator. You can also specify a default value here, to be used if
-   * "required" is false and no value is set.
+   * Define context variables that the connection relies on here.
+   * The values that get passed in to the connection will be assigned in the
+   * Sample Generator.
+   * You can also specify a default value here, to be used if "required" is
+   * false and no value is set.
+   * If the value is sensitive and must be stored encrypted, set "encrypted: true".
    */
   contextDefinition: {
     /*
     var1: {
       description: 'description...',
       required: false,
+      encrypted: false,
       default: 4,
     },
     */

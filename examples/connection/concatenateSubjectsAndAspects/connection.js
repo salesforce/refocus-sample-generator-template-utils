@@ -36,17 +36,21 @@ module.exports = {
    *
    * Define context variables that the connection relies on here.
    * The values that get passed in to the connection will be assigned in the
-   * Sample Generator. You can also specify a default value here, to be used if
-   * "required" is false and no value is set.
+   * Sample Generator.
+   * You can also specify a default value here, to be used if "required" is
+   * false and no value is set.
+   * If the value is sensitive and must be stored encrypted, set "encrypted: true".
    */
   contextDefinition: {
     baseUrl: {
       description: 'the base url to add the params to',
       required: true,
+      encrypted: false,
     },
     window: {
       description: 'the window value to be set in the url',
       required: false,
+      encrypted: false,
       default: '-15m',
     },
   },

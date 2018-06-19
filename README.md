@@ -111,6 +111,7 @@ Each key defined here must provide an object with the following attributes:
 
 - `description` (String, required) - provide enough detail for the user to understand what value to provide
 - `required` (Boolean, optional, default = `false`) - set to `true` if your users *must* provide a value for this context variable in their sample generators.
+- `encrypted` (Boolean, optional, default = `false`) - set to `true` if the value specified in the sample generator is sensitive and should be stored encrypted. Use this to store credentials for the remote data source, to be accessed in `headers` or `url`/`toUrl`.
 - `default` (Any, optional) - a value to populate the context variable when your users do not provide a value in their sample generators.
 
 ### Other Connection Information (optional)
