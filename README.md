@@ -10,11 +10,10 @@ Install [node.js](https://docs.npmjs.com/getting-started/installing-node).
 
 ## Installation
 
-Install the Refocus Sample Generator Template Utilities, then run `npm link` to create global symlinks to the /bin commands.
+Install the Refocus Sample Generator Template Utilities.
 
 ```
-$ npm install @salesforce/refocus-sample-generator-template-utils
-$ npm link
+$ npm install -g @salesforce/refocus-sample-generator-template-utils
 ```
 
 ## Create a New Refocus Sample Generator Template Project
