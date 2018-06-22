@@ -1,6 +1,6 @@
 {
   "name": "@salesforce/refocus-sample-generator-template-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Refocus Sample Generator Template Utilities",
   "main": "index.js",
   "dependencies": {
