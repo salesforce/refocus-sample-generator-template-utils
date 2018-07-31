@@ -221,6 +221,21 @@ describe('test/utils/testUtils.js >', function () {
     });
   });
 
+  describe('validateResponse >', () => {
+    before(() => setupAndBuild('basicBulk', null));
+    after(removeProject);
+
+    it('rce.validateResponseBody is called', () => {
+      const res = {
+        body: {},
+      };
+
+      expect(() => tu.validateResponse(res)).to.throw(
+        "Response validation failed - /body - should have required property 'root'"
+      );
+    });
+  });
+
   describe('doTransform >', () => {
     afterEach(removeProject);
 
@@ -306,6 +321,30 @@ describe('test/utils/testUtils.js >', function () {
         expect(samples).to.have.lengthOf(1);
         expect(samples[0]).to.have.property('name', 'aaa.bbb|aspect1');
         expect(samples[0]).to.have.property('messageBody', 'got 400 error...');
+      });
+    });
+
+    it('rce.validateResponseBody is called', function () {
+      return setupAndBuild('basicBulk', null)
+      .then(() => {
+        const ctx = {};
+        const aspects = [
+          {
+            name: 'aspect1',
+            timeout: '30s',
+          },
+        ];
+        const subjects = [
+          { absolutePath: 'aaa.bbb' },
+          { absolutePath: 'aaa.ccc' },
+        ];
+        const res = {
+          body: {},
+        };
+
+        expect(() => tu.doTransform(ctx, aspects, subjects, res)).to.throw(
+          "Response validation failed - /body - should have required property 'root'"
+        );
       });
     });
 

@@ -166,6 +166,19 @@ describe('test/src/compressUtils.js >', () => {
         },
       },
 
+      responseSchema: {
+        type: 'object',
+        properties: {
+          body: {
+            type: 'object',
+            properties: {
+              prop1: { type: 'string' },
+              prop2: { type: 'number' },
+            },
+          },
+        },
+      },
+
       contextDefinition: {
         val: {
           description: 'value',
@@ -194,6 +207,19 @@ describe('test/src/compressUtils.js >', () => {
 
         500: function (ctx, aspects, subject, res) {
           return [{ name: generateSampleName('aaa', 'bbb'), value: ctx.errVal }];
+        },
+      },
+
+      responseSchema: {
+        type: 'object',
+        properties: {
+          body: {
+            type: 'object',
+            properties: {
+              prop1: { type: 'string' },
+              prop2: { type: 'number' },
+            },
+          },
         },
       },
 
@@ -231,6 +257,7 @@ describe('test/src/compressUtils.js >', () => {
       transform: {
         default: '',
         errorHandlers: {},
+        responseSchema: '{}',
       },
     };
 
@@ -695,13 +722,14 @@ describe('test/src/compressUtils.js >', () => {
       const defTransform = exports.transformBulk || exports.transformBySubject;
       const errorHandlers = exports.errorHandlers;
       const errorHandlerKeys = errorHandlers ? Object.keys(errorHandlers) : [];
+      const responseSchema = exports.responseSchema || {};
       const helpers = exports.helpers || {};
 
       //keys
       if (defTransform) {
-        expect(transformObj).to.have.keys('default', 'errorHandlers');
+        expect(transformObj).to.have.keys('default', 'errorHandlers', 'responseSchema');
       } else {
-        expect(transformObj).to.have.keys('errorHandlers');
+        expect(transformObj).to.have.keys('errorHandlers', 'responseSchema');
       }
 
       if (errorHandlerKeys.length) {
@@ -721,6 +749,10 @@ describe('test/src/compressUtils.js >', () => {
         const compressed = cu.compress(errorHandlers[key].toString(), helpers);
         expect(transformObj.errorHandlers[key]).to.equal(compressed);
       });
+
+      //responseSchema
+      const compressed = JSON.stringify(responseSchema);
+      expect(transformObj.responseSchema).to.equal(compressed);
     }
 
     it('default (bulk)', () => {
@@ -796,7 +828,10 @@ describe('test/src/compressUtils.js >', () => {
       };
 
       const { transformObj, bulk } = cu.doBuildTransform(exports);
-      expect(transformObj).to.deep.equal({ errorHandlers: {} });
+      expect(transformObj).to.deep.equal({
+        errorHandlers: {},
+        responseSchema: '{}',
+      });
       expect(bulk).to.be.undefined;
     });
 
@@ -810,14 +845,20 @@ describe('test/src/compressUtils.js >', () => {
       };
 
       const { transformObj, bulk } = cu.doBuildTransform(exports);
-      expect(transformObj).to.deep.equal({ errorHandlers: {} });
+      expect(transformObj).to.deep.equal({
+        errorHandlers: {},
+        responseSchema: '{}',
+      });
       expect(bulk).to.be.undefined;
     });
 
     it('empty', () => {
       const exports = {};
       const { transformObj, bulk } = cu.doBuildTransform(exports);
-      expect(transformObj).to.deep.equal({ errorHandlers: {} });
+      expect(transformObj).to.deep.equal({
+        errorHandlers: {},
+        responseSchema: '{}',
+      });
       expect(bulk).to.be.undefined;
     });
 
@@ -1036,6 +1077,82 @@ describe('test/src/compressUtils.js >', () => {
       );
     });
 
+    it('with responseSchema (bulk)', () => {
+      const exports = {
+        transformBulk(ctx, aspects, subjects, res) {
+          return [{ name: 'aaa|bbb', value: 'ccc' }];
+        },
+
+        responseSchema: {
+          type: 'object',
+          properties: {
+            body: {
+              type: 'object',
+              properties: {
+                prop1: { type: 'string' },
+                prop2: { type: 'number' },
+              },
+            },
+          },
+        },
+      };
+
+      const { transformObj, bulk } = cu.doBuildTransform(exports);
+      expectCompressed(transformObj, exports);
+      expect(bulk).to.be.true;
+    });
+
+    it('with responseSchema (bySubject)', () => {
+      const exports = {
+        transformBySubject(ctx, aspects, subject, res) {
+          return [{ name: 'aaa|bbb', value: 'ccc' }];
+        },
+
+        responseSchema: {
+          type: 'object',
+          properties: {
+            body: {
+              type: 'object',
+              properties: {
+                prop1: { type: 'string' },
+                prop2: { type: 'number' },
+              },
+            },
+          },
+        },
+      };
+
+      const { transformObj, bulk } = cu.doBuildTransform(exports);
+      expectCompressed(transformObj, exports);
+      expect(bulk).to.be.false;
+    });
+
+    it('validateResponseSchema applied', () => {
+      const exports = {
+        transformBulk(ctx, aspects, subjects, res) {
+          return [{ name: 'aaa|bbb', value: ctx.value }];
+        },
+
+        responseSchema: {
+          type: 'object',
+          properties: {
+            body: {
+              type: 'object',
+              properties: {
+                prop1: { type: 'aaa' },
+                prop2: { type: 'number' },
+              },
+            },
+          },
+        },
+      };
+
+      expect(() => cu.doBuildTransform(exports)).to.throw(
+        'Invalid response schema - /properties/body/properties/prop1/type - ' +
+        'should be equal to one of the allowed values'
+      );
+    });
+
     it('with contextDefinition (bulk)', () => {
       const exports = {
         transformBulk(ctx, aspects, subjects, res) {
@@ -1203,7 +1320,7 @@ describe('test/src/compressUtils.js >', () => {
       );
     });
 
-    it('default, errorHandlers, contextDefinition, helpers (bulk)', () => {
+    it('default, errorHandlers, contextDefinition, helpers, responseSchema (bulk)', () => {
       const exports = {
         transformBulk(ctx, aspects, subjects, res) {
           return [{ name: generateSampleName('aaa', 'bbb'), value: ctx.val }];
@@ -1228,6 +1345,19 @@ describe('test/src/compressUtils.js >', () => {
           },
         },
 
+        responseSchema: {
+          type: 'object',
+          properties: {
+            body: {
+              type: 'object',
+              properties: {
+                prop1: { type: 'string' },
+                prop2: { type: 'number' },
+              },
+            },
+          },
+        },
+
         helpers: {
           generateSampleName(subject, aspect) {
             return `${subject.absolutePath}|${aspect.name}`;
@@ -1240,7 +1370,7 @@ describe('test/src/compressUtils.js >', () => {
       expect(bulk).to.be.true;
     });
 
-    it('default, errorHandlers, contextDefinition, helpers (bySubject)', () => {
+    it('default, errorHandlers, contextDefinition, helpers, responseSchema (bySubject)', () => {
       const exports = {
         transformBySubject(ctx, aspects, subject, res) {
           return [{ name: generateSampleName('aaa', 'bbb'), value: ctx.val }];
@@ -1262,6 +1392,19 @@ describe('test/src/compressUtils.js >', () => {
           },
           errVal: {
             description: 'errVal',
+          },
+        },
+
+        responseSchema: {
+          type: 'object',
+          properties: {
+            body: {
+              type: 'object',
+              properties: {
+                prop1: { type: 'string' },
+                prop2: { type: 'number' },
+              },
+            },
           },
         },
 
@@ -2118,6 +2261,96 @@ describe('test/src/compressUtils.js >', () => {
       expect(() => cu.validateCtxDef(ctxDef)).to.throw(
         'contextDefinition.ctx2: description required'
       );
+    });
+  });
+
+  describe('validateResponseSchema >', () => {
+    it('valid schema', () => {
+      const schema = {
+        type: 'object',
+        required: ['body'],
+        properties: {
+          body: {
+            type: 'object',
+            properties: {
+              prop1: { type: 'string', },
+            },
+          },
+        },
+      };
+
+      expect(() => cu.validateResponseSchema(schema)).to.not.throw();
+    });
+
+    it('invalid schema - invalid type', () => {
+      const schema = {
+        type: 'object',
+        required: ['body'],
+        properties: {
+          body: {
+            type: 'object',
+            properties: {
+              prop1: { type: 'aaa', },
+            },
+          },
+        },
+      };
+
+      expect(() => cu.validateResponseSchema(schema)).to.throw(
+        'Invalid response schema - /properties/body/properties/prop1/type - ' +
+        'should be equal to one of the allowed values'
+      );
+    });
+
+    it('invalid schema - extra top-level properties', () => {
+      const schema = {
+        type: 'object',
+        required: ['body'],
+        properties: {
+          body: { type: 'object' },
+          status: { type: 'string' },
+        },
+      };
+
+      expect(() => cu.validateResponseSchema(schema)).to.throw(
+        'Invalid response schema: only "body" or "text" may be specified ' +
+        'at the top level.'
+      );
+    });
+
+    it('invalid schema - extra top-level required properties', () => {
+      const schema = {
+        type: 'object',
+        required: ['body', 'status'],
+        properties: {
+          body: { type: 'object' },
+        },
+      };
+
+      expect(() => cu.validateResponseSchema(schema)).to.throw(
+        'Invalid response schema: only "body" or "text" may be specified ' +
+        'at the top level.'
+      );
+    });
+
+    it('invalid schema - top-level additionalProperties', () => {
+      const schema = {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          body: { type: 'object' },
+        },
+      };
+
+      expect(() => cu.validateResponseSchema(schema)).to.throw(
+        'Invalid response schema: schema cannot have ' +
+        '"additionalProperties" specified at the top level.'
+      );
+    });
+
+    it('empty schema', () => {
+      const schema = {};
+      expect(() => cu.validateResponseSchema(schema)).to.not.throw();
     });
   });
 });
