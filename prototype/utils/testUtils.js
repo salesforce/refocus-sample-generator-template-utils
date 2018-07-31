@@ -63,8 +63,14 @@ module.exports = {
     return rce.prepareHeaders(sgt.connection.headers, ctx);
   }, // prepareHeaders
 
+  validateResponse(res) {
+    const sgt = fs.readJsonSync(`./${projectName}.json`);
+    rce.validateResponseBody(res, sgt.transform.responseSchema);
+  }, // validateResponse
+
   doTransform(ctx, aspects, subj, res) {
     const sgt = fs.readJsonSync(`./${projectName}.json`);
+    rce.validateResponseBody(res, sgt.transform.responseSchema);
     this.assignContext(ctx, sgt.contextDefinition);
     if (!res.statusCode) res.statusCode = 200;
     const fn =

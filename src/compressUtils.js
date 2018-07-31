@@ -14,6 +14,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const UglifyJS = require('uglify-es');
+const ajv = require('ajv')({ jsonPointers: true });
 const cwd = process.cwd();
 const uglifyOpts = {
   compress: {
@@ -136,10 +137,13 @@ function doBuildTransform(transformExports) {
     ? Object.keys(transformExports.errorHandlers) : [];
   const ctxDef = transformExports.contextDefinition || {};
   const helpers = transformExports.helpers || {};
+  const resSchema = transformExports.responseSchema || {};
   const transformObj = { errorHandlers: {} };
   let bulk;
 
   validateCtxDef(ctxDef);
+  validateResponseSchema(resSchema);
+  transformObj.responseSchema = JSON.stringify(resSchema);
 
   if (transformBulk && transformBySubject) {
     throw new Error(
@@ -354,6 +358,36 @@ function validateCtxDef(ctxDef) {
   });
 }
 
+function validateResponseSchema(resSchema) {
+  if (!ajv.validateSchema(resSchema)) {
+    const err = ajv.errors[0];
+    throw new Error(
+      `Invalid response schema - ${err.dataPath} - ${err.message}`
+    );
+  }
+
+  // disallow validation on any top-level properties other than "body" or "text"
+  const required = resSchema.required;
+  const properties = resSchema.properties;
+  const hasExtra = (key) => key !== 'body' && key !== 'text';
+  const extraRequired = required && required.find(hasExtra);
+  const extraProps = properties && Object.keys(properties).find(hasExtra);
+
+  if (extraRequired || extraProps) {
+    throw new Error(
+      'Invalid response schema: only "body" or "text" may be specified ' +
+      'at the top level.'
+    );
+  }
+
+  if (resSchema.hasOwnProperty('additionalProperties')) {
+    throw new Error(
+      'Invalid response schema: schema cannot have ' +
+      '"additionalProperties" specified at the top level.'
+    );
+  }
+}
+
 /**
  * Make sure the contextDefinitions in transform and connection do not conflict
  * @throws {Error} if there is a conflict
@@ -402,4 +436,5 @@ module.exports = {
   compress,
   validateCtxUsages,
   validateCtxDef,
+  validateResponseSchema,
 };

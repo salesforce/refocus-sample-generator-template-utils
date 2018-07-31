@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@salesforce/refocus-collector-eval": "*",
+    "ajv": "^6.5.2",
     "chai": "*",
     "chai-url": "*",
     "fs-extra": "4.*",

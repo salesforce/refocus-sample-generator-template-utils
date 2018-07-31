@@ -256,8 +256,8 @@ describe('test/src/resourceGenUtils.js >', () => {
       expect(fs.readdirSync('./my-project/node_modules')).to.be.empty;
       rgu.copyPackages();
       expect(fs.readdirSync('./my-project/node_modules')).to.have.members([
-        '@salesforce', 'chai', 'chai-url', 'fs-extra', 'istanbul', 'mocha',
-        'abbrev', 'align-text',
+        '@salesforce', 'abbrev', 'ajv', 'align-text', 'chai', 'chai-url',
+        'fs-extra', 'istanbul', 'mocha',
       ]);
     });
   });
@@ -278,8 +278,8 @@ describe('test/src/resourceGenUtils.js >', () => {
         'scripts', 'keywords', 'author', 'license'
       );
       expect(contents.dependencies).to.have.keys(
-        '@salesforce/refocus-collector-eval', 'chai', 'chai-url', 'fs-extra',
-        'istanbul', 'mocha'
+        '@salesforce/refocus-collector-eval', 'ajv', 'chai', 'chai-url',
+        'fs-extra', 'istanbul', 'mocha'
       );
       expect(contents.scripts).to.have.keys(
         'test', 'build', 'deploy', 'template-init', 'test-connection',
