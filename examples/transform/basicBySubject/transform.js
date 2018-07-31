@@ -41,6 +41,25 @@ module.exports = {
   },
 
   /**
+   * Response Schema (optional)
+   *
+   * Define a JSON Schema with which to validate the response object before
+   * passing it to the transform function
+   */
+  responseSchema: {
+    type: 'object',
+    required: ['body'],
+    properties: {
+      body: {
+        type: 'object',
+        additionalProperties: {
+          type: 'number',
+        },
+      },
+    },
+  },
+
+  /**
    * Helpers (optional)
    *
    * Define helper functions here if you need to be able to test them directly.
