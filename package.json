@@ -25,7 +25,7 @@
     "sgtu-init": "bin/generateResources.js"
   },
   "devDependencies": {
-    "@salesforce/refocus-collector-eval": "*",
+    "@salesforce/refocus-collector-eval": "^1.8.0",
     "ajv": "^6.5.2",
     "chai": "*",
     "chai-url": "*",
