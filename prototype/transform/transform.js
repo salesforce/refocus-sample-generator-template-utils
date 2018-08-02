@@ -77,6 +77,22 @@ module.exports = {
   },
 
   /**
+   * Response Schema (optional)
+   *
+   * Define a JSON Schema with which to validate the response object before
+   * passing it to the transform function
+   */
+  /*
+   responseSchema: {
+     type: 'object',
+     required: ['body'],
+     properties: {
+       body: { ... },
+     },
+   },
+   */
+
+  /**
    * ContextDefinition (optional)
    *
    * Define context variables that the connection relies on here.

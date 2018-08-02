@@ -134,6 +134,65 @@ describe('transform tests >', () => {
   });
 
   /**
+   * Response Schema
+   *
+   * Set up a mock response object and execute your schema against it with
+   * validateResponse.
+   */
+  describe('response schema >', () => {
+    it('valid response', () => {
+      const res = {
+        body: {
+          root: {
+            node1: {
+              subject1: { aspect1: 0, aspect2: 75, },
+            },
+          },
+        },
+      };
+
+      expect(() => tu.validateResponse(res)).to.not.throw();
+    });
+
+    it('invalid response - no root', () => {
+      const res = {
+        body: {}
+      };
+
+      expect(() => tu.validateResponse(res)).to.throw();
+    });
+
+    it('invalid response - empty node', () => {
+      const res = {
+        body: {
+          root: {
+            node1: {
+              subject1: { aspect1: 0 }
+            },
+            node2: {},
+          },
+        },
+      };
+
+      expect(() => tu.validateResponse(res)).to.throw();
+    });
+
+    it('invalid response - string value', () => {
+      const res = {
+        body: {
+          root: {
+            node1: {
+              subject1: { aspect1: '0' }
+            },
+          },
+        },
+      };
+
+      expect(() => tu.validateResponse(res)).to.throw();
+    });
+  });
+
+  /**
    * Helpers (optional)
    *
    * Test helpers directly.

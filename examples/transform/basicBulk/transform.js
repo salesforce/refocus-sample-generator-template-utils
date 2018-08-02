@@ -58,6 +58,44 @@ module.exports = {
   },
 
   /**
+   * Response Schema (optional)
+   *
+   * Define a JSON Schema with which to validate the response object before
+   * passing it to the transform function
+   */
+  responseSchema: {
+    type: 'object',
+    required: ['body'],
+    properties: {
+      body: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['root'],
+        properties: {
+          root: {
+            type: 'object',
+            minProperties: 1,
+            additionalProperties: {$ref: '#/def/node'},
+          },
+        },
+      },
+    },
+
+    def: {
+      subject: {
+        type: 'object',
+        minProperties: 1,
+        additionalProperties: { type: 'number' },
+      },
+      node: {
+        type: 'object',
+        minProperties: 1,
+        additionalProperties: { $ref: '#/def/subject' },
+      },
+    },
+  },
+
+  /**
    * Helpers (optional)
    *
    * Define helper functions here if you need to be able to test them directly.

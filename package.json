@@ -1,6 +1,6 @@
 {
   "name": "@salesforce/refocus-sample-generator-template-utils",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Refocus Sample Generator Template Utilities",
   "main": "index.js",
   "dependencies": {
@@ -25,7 +25,8 @@
     "sgtu-init": "bin/generateResources.js"
   },
   "devDependencies": {
-    "@salesforce/refocus-collector-eval": "*",
+    "@salesforce/refocus-collector-eval": "^1.8.0",
+    "ajv": "^6.5.2",
     "chai": "*",
     "chai-url": "*",
     "fs-extra": "4.*",

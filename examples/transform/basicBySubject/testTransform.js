@@ -75,6 +75,36 @@ describe('transform tests >', () => {
   });
 
   /**
+   * Response Schema
+   *
+   * Set up a mock response object and execute your schema against it with
+   * validateResponse.
+   */
+  describe('response schema >', () => {
+    it('valid response', () => {
+      const res = {
+        body: {
+          aspect1: 0,
+          aspect2: 75,
+        },
+      };
+
+      expect(() => tu.validateResponse(res)).to.not.throw();
+    });
+
+    it('invalid response', () => {
+      const res = {
+        body: {
+          aspect1: '0',
+          aspect2: 75,
+        },
+      };
+
+      expect(() => tu.validateResponse(res)).to.not.throw();
+    });
+  });
+
+  /**
    * Helpers (optional)
    *
    * Test helpers directly.

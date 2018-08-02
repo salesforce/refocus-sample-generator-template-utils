@@ -96,6 +96,10 @@ Go to `/transform/transform.js` and implement your logic in the function which i
 
 Provide guidance for the developer to answer stuff like “how are you handling error type x?”, “what happens if y is missing?”, “what does the expected res look like?”, describe your algorithm in user-readable form, etc. — these things can go into a description, etc.
 
+Response Validation:
+If you want the response to be validated before being passed to the transform, you can define the expected response in the responseValidation attribute in this file. It must be a valid [JSON Schema](http://json-schema.org).
+If the response is invalid, error samples will be automatically created with the error message from the failed validation.
+
 Write your tests in the stubbed out `/transform/testTransform.js` file.
 
 ### Context Definition (Optional)
