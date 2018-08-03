@@ -95,10 +95,9 @@ module.exports = {
       const dir = path.resolve(cwd, projectName);
       fs.mkdirSync(dir);
       cwd = dir;
-    } else if (validate.errors) {
-      throw new Error(validate.errors[0]);
-    } else if (validate.warnings) {
-      throw new Error(validate.warnings[0]);
+    } else {
+      const errors = validate.errors || validate.warnings;
+      throw new Error(errors[0]);
     }
   },
 
