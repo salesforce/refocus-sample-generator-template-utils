@@ -20,7 +20,10 @@ commander
 .parse(process.argv);
 
 if (commander.args.length < 4) {
-  console.error('\nError: <templateFile> <isPublished=(true|false)> <refocusUrl> <refocusToken> args are required.\n');
+  console.error(
+    '\nError: <templateFile> <isPublished=(true|false)> <refocusUrl>' +
+    ' <refocusToken> args are required.\n'
+  );
   process.exit(1);
 }
 
