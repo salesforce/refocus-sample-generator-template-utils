@@ -217,7 +217,7 @@ module.exports = {
       },
       contextDefinition: {},
       transform: {
-      default: '',
+        default: '',
         errorHandlers: {},
       },
     };
