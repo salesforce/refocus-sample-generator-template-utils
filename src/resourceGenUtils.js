@@ -211,14 +211,14 @@ module.exports = {
       repository: packageInfo.repository,
       connection: {
         method: 'GET',
-          headers: {
+        headers: {
           Accept: 'application/json',
         },
       },
       contextDefinition: {},
       transform: {
       default: '',
-          errorHandlers: {},
+        errorHandlers: {},
       },
     };
 
