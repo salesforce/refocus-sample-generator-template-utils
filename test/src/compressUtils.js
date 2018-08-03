@@ -1452,11 +1452,37 @@ describe('test/src/compressUtils.js >', () => {
       },
     };
 
-    it('empty ok', () => {
+    it('one empty ok', () => {
       const mockConnectionCtxDef = {
         ctx1: mockCtxDef.ctx3,
       };
       const mockTransformCtxDef = {};
+
+      mock(mockConnectionCtxDef, mockTransformCtxDef);
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
+    });
+
+    it('both empty ok', () => {
+      const mockConnectionCtxDef = {};
+      const mockTransformCtxDef = {};
+
+      mock(mockConnectionCtxDef, mockTransformCtxDef);
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
+    });
+
+    it('one undefined ok', () => {
+      const mockConnectionCtxDef = {
+        ctx1: mockCtxDef.ctx3,
+      };
+      const mockTransformCtxDef = undefined;
+
+      mock(mockConnectionCtxDef, mockTransformCtxDef);
+      expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
+    });
+
+    it('both undefined ok', () => {
+      const mockConnectionCtxDef = undefined;
+      const mockTransformCtxDef = undefined;
 
       mock(mockConnectionCtxDef, mockTransformCtxDef);
       expect(() => cu.checkConflictingCtxDefs()).to.not.throw();
