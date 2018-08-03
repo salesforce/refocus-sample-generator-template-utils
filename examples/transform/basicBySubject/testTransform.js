@@ -100,7 +100,7 @@ describe('transform tests >', () => {
         },
       };
 
-      expect(() => tu.validateResponse(res)).to.not.throw();
+      expect(() => tu.validateResponse(res)).to.throw();
     });
   });
 

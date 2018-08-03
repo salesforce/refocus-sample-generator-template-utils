@@ -17,7 +17,7 @@ function runExample {
   sgtu-init $newProject $1 $2
   cd $newProject
   npm run test
-  if [ $? != 0 ]; then exit; fi
+  if [ $? != 0 ]; then exit 1; fi
   cd ..
   cd $baseDir
   rm -rf $newProject
