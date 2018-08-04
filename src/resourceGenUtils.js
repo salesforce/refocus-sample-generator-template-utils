@@ -64,6 +64,23 @@ function getAllDependencies(moduleNames, dependencyTree) {
   return allDependencies;
 }
 
+/**
+ * Adds scripts and dependencies to the initialized package.json file.
+ *
+ * @param {Object} packageJson - The package.json file, in object format.
+ */
+function addScriptsAndDependencies(packageJson) {
+  if (!packageJson.scripts) packageJson.scripts = {};
+  Object.keys(scriptsToAdd).forEach((key) => {
+    packageJson.scripts[key] = scriptsToAdd[key];
+  });
+
+  if (!packageJson.dependencies) packageJson.dependencies = {};
+  Object.keys(devDependencies).forEach((m) => {
+    packageJson.dependencies[m] = devDependencies[m];
+  });
+}
+
 module.exports = {
   /**
    * Create a directory for the new project
@@ -78,10 +95,9 @@ module.exports = {
       const dir = path.resolve(cwd, projectName);
       fs.mkdirSync(dir);
       cwd = dir;
-    } else if (validate.errors) {
-      throw new Error(validate.errors[0]);
-    } else if (validate.warnings) {
-      throw new Error(validate.warnings[0]);
+    } else {
+      const errors = validate.errors || validate.warnings;
+      throw new Error(errors[0]);
     }
   },
 
@@ -155,15 +171,11 @@ module.exports = {
   setupPackageJson: (dir = cwd) => {
     execSync('npm init --force', { cwd: dir, stdio: 'ignore' });
     const p = fs.readJsonSync(path.resolve(dir, 'package.json'));
-    if (!p.dependencies) p.dependencies = {};
-    Object.keys(devDependencies).forEach((m) => {
-      p.dependencies[m] = devDependencies[m];
-    });
-    if (!p.scripts) p.scripts = {};
-    Object.keys(scriptsToAdd)
-    .forEach((key) => p.scripts[key] = scriptsToAdd[key]);
+    addScriptsAndDependencies(p);
     fs.writeJsonSync(path.resolve(dir, 'package.json'), p, { spaces: 2 });
   },
+
+  addScriptsAndDependencies,
 
   /**
    * Retrieves the contents of the package.json file in the specified
@@ -188,30 +200,32 @@ module.exports = {
    *  command, or an error.
    */
   createTemplateJson: (packageInfo, dir = cwd) => {
+    const templateJson = {
+      name: packageInfo.name,
+      version: packageInfo.version,
+      description: packageInfo.description,
+      tags: packageInfo.keywords && Array.isArray(packageInfo.keywords) ?
+      packageInfo.keywords.concat([packageInfo.name]) : [packageInfo.name],
+      author: packageInfo.author,
+      repository: packageInfo.repository,
+      connection: {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      },
+      contextDefinition: {},
+      transform: {
+        default: '',
+        errorHandlers: {},
+      },
+    };
+
     const filename = `${packageInfo.name}.json`;
     console.log(`creating ${filename}...`);
     fs.writeJsonSync(
       path.resolve(dir, filename),
-      {
-        name: packageInfo.name,
-        version: packageInfo.version,
-        description: packageInfo.description,
-        tags: packageInfo.keywords && Array.isArray(packageInfo.keywords) ?
-          packageInfo.keywords.concat([packageInfo.name]) : [packageInfo.name],
-        author: packageInfo.author,
-        repository: packageInfo.repository,
-        connection: {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-          },
-        },
-        contextDefinition: {},
-        transform: {
-          default: '',
-          errorHandlers: {},
-        },
-      },
+      templateJson,
       { spaces: 2 });
   },
 

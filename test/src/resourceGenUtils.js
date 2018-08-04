@@ -49,10 +49,16 @@ describe('test/src/resourceGenUtils.js >', () => {
       expect(fs.existsSync('./my-project')).to.be.true;
     });
 
-    it('invalid name', () => {
+    it('invalid name (warning)', () => {
       expect(fs.existsSync('MyProject')).to.be.false;
       expect(() => rgu.createDir('MyProject'))
       .to.throw('name can no longer contain capital letters');
+    });
+
+    it('invalid name (error)', () => {
+      expect(fs.existsSync('MyProject')).to.be.false;
+      expect(() => rgu.createDir(''))
+      .to.throw('name length must be greater than zero');
     });
   });
 
@@ -288,6 +294,76 @@ describe('test/src/resourceGenUtils.js >', () => {
     });
   });
 
+  describe('addScriptsAndDependencies >', () => {
+    const packageJson = {
+      name: 'my-sgt',
+      version: '1.0.0',
+      description: '...',
+      main: 'index.js',
+      keywords: [],
+      author: '...',
+      license: 'BSD-3-clause',
+    };
+
+    it('undefined scripts and dependencies', () => {
+      rgu.addScriptsAndDependencies(packageJson);
+      expect(packageJson).to.have.keys(
+        'name', 'version', 'description', 'main', 'dependencies',
+        'scripts', 'keywords', 'author', 'license'
+      );
+      expect(packageJson.dependencies).to.have.keys(
+        '@salesforce/refocus-collector-eval', 'ajv', 'chai', 'chai-url',
+        'fs-extra', 'istanbul', 'mocha'
+      );
+      expect(packageJson.scripts).to.have.keys(
+        'test', 'build', 'deploy', 'template-init', 'test-connection',
+        'test-transform', 'validate'
+      );
+    });
+
+    it('empty scripts and dependencies', () => {
+      packageJson.dependencies = {};
+      packageJson.scripts = {};
+      rgu.addScriptsAndDependencies(packageJson);
+      expect(packageJson).to.have.keys(
+        'name', 'version', 'description', 'main', 'dependencies',
+        'scripts', 'keywords', 'author', 'license'
+      );
+      expect(packageJson.dependencies).to.have.keys(
+        '@salesforce/refocus-collector-eval', 'ajv', 'chai', 'chai-url',
+        'fs-extra', 'istanbul', 'mocha'
+      );
+      expect(packageJson.scripts).to.have.keys(
+        'test', 'build', 'deploy', 'template-init', 'test-connection',
+        'test-transform', 'validate'
+      );
+    });
+
+    it('preexisting scripts and dependencies', () => {
+      packageJson.dependencies = {
+        dep1: '1.0.0',
+        dep2: '1.0.0',
+      };
+      packageJson.scripts = {
+        script1: '...',
+        script2: '...',
+      };
+      rgu.addScriptsAndDependencies(packageJson);
+      expect(packageJson).to.have.keys(
+        'name', 'version', 'description', 'main', 'dependencies',
+        'scripts', 'keywords', 'author', 'license'
+      );
+      expect(packageJson.dependencies).to.have.keys(
+        '@salesforce/refocus-collector-eval', 'ajv', 'chai', 'chai-url',
+        'dep1', 'dep2', 'fs-extra', 'istanbul', 'mocha'
+      );
+      expect(packageJson.scripts).to.have.keys(
+        'test', 'build', 'deploy', 'script1', 'script2', 'template-init',
+        'test-connection', 'test-transform', 'validate'
+      );
+    });
+  });
+
   describe('getPackageInfo >', () => {
     before(() => {
       const package = {
@@ -329,9 +405,29 @@ describe('test/src/resourceGenUtils.js >', () => {
       name: 'my-project',
       version: '1.0.0',
       description: 'description...',
-      keywords: ['sgt', 'my-project'],
+      keywords: ['tag1', 'tag2'],
       author: 'author1',
       repository: 'http://github.com/my-project',
+    };
+
+    const expectedSGT = {
+      name: 'my-project',
+      version: '1.0.0',
+      description: 'description...',
+      tags: ['tag1', 'tag2', 'my-project'],
+      author: 'author1',
+      repository: 'http://github.com/my-project',
+      connection: {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      },
+      contextDefinition: {},
+      transform: {
+        default: '',
+        errorHandlers: {},
+      },
     };
 
     it('sgt file is created', () => {
@@ -342,10 +438,33 @@ describe('test/src/resourceGenUtils.js >', () => {
       expect(fs.existsSync('./my-project/my-project.json')).to.be.true;
 
       const contents = fs.readJsonSync('./my-project/my-project.json');
-      expect(contents).to.have.keys(
-        'name', 'version', 'description', 'tags', 'author', 'repository',
-        'connection', 'contextDefinition', 'transform'
-      );
+      expect(contents).to.deep.equal(expectedSGT);
+    });
+
+    it('sgt file is created (no keywords)', () => {
+      delete packageInfo.keywords;
+      expectedSGT.tags = ['my-project'];
+      expect(fs.existsSync('./my-project')).to.be.true;
+      expect(fs.existsSync('./my-project/my-project.json')).to.be.false;
+
+      rgu.createTemplateJson(packageInfo);
+      expect(fs.existsSync('./my-project/my-project.json')).to.be.true;
+
+      const contents = fs.readJsonSync('./my-project/my-project.json');
+      expect(contents).to.deep.equal(expectedSGT);
+    });
+
+    it('sgt file is created (keywords not array)', () => {
+      packageInfo.keywords = '';
+      expectedSGT.tags = ['my-project'];
+      expect(fs.existsSync('./my-project')).to.be.true;
+      expect(fs.existsSync('./my-project/my-project.json')).to.be.false;
+
+      rgu.createTemplateJson(packageInfo);
+      expect(fs.existsSync('./my-project/my-project.json')).to.be.true;
+
+      const contents = fs.readJsonSync('./my-project/my-project.json');
+      expect(contents).to.deep.equal(expectedSGT);
     });
   });
 
@@ -370,6 +489,22 @@ describe('test/src/resourceGenUtils.js >', () => {
       const contents = fs.readFileSync('./my-project/README.md').toString();
       expect(contents).to.include('# my-project');
       expect(contents).to.include('## Description\n\ndescription...');
+      expect(contents).to.include('## Context Variables\n\n The following ');
+    });
+
+    it('README file is created (default description)', () => {
+      delete packageInfo.description;
+      expect(fs.existsSync('./my-project')).to.be.true;
+      expect(fs.existsSync('./my-project/README.md')).to.be.false;
+
+      rgu.createReadme(packageInfo);
+      expect(fs.existsSync('./my-project/README.md')).to.be.true;
+
+      const contents = fs.readFileSync('./my-project/README.md').toString();
+      expect(contents).to.include('# my-project');
+      expect(contents).to.include(
+        '## Description\n\nA Refocus Sample Generator Template.'
+      );
       expect(contents).to.include('## Context Variables\n\n The following ');
     });
   });
