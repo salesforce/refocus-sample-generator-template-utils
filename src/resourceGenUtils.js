@@ -18,7 +18,7 @@ let cwd = process.cwd();
 const validatePackageName = require('validate-npm-package-name');
 const Promise = require('bluebird');
 const execSync = require('child_process').execSync;
-const devDependencies = require('../package.json').devDependencies;
+const dependencies = require('../package.json').dependencies;
 
 /* Format of the README.md file */
 const readme = '# %s\n\n' +
@@ -43,6 +43,17 @@ const scriptsToAdd = {
     ' transform/testTransform.js',
   validate: 'echo "validate"',
 };
+
+/* Packages to be copied to the new project */
+const packagesToCopy = [
+  '@salesforce/refocus-collector-eval',
+  'ajv',
+  'chai',
+  'chai-url',
+  'fs-extra',
+  'istanbul',
+  'mocha',
+];
 
 /**
  * Traverses the dependency tree to find all required modules.
@@ -76,8 +87,8 @@ function addScriptsAndDependencies(packageJson) {
   });
 
   if (!packageJson.dependencies) packageJson.dependencies = {};
-  Object.keys(devDependencies).forEach((m) => {
-    packageJson.dependencies[m] = devDependencies[m];
+  packagesToCopy.forEach((m) => {
+    packageJson.dependencies[m] = dependencies[m];
   });
 }
 
@@ -144,11 +155,10 @@ module.exports = {
   copyPackages: () => {
     console.log('copying packages...');
 
-    const npmLs = execSync('npm ls --dev --json', { cwd: __dirname });
+    const npmLs = execSync('npm ls --prod --json', { cwd: __dirname });
     const dependencyTree = JSON.parse(npmLs).dependencies;
-    const modulesToCopy = Object.keys(devDependencies);
 
-    getAllDependencies(modulesToCopy, dependencyTree)
+    getAllDependencies(packagesToCopy, dependencyTree)
     .forEach((m) => {
       const fromDir = path.resolve(__dirname, '..', 'node_modules', m);
       const toDir = path.resolve(cwd, 'node_modules', m);
