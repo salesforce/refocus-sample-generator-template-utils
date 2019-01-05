@@ -93,6 +93,7 @@ Go to `/transform/transform.js` and implement your logic in the function which i
 - `subject` - if connection.bulk is set to false, this is a reference to the subject.
 - `subjects` - if connection.bulk is set to true, this is reference to the array of subjects.
 - `res` - a reference to the HTTP response. See https://nodejs.org/api/http.html#http_class_http_incomingmessage for more details on the format of the HTTP response. Typically, the body of the response will be in res.body or res.text, depending on the content type.
+  - Note that you can always get access to the data source's url using `res.path`, if, for example, you want to add a related link to the data source. 
 
 Provide guidance for the developer to answer stuff like “how are you handling error type x?”, “what happens if y is missing?”, “what does the expected res look like?”, describe your algorithm in user-readable form, etc. — these things can go into a description, etc.
 
