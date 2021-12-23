@@ -4,7 +4,7 @@
   "description": "Refocus Sample Generator Template Utilities",
   "main": "index.js",
   "dependencies": {
-    "@salesforce/refocus-collector-eval": "^1.8.0",
+    "@salesforce/refocus-collector-eval": "^1.11.3",
     "ajv": "^6.5.2",
     "bluebird": "^3.5.1",
     "chai": "*",
