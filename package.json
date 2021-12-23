@@ -7,7 +7,7 @@
     "@salesforce/refocus-collector-eval": "^1.8.0",
     "ajv": "^6.5.2",
     "bluebird": "^3.5.1",
-    "chai": "*",
+    "chai": "4.3.4",
     "chai-url": "*",
     "commander": "^2.12.2",
     "fs-extra": "4.*",
