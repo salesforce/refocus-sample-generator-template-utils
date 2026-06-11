@@ -6,7 +6,7 @@
   "dependencies": {
     "@salesforce/refocus-collector-eval": "^1.8.0",
     "ajv": "^6.5.2",
-    "bluebird": "^3.5.1",
+    "bluebird": "^3.7.2",
     "chai": "*",
     "chai-url": "*",
     "commander": "^2.12.2",
