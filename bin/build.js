@@ -11,10 +11,14 @@
 /**
  * bin/build.js
  */
+const rgu = require('../src/resourceGenUtils');
 const cu = require('../src/compressUtils');
 const startTime = Date.now();
 
 cu.checkConflictingCtxDefs();
+const packageInfo = rgu.getPackageInfo();
+rgu.createTemplateJson(packageInfo);
+console.log(`Done creating template (${Date.now() - startTime}ms)`);
 cu.buildTransform();
 console.log(`Done building transform (${Date.now() - startTime}ms)`);
 cu.buildConnection();
